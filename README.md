@@ -5,6 +5,22 @@
 
 </div>
 
+## Tarefas
+
+#### Em Banco de dados:
+- [ ] Refazer o DER.
+- [ ] Fazer as Views do Banco.
+- [ ] Fazer as Functions do Banco.
+- [ ] Fazer as Procedures do Banco.
+- [ ] Fazer as Triggers do Banco.
+
+#### Em POO:
+- [ ] Começar o projeto em ASP.NET.
+
+#### Em Engenharia de Software:
+- [ ] Atualizar o Relatório do ano passado.
+
+
 <br>
 
 ## Descrição do Projeto
