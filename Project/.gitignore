@@ -1,0 +1,31 @@
+# Artefatos de compilação (Build)
+[Bb]in/
+[Oo]bj/
+
+# Pastas e arquivos de configuração da IDE (Visual Studio / VS Code)
+.vs/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+
+# Arquivos de log
+*.log
+
+# Arquivos temporários do Sistema Operacional
+.DS_Store
+Thumbs.db
+
+# Pacotes NuGet locais e cache
+*.nuget.props
+*.nuget.targets
+
+# Configurações locais e segredos (MUITO IMPORTANTE)
+.env
+appsettings.Development.json
+appsettings.Local.json
