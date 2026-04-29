@@ -19,6 +19,8 @@
 
 #### Em Engenharia de Software:
 - [ ] Atualizar o Relatório do ano passado.
+- [ ] Refazer o Diagrama de Classes.
+- [ ] Refazer os casos de uso.
 
 
 <br>
@@ -82,6 +84,17 @@ A manicure tem o controle do estoque dos materiais utilizados, o que influencia 
 
 > [!IMPORTANT]  
 > **TODO:** Substituir a imagem acima pelo nosso DER real.
+
+<br>
+
+## Diagrama de Classes 
+
+<div align="center">
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeJQeJyzgAzTEVqXiGe90RGBFhfp_4RcJJMQ&s" alt="Exemplo de DER" width="400">
+</div>
+
+> [!IMPORTANT]  
+> **TODO:** Substituir a imagem acima pelo nosso Diagrama de classes real.
 
 <br>
 
