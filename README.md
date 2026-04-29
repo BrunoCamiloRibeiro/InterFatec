@@ -1,8 +1,88 @@
-(teste)
-# Inter FATEC Rio Preto
-## E-Commerce para manicure
+<div align="center">
 
-- [x] ver o que falta
-- [ ] diagramar
-- [x] sla
-- [ ] teste
+# **Interdisciplinar FATEC**
+### 4º Semestre
+
+</div>
+
+<br>
+
+## Descrição do Projeto
+
+Um **site** para uma MEI (Microempreendedor Individual) do ramo de serviços estéticos (manicure), que exibe informações de autopromoção, um sistema de **agendamento**, um sistema de **simulação** do trabalho a ser feito e um controle básico de **estoque**.
+
+<br>
+
+## Requisitos do Projeto
+
+---
+
+### Landing Page / Conteúdos Estáticos
+
+Informações sobre o estabelecimento, imagens do local, descrição dos serviços executados (de forma genérica), informações de contato, localização e redes sociais.
+
+---
+
+### Sistema de Agendamentos
+
+#### Lado do cliente:
+
+* **O cliente deve poder, no agendamento:** Definir os serviços requisitados, os detalhes desses serviços, a data e hora (se disponíveis) e a forma de pagamento.
+* **O cliente deve poder, após o agendamento:** Cancelar o horário agendado, requisitar mudanças no pedido e requisitar mudança na data e/ou hora do atendimento.
+
+#### Lado da manicure:
+
+* A manicure pode cancelar um horário, requisitar o reagendamento, solicitar mudanças no pedido (em caso de falta de produto, por exemplo) e recusar um agendamento.
+
+---
+
+### Sistema de Simulação
+
+Caso o cliente escolha as opções pré-definidas, o sistema será capaz de mostrar uma imagem com uma prévia do resultado daquelas escolhas. Caso o cliente precise de algo mais específico, a simulação não será aplicada.
+
+---
+
+### Sistema de Estoque
+
+A manicure tem o controle do estoque dos materiais utilizados, o que influencia diretamente nos serviços que ficam disponíveis para agendamento.
+
+---
+
+<br>
+
+## Definições Técnicas
+
+* **Linguagem do Projeto:** C# + ASP.NET
+* **Sistema de Banco de Dados:** SQL SERVER
+* **Framework Visual:** A definir
+
+<br>
+
+## DER (Diagrama de Entidade e Relacionamento)
+
+<div align="center">
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeJQeJyzgAzTEVqXiGe90RGBFhfp_4RcJJMQ&s" alt="Exemplo de DER" width="400">
+</div>
+
+> [!IMPORTANT]  
+> **TODO:** Substituir a imagem acima pelo nosso DER real.
+
+<br>
+
+## Telas do Projeto
+
+### Tela 1 (Homepage):
+
+<div align="center">
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeJQeJyzgAzTEVqXiGe90RGBFhfp_4RcJJMQ&s" alt="Homepage" width="400">
+</div>
+
+*Descrição da tela 1*
+
+### Tela 2 (Placeholder):
+
+<div align="center">
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeJQeJyzgAzTEVqXiGe90RGBFhfp_4RcJJMQ&s" alt="Tela 2" width="400">
+</div>
+
+*Descrição da tela 2*
