@@ -8,6 +8,7 @@
 ## Tarefas
 
 #### Em Banco de dados:
+- [ ] Descobrir oque fazer com o atributo "Status".
 - [ ] Refazer o DER.
 - [ ] Fazer as Views do Banco.
 - [ ] Fazer as Functions do Banco.
@@ -15,14 +16,31 @@
 - [ ] Fazer as Triggers do Banco.
 
 #### Em POO:
-- [ ] Começar o projeto em ASP.NET.
+- [x] Começar o projeto em ASP.NET.
+- [x] Criar a estrutura de pastas.
+- [x] Criar os arquivos basicos (Controllers).
+- [x] Fazer as Models.
+- [ ] Verificar se as Models estão certas (Qualquer um menos o Bruno).
+- [ ] Fazer os Controllers.
+- [ ] Fazer os Services e Interfaces.
+- [ ] Fazer os Repositories e Interfaces.
+- [ ] Fazer o AppDbContext.
+- [ ] Fazer as ViewModels
+- [ ] Fazer as Telas (Razor).
+- [ ] Configurar o AutoMapper.
+- [ ] Conectar com o SqlServer sem explodir nada.
 
 #### Em Engenharia de Software:
-- [ ] Atualizar o Relatório do ano passado.
+- [ ] Refazer os casos de uso (-Importante).
 - [ ] Refazer o Diagrama de Classes.
-- [ ] Refazer os casos de uso.
-
-
+- [ ] Refazer os Diagramas de casos de uso.
+- [ ] Atualizar no relatório o Objetivo.
+- [ ] Atualizar no relatório a Justificativa.
+- [ ] Atualizar no relatório o Escopo e Não Escopo.
+- [ ] Fazer o Mapeamento de processos (BPMN).
+- [ ] Atualizar no relatório os Casos de uso expandidos.
+- [ ] Anotar referências.
+ 
 <br>
 
 ## Descrição do Projeto
