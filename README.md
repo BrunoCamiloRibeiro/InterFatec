@@ -25,13 +25,13 @@
 - [ ] Fazer os Services e Interfaces.
 - [ ] Fazer os Repositories e Interfaces.
 - [ ] Fazer o AppDbContext.
-- [ ] Fazer as ViewModels
+- [ ] Fazer as ViewModels.
 - [ ] Fazer as Telas (Razor).
 - [ ] Configurar o AutoMapper.
 - [ ] Conectar com o SqlServer sem explodir nada.
 
 #### Em Engenharia de Software:
-- [ ] Refazer os casos de uso (-Importante).
+- [ ] Refazer os casos de uso (**Importante**).
 - [ ] Refazer o Diagrama de Classes.
 - [ ] Refazer os Diagramas de casos de uso.
 - [ ] Atualizar no relatório o Objetivo.
