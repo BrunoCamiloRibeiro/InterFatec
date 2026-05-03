@@ -97,11 +97,11 @@ A manicure tem o controle do estoque dos materiais utilizados, o que influencia 
 ## DER (Diagrama de Entidade e Relacionamento)
 
 <div align="center">
-  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeJQeJyzgAzTEVqXiGe90RGBFhfp_4RcJJMQ&s" alt="Exemplo de DER" width="400">
+  <img src="Sql/Diagramas/000_DER.png" alt="Exemplo de DER" width="400">
 </div>
 
 > [!IMPORTANT]  
-> **TODO:** Substituir a imagem acima pelo nosso DER real.
+> **ATUALIZAR:** Substituir a imagem acima pelo nosso DER mais ATUALIZADO.
 
 <br>
 
@@ -112,7 +112,7 @@ A manicure tem o controle do estoque dos materiais utilizados, o que influencia 
 </div>
 
 > [!IMPORTANT]  
-> **TODO:** Substituir a imagem acima pelo nosso Diagrama de classes real.
+> **ADICIONAR:** Substituir a imagem acima pelo nosso Diagrama de classes real.
 
 <br>
 
