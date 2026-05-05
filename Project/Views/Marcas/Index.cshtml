@@ -1,1 +1,33 @@
-<!-- Em Teoria é pra ser um modal dps -->
+@model IEnumerable<FabysUnha.ViewModels.MarcasViewModel>
+
+<h1>Marcas</h1>
+
+<p>
+    <a asp-action="Criar">Criar Nova Marca</a>
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nome</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @item.Id
+            </td>
+            <td>
+                @item.Nome
+            </td>
+            <td>
+                <a asp-action="Editar" asp-route-id="@item.Id">Editar</a> |
+                <a asp-action="Excluir" asp-route-id="@item.Id">Excluir</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

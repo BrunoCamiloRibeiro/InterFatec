@@ -1,0 +1,24 @@
+@model FabysUnha.ViewModels.MarcasViewModel
+
+<h1>Excluir Marca</h1>
+
+<h3>Você tem certeza que deseja excluir isto?</h3>
+
+<hr />
+
+<div>
+    <dl>
+        <dt>Id</dt>
+        <dd>@Model.Id</dd>
+        
+        <dt>Nome</dt>
+        <dd>@Model.Nome</dd>
+    </dl>
+</div>
+
+<form asp-action="Excluir" method="post">
+    <input type="hidden" asp-for="Id" />
+    
+    <button type="submit">Confirmar Exclusão</button> |
+    <a asp-action="Index">Cancelar e Voltar</a>
+</form>
