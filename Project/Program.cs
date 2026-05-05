@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using FabysUnha.Data;
+using FabysUnha.Repositories;
+using FabysUnha.Services;
+using FabysUnha.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +18,16 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
 */
+
+// Configurando AutoMapper
+builder.Services.AddAutoMapper(cfg =>
+{
+    cfg.AddProfile<MarcasProfile>();
+});
+
+// Registrando os repositórios e serviços
+builder.Services.AddScoped<IMarcasRepository, MarcasRepository>();
+builder.Services.AddScoped<IMarcaService, MarcaService>();
 
 var app = builder.Build();
 
