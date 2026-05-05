@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace FabysUnha.Models;
 
 public class Agendamentos
 {
+    [Key]
     public int Nr { get; set; }
     public DateTime Data { get; set; }
     public decimal Total { get; set; }
