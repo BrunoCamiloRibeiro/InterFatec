@@ -24,13 +24,13 @@ INSERT INTO Clientes (pessoa_id) VALUES
 (11), (12), (13), (14), (15), (16), (17), (18), (19), (20);
 
 INSERT INTO Especialidades (descricao) VALUES
-('Manicure Cl·ssica'), ('Pedicure Cl·ssica'), ('Alongamento em Gel'),
-('Alongamento em Fibra'), ('Spa dos PÈs'), ('Pl·stica dos PÈs'),
-('Francesinha Definitiva'), ('EsmaltaÁ„o em Gel'), ('Nail Art 3D'),
-('Podologia B·sica'), ('Cutilagem Russa'), ('Banho de Gel'),
-('ManutenÁ„o de Gel'), ('RemoÁ„o de Alongamento'), ('Massagem Relaxante PÈs'),
-('Reflexologia Podal'), ('Blindagem de Unhas'), ('ReconstruÁ„o de Unha'),
-('DecoraÁ„o com Pedrarias'), ('EsmaltaÁ„o Infantil');
+('Manicure Cl√°ssica'), ('Pedicure Cl√°ssica'), ('Alongamento em Gel'),
+('Alongamento em Fibra'), ('Spa dos P√©s'), ('Pl√°stica dos P√©s'),
+('Francesinha Definitiva'), ('Esmalta√ß√£o em Gel'), ('Nail Art 3D'),
+('Podologia B√°sica'), ('Cutilagem Russa'), ('Banho de Gel'),
+('Manuten√ß√£o de Gel'), ('Remo√ß√£o de Alongamento'), ('Massagem Relaxante P√©s'),
+('Reflexologia Podal'), ('Blindagem de Unhas'), ('Reconstru√ß√£o de Unha'),
+('Decora√ß√£o com Pedrarias'), ('Esmalta√ß√£o Infantil');
 
 INSERT INTO Funcionarios (pessoa_id, salario, especialidade_id) VALUES
 (21, 2500.00, 1), (22, 2600.00, 2), (23, 3500.00, 3), (24, 3800.00, 4), (25, 2200.00, 5),
@@ -48,7 +48,7 @@ INSERT INTO Funcionarios (pessoa_id, salario, especialidade_id) VALUES
 -- GRUPO 2: Marcas, Produtos
 -- ==========================================
 INSERT INTO Marcas (nome) VALUES
-('RisquÈ'), ('Colorama'), ('Impala'), ('Dailus'), ('Vult'),
+('Risqu√©'), ('Colorama'), ('Impala'), ('Dailus'), ('Vult'),
 ('Anita'), ('Avon'), ('Natura'), ('OPI'), ('Essie'),
 ('Hits'), ('Blant'), ('Studio 35'), ('Haskell'), ('Latika'),
 ('Bella Brazil'), ('Top Beauty'), ('Novo Toque'), ('Nati'), ('Cora');
@@ -58,22 +58,22 @@ INSERT INTO Produtos (nome, marca_id, preco, PathImg) VALUES
 ('Base Fortalecedora', 2, 9.00, '/img/prod02.jpg'),
 ('Top Coat Brilho', 3, 12.00, '/img/prod03.jpg'),
 ('Esmalte Preto Fosco', 4, 10.50, '/img/prod04.jpg'),
-('Esmalte Branco PurÌssimo', 5, 8.90, '/img/prod05.jpg'),
+('Esmalte Branco Pur√≠ssimo', 5, 8.90, '/img/prod05.jpg'),
 ('Removedor de Esmalte', 6, 15.00, '/img/prod06.jpg'),
-('Algod„o 500g', 7, 20.00, '/img/prod07.jpg'),
-('Creme Esfoliante PÈs', 8, 35.00, '/img/prod08.jpg'),
+('Algod√£o 500g', 7, 20.00, '/img/prod07.jpg'),
+('Creme Esfoliante P√©s', 8, 35.00, '/img/prod08.jpg'),
 ('Gel Construtor Clear', 9, 85.00, '/img/prod09.jpg'),
 ('Fibra de Vidro Rolo', 10, 45.00, '/img/prod10.jpg'),
-('Primer ¡cido', 11, 25.00, '/img/prod11.jpg'),
-('”leo Secante', 12, 7.50, '/img/prod12.jpg'),
+('Primer √Åcido', 11, 25.00, '/img/prod11.jpg'),
+('√ìleo Secante', 12, 7.50, '/img/prod12.jpg'),
 ('Lixa Banana (Pct 100)', 13, 30.00, '/img/prod13.jpg'),
-('Esp·tula Inox', 14, 18.00, '/img/prod14.jpg'),
-('Alicate de CutÌcula', 15, 40.00, '/img/prod15.jpg'),
+('Esp√°tula Inox', 14, 18.00, '/img/prod14.jpg'),
+('Alicate de Cut√≠cula', 15, 40.00, '/img/prod15.jpg'),
 ('Prep Higienizador', 16, 22.00, '/img/prod16.jpg'),
-('Esmalte Nude Cl·ssico', 17, 9.50, '/img/prod17.jpg'),
+('Esmalte Nude Cl√°ssico', 17, 9.50, '/img/prod17.jpg'),
 ('Esmalte Neon Rosa', 18, 11.00, '/img/prod18.jpg'),
 ('Base Bomba Aceleradora', 19, 14.00, '/img/prod19.jpg'),
-('Amolecedor de CutÌculas', 20, 13.50, '/img/prod20.jpg');
+('Amolecedor de Cut√≠culas', 20, 13.50, '/img/prod20.jpg');
 
 
 
@@ -84,23 +84,23 @@ INSERT INTO Produtos (nome, marca_id, preco, PathImg) VALUES
 INSERT INTO Servicos (preco, descricao, tempo) VALUES
 (35.00, 'Manicure Simples', '00:45:00'),
 (40.00, 'Pedicure Simples', '00:50:00'),
-(70.00, 'M„o e PÈ Casadinho', '01:30:00'),
+(70.00, 'M√£o e P√© Casadinho', '01:30:00'),
 (150.00, 'Alongamento Fibra de Vidro', '02:30:00'),
 (130.00, 'Alongamento em Gel', '02:00:00'),
-(80.00, 'ManutenÁ„o de Alongamento', '01:30:00'),
+(80.00, 'Manuten√ß√£o de Alongamento', '01:30:00'),
 (60.00, 'Banho de Gel', '01:00:00'),
-(40.00, 'RemoÁ„o de Alongamento', '00:40:00'),
-(55.00, 'Spa dos PÈs Completo', '01:00:00'),
-(85.00, 'Pl·stica dos PÈs', '01:15:00'),
-(25.00, 'Apenas EsmaltaÁ„o', '00:20:00'),
-(45.00, 'EsmaltaÁ„o em Gel', '00:45:00'),
+(40.00, 'Remo√ß√£o de Alongamento', '00:40:00'),
+(55.00, 'Spa dos P√©s Completo', '01:00:00'),
+(85.00, 'Pl√°stica dos P√©s', '01:15:00'),
+(25.00, 'Apenas Esmalta√ß√£o', '00:20:00'),
+(45.00, 'Esmalta√ß√£o em Gel', '00:45:00'),
 (15.00, 'Francesinha/Inglesinha', '00:15:00'),
 (20.00, 'Nail Art (por unha)', '00:15:00'),
 (10.00, 'Conserto de Unha (unidade)', '00:10:00'),
 (90.00, 'Podologia Preventiva', '01:00:00'),
-(45.00, 'Cutilagem Russa M„o', '00:45:00'),
+(45.00, 'Cutilagem Russa M√£o', '00:45:00'),
 (50.00, 'Blindagem Diamante', '01:00:00'),
-(30.00, 'Massagem Relaxante PÈs', '00:30:00'),
+(30.00, 'Massagem Relaxante P√©s', '00:30:00'),
 (35.00, 'Manicure Infantil', '00:30:00');
 
 
@@ -110,8 +110,8 @@ INSERT INTO Servicos (preco, descricao, tempo) VALUES
 -- GRUPO 4: Status, Agendamentos, Servicos_Agendados, Produtos_Agendados
 -- ==========================================
 INSERT INTO Status (descricao) VALUES
-('Agendado'), ('Confirmado'), ('Em Atendimento'), ('ConcluÌdo'), ('Aguardando Pagamento'),
-('Pago'), ('Cancelado Cliente'), ('Cancelado Sal„o'), ('Faltou'), ('Remarcado'),
+('Agendado'), ('Confirmado'), ('Em Atendimento'), ('Conclu√≠do'), ('Aguardando Pagamento'),
+('Pago'), ('Cancelado Cliente'), ('Cancelado Sal√£o'), ('Faltou'), ('Remarcado'),
 ('Atrasado'), ('Em Espera'), ('Triagem'), ('Pausado'), ('Finalizado com Nota'),
 ('Estornado'), ('Bloqueado'), ('Reagendamento Req.'), ('Aguardando Material'), ('Arquivado');
 
@@ -127,24 +127,24 @@ INSERT INTO Agendamentos (data, total, cliente_id, status_id) VALUES
 INSERT INTO Servicos_Agendados (agendamento_nr, servico_id, obs, horario, funcionario_id, valor) VALUES
 (1, 1, 'Cliente pediu esmalte vermelho', '09:00:00', 21, 35.00),
 (2, 2, 'Cuidado extra com calo', '10:00:00', 22, 40.00),
-(3, 3, 'Sem cutÌcula funda', '11:00:00', 21, 70.00),
+(3, 3, 'Sem cut√≠cula funda', '11:00:00', 21, 70.00),
 (4, 4, 'Formato Almond', '14:00:00', 23, 150.00),
 (5, 5, 'Formato Quadrado', '15:00:00', 24, 130.00),
 (6, 6, 'Repor 1 unha quebrada', '16:00:00', 23, 80.00),
 (7, 7, 'Nenhuma', '09:30:00', 25, 60.00),
-(8, 8, 'DÛi um pouco a unha do ded„o', '10:30:00', 26, 40.00),
-(9, 9, 'Relaxamento m·ximo', '13:00:00', 27, 55.00),
+(8, 8, 'D√≥i um pouco a unha do ded√£o', '10:30:00', 26, 40.00),
+(9, 9, 'Relaxamento m√°ximo', '13:00:00', 27, 55.00),
 (10, 10, 'Fissuras no calcanhar', '14:30:00', 28, 85.00),
-(11, 11, 'Trazer prÛprio esmalte', '16:00:00', 29, 25.00),
+(11, 11, 'Trazer pr√≥prio esmalte', '16:00:00', 29, 25.00),
 (12, 12, 'Cor Nude', '08:00:00', 30, 45.00),
-(13, 13, 'TraÁo fino', '09:00:00', 31, 15.00),
+(13, 13, 'Tra√ßo fino', '09:00:00', 31, 15.00),
 (14, 14, 'Flor no dedo anelar', '10:00:00', 32, 20.00),
-(15, 15, 'UrgÍncia', '11:00:00', 33, 10.00),
+(15, 15, 'Urg√™ncia', '11:00:00', 33, 10.00),
 (16, 16, 'Unha encravada', '13:30:00', 34, 90.00),
 (17, 17, 'Nenhuma', '14:30:00', 35, 45.00),
 (18, 18, 'Cliente com pressa', '15:30:00', 36, 50.00),
-(19, 19, '”leo essencial de lavanda', '17:00:00', 37, 30.00),
-(20, 20, 'CrianÁa agitada', '18:00:00', 40, 35.00);
+(19, 19, '√ìleo essencial de lavanda', '17:00:00', 37, 30.00),
+(20, 20, 'Crian√ßa agitada', '18:00:00', 40, 35.00);
 
 INSERT INTO Produtos_Agendados (agendamento_nr, servico_id, produto_codigo, preco) VALUES
 (1, 1, 1, 8.50),
