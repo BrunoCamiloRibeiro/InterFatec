@@ -1,4 +1,3 @@
--- Active: 1758114171478@@AUDREY_LAPTOP@1433@LANCHONETE
 create database Fabys_Unha
 go
 
