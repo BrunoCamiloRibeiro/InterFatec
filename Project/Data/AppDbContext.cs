@@ -9,11 +9,20 @@ public class AppDbContext : DbContext
     {
     }    
 
+    public DbSet<Pessoas> Pessoas { get; set; }
+    public DbSet<Clientes> Clientes { get; set; }
+    public DbSet<Funcionarios> Funcionarios { get; set; }
+
+    
     public DbSet<Marcas> Marcas { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Pessoas>().ToTable("Pessoas");
+        modelBuilder.Entity<Clientes>().ToTable("Clientes");
+        modelBuilder.Entity<Funcionarios>().ToTable("Funcionarios");
 
         modelBuilder.Entity<Servicos_Agendados>()
         .HasKey(sa => new { sa.AgendamentoNr, sa.ServicoId });
