@@ -23,11 +23,17 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(conn
 builder.Services.AddAutoMapper(cfg =>
 {
     cfg.AddProfile<MarcasProfile>();
+    cfg.AddProfile<FuncionariosProfile>();
+    cfg.AddProfile<ClientesProfile>();
 });
 
 // Registrando os repositórios e serviços
 builder.Services.AddScoped<IMarcasRepository, MarcasRepository>();
-builder.Services.AddScoped<IMarcaService, MarcaService>();
+builder.Services.AddScoped<IMarcasService, MarcasService>();
+builder.Services.AddScoped<IClientesRepository, ClientesRepository>();
+builder.Services.AddScoped<IClientesService, ClientesService>();
+builder.Services.AddScoped<IFuncionariosRepository, FuncionariosRepository>();
+builder.Services.AddScoped<IFuncionariosService, FuncionariosService>();
 
 var app = builder.Build();
 
