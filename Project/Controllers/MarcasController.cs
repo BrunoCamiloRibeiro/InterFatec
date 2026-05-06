@@ -7,17 +7,17 @@ namespace FabysUnha.Controllers;
 
 public class MarcasController : Controller
 {
-    private readonly IMarcaService _marcaService;
+    private readonly IMarcasService _MarcasService;
     private readonly IMapper _mapper;
-    public MarcasController(IMarcaService marcaService, IMapper mapper)
+    public MarcasController(IMarcasService MarcasService, IMapper mapper)
     {
-        _marcaService = marcaService;
+        _MarcasService = MarcasService;
         _mapper = mapper;
     }
 
     public IActionResult Index()
     {
-        var marcas = _marcaService.ObterTodasMarcas().Result;
+        var marcas = _MarcasService.ObterTodasMarcas().Result;
         var marcasViewModel = _mapper.Map<IEnumerable<MarcasViewModel>>(marcas);
         return View(marcasViewModel);
     }
@@ -34,14 +34,14 @@ public class MarcasController : Controller
         if (!ModelState.IsValid) return View(marcaViewModel);
 
         var marca = _mapper.Map<Models.Marcas>(marcaViewModel);
-        await _marcaService.CriarMarca(marca);
+        await _MarcasService.CriarMarca(marca);
         return RedirectToAction(nameof(Index));
     }
 
     [HttpGet]
     public async Task<IActionResult> Editar(int id)
     {
-        var marca = await _marcaService.ObterMarcaPorId(id);
+        var marca = await _MarcasService.ObterMarcaPorId(id);
 
         if (marca == null) return NotFound();
 
@@ -55,14 +55,14 @@ public class MarcasController : Controller
         if (!ModelState.IsValid) return View(marcaViewModel);
 
         var marca = _mapper.Map<Models.Marcas>(marcaViewModel);
-        await _marcaService.AtualizarMarca(marca);
+        await _MarcasService.AtualizarMarca(marca);
         return RedirectToAction(nameof(Index));
     }
 
     [HttpGet]
     public async Task<IActionResult> Excluir(int id)
     {
-        var marca = await _marcaService.ObterMarcaPorId(id);
+        var marca = await _MarcasService.ObterMarcaPorId(id);
 
         if (marca == null) return NotFound();
 
@@ -73,7 +73,7 @@ public class MarcasController : Controller
     [HttpPost, ActionName("Excluir")]
     public async Task<IActionResult> ConfirmarExclusao(int id)
     {
-        await _marcaService.ExcluirMarca(id);
+        await _MarcasService.ExcluirMarca(id);
         return RedirectToAction(nameof(Index));
     }
 }
