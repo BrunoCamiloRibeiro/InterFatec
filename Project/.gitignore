@@ -29,3 +29,5 @@ Thumbs.db
 .env
 appsettings.Development.json
 appsettings.Local.json
+
+Project.sln
