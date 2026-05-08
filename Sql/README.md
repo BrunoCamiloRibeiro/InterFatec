@@ -8,19 +8,19 @@
 ## Commits rápidos: SQL
 
 ```
-"[SQL] feat: 
+git commit -m "[SQL] feat: 
 ```
 ```
-"[SQL] fix: 
+git commit -m "[SQL] fix: 
 ```
 ```
-"[SQL] refactor:
+git commit -m "[SQL] refactor:
 ```
 ```
-"[SQL] docs:
+git commit -m "[SQL] docs:
 ```
 ```
-"[SQL] chore:
+git commit -m "[SQL] chore:
 ```
 
 ## O que deve conter nessa pasta:
