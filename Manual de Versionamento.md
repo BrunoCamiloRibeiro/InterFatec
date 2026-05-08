@@ -14,16 +14,45 @@ Este documento define as regras básicas de organização para o nosso repositó
 
 ## 💬 2. Padrão de Mensagens de Commit
 
-Use um prefixo para sabermos de bater o olho o que foi alterado:
+### *Onde foi alterado:*
 
-* **[DOCS]** - Para alterações em documentos.
-* **[SQL]** - Para novos scripts de banco de dados.
-* **[PROJ]** - Para código no ASP.NET.
-* **[GERAL]** - README ou configurações gerais.
+* `[DOCS]` - Para alterações em documentos.
+* `[SQL]` - Para novos scripts de banco de dados.
+* `[PROJ]` - Para código no ASP.NET.
+* `[GERAL]` - README ou configurações gerais.
 
-**Exemplos:**
-- `[PROJ] Adiciona botão de voltar na tela de login`
-- `[SQL] Cria tabela de clientes`
+### *Tipo de alteração:*
+* `feat:` (Funcionalidade) -> Quando você implementa um **recurso** que novo.
+* `fix:` (Correção) -> Quando você resolve um bug em código.
+* `refactor:` (Refatoração) -> Quando você reestrutura um código sem alterar seu comportamento.
+* `docs:` (Documentação) -> Alterações em arquivos de documentação. (Ignorar em caso de documentação em `[DOCS]`)
+* `chore:` (Tarefas de manutenção) -> Alterações em arquivos que não alteram código funcional (Configurações, Ambiente, Atualizações de dependencias etc)
+
+### *Exemplos:*
+- `[PROJ] feat: implementando o Controller de Agendamentos`
+- `[PROJ] fix: corrigindo erro de validação no modelo de Professores`
+- `[PROJ] refactor: movendo lógica de acesso a dados para a camada de Service`
+- `[PROJ] chore: instalando pacotes do Entity Framework Core Design e Tools`
+  
+<br>
+  
+- `[SQL] feat: script para criação das tabelas de Mensagens e Anexos`
+- `[SQL] feat: adição de Procedure para relatório de estoque`
+- `[SQL] fix: alteração do tamanho do campo de senha para suportar Hash`
+- `[SQL] chore: inclusão de dados iniciais (Seed) para categorias de produtos`
+- `[SQL] docs: atualização do README com prompt de insert`
+  
+<br>
+  
+- `[DOCS] Adição do Diagrama de Classes`
+- `[DOCS] Correção da bibliografia`
+  
+<br>
+  
+- `[GERAL] chore: atualização da ConnectionString no appsettings.json para ambiente de produção`
+- `[GERAL] docs: atualização do README com instruções de como rodar as Migrations`
+- `[GERAL] chore: configuração de regras de CORS no Startup/Program.cs`
+- `[GERAL] fix: correção de links quebrados no arquivo de licença`
 
 ---
 
