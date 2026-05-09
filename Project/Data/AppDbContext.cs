@@ -16,6 +16,8 @@ public class AppDbContext : DbContext
     
     public DbSet<Marcas> Marcas { get; set; }
 
+    public DbSet<Especialidades> Especialidades { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
