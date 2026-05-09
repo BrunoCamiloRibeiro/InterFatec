@@ -25,15 +25,21 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.AddProfile<MarcasProfile>();
     cfg.AddProfile<FuncionariosProfile>();
     cfg.AddProfile<ClientesProfile>();
+    cfg.AddProfile<EspecialidadesProfile>(); 
 });
 
 // Registrando os repositórios e serviços
 builder.Services.AddScoped<IMarcasRepository, MarcasRepository>();
 builder.Services.AddScoped<IMarcasService, MarcasService>();
+
 builder.Services.AddScoped<IClientesRepository, ClientesRepository>();
 builder.Services.AddScoped<IClientesService, ClientesService>();
+
 builder.Services.AddScoped<IFuncionariosRepository, FuncionariosRepository>();
 builder.Services.AddScoped<IFuncionariosService, FuncionariosService>();
+
+builder.Services.AddScoped<IEspecialidadeRepository, EspecialidadesRepository>();
+builder.Services.AddScoped<IEspecialidadeService, EspecialidadeService>();
 
 var app = builder.Build();
 
