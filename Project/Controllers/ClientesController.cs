@@ -88,4 +88,22 @@ public class ClientesController : Controller
             return View(clienteViewModel);
         }
     }
+
+    [HttpGet]
+    public async Task<IActionResult> Excluir(int id)
+    {
+        var cliente = await _clientesService.ObterClientePorId(id);
+        if (cliente == null) return NotFound();
+
+        var clienteViewModel = _mapper.Map<ClienteDetalhesViewModel>(cliente);
+        return View(clienteViewModel);
+    }
+
+    [HttpPost, ActionName("Excluir")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ExcluirConfirmado(int id)
+    {
+        await _clientesService.ExcluirCliente(id);
+        return RedirectToAction(nameof(Index));
+    }
 }
