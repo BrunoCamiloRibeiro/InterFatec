@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using FabysUnha.Services;
 using FabysUnha.ViewModels;
-using AutoMapper;
+using AutoMapper; 
 
 namespace FabysUnha.Controllers;
 
@@ -59,7 +59,6 @@ public class ClientesController : Controller
     }
 
     [HttpGet]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Editar(int id)
     {
         var cliente = await _clientesService.ObterClientePorId(id);
@@ -70,6 +69,7 @@ public class ClientesController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Editar(int id, ClienteEditarViewModel clienteViewModel)
     {
         if (id != clienteViewModel.Id) return BadRequest();
