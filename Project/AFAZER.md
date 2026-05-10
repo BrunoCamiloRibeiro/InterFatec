@@ -15,10 +15,10 @@
 - [x] Implementar métodos no Controller `ProdutosController`
 
 **Serviços**
-- [ ] Criar Model `Servico`
-- [ ] Criar Repository `IServicoRepository` e `ServicoRepository`
-- [ ] Criar Service `IServicoService` e `ServicoService`
-- [ ] Implementar métodos no Controller `ServicosController`
+- [x] Criar Model `Servico`
+- [x] Criar Repository `IServicoRepository` e `ServicoRepository`
+- [x] Criar Service `IServicoService` e `ServicoService`
+- [x] Implementar métodos no Controller `ServicosController`
 
 **Agendamentos**
 - [ ] Criar Model `Agendamento`
@@ -58,10 +58,10 @@
 - [x] Criar `ProdutoDetalhesViewModel`
 
 **Serviços**
-- [ ] Criar `ServicoRegistroViewModel`
-- [ ] Criar `ServicoEditarViewModel`
-- [ ] Criar `ServicoListagemViewModel`
-- [ ] Criar `ServicoDetalhesViewModel`
+- [x] Criar `ServicoRegistroViewModel`
+- [x] Criar `ServicoEditarViewModel`
+- [x] Criar `ServicoListagemViewModel`
+- [x] Criar `ServicoDetalhesViewModel`
 
 **Agendamentos**
 - [ ] Criar `AgendamentoRegistroViewModel`
