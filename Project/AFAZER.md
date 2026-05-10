@@ -3,16 +3,16 @@
 ## 1. Estrutura Base (Model -> Repository -> Service -> Controller)
 
 **Especialidades**
-- [ ] Criar Model `Especialidade`
-- [ ] Criar Repository `IEspecialidadeRepository` e `EspecialidadeRepository`
-- [ ] Criar Service `IEspecialidadeService` e `EspecialidadeService`
-- [ ] Implementar métodos no Controller `EspecialidadesController`
+- [x] Criar Model `Especialidade`
+- [x] Criar Repository `IEspecialidadeRepository` e `EspecialidadeRepository`
+- [x] Criar Service `IEspecialidadeService` e `EspecialidadeService`
+- [x] Implementar métodos no Controller `EspecialidadesController`
 
 **Produtos**
-- [ ] Criar Model `Produto`
-- [ ] Criar Repository `IProdutoRepository` e `ProdutoRepository`
-- [ ] Criar Service `IProdutoService` e `ProdutoService`
-- [ ] Implementar métodos no Controller `ProdutosController`
+- [x] Criar Model `Produto`
+- [x] Criar Repository `IProdutoRepository` e `ProdutoRepository`
+- [x] Criar Service `IProdutoService` e `ProdutoService`
+- [x] Implementar métodos no Controller `ProdutosController`
 
 **Serviços**
 - [ ] Criar Model `Servico`
