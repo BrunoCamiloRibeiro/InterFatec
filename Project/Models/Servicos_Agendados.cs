@@ -15,4 +15,6 @@ public class Servicos_Agendados
 
     public int FuncionarioId { get; set; }
     public Funcionarios? Funcionario { get; set; }
+
+    public ICollection<Produtos_Agendados> Produtos_Agendados { get; set; } = new List<Produtos_Agendados>();
 }
