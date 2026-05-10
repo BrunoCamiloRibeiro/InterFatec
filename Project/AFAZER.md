@@ -42,23 +42,20 @@
 - [ ] Congelar o preço atual do produto/serviço na tabela de itens do agendamento (histórico financeiro).
 
 **Clientes**
-- [ ] Implementar método `Excluir` no `ClientesController`.
+- [x] Implementar método `Excluir` no `ClientesController`.
 
 ---
 
 ## 3. ViewModels (A Criar)
 
 **Especialidades**
-- [ ] Criar `EspecialidadeRegistroViewModel`
-- [ ] Criar `EspecialidadeEditarViewModel`
-- [ ] Criar `EspecialidadeListagemViewModel`
-- [ ] Criar `EspecialidadeDetalhesViewModel`
+- [x] Criar `EspecialidadeViewModel`
 
 **Produtos**
-- [ ] Criar `ProdutoRegistroViewModel`
-- [ ] Criar `ProdutoEditarViewModel`
-- [ ] Criar `ProdutoListagemViewModel`
-- [ ] Criar `ProdutoDetalhesViewModel`
+- [x] Criar `ProdutoRegistroViewModel`
+- [x] Criar `ProdutoEditarViewModel`
+- [x] Criar `ProdutoListagemViewModel`
+- [x] Criar `ProdutoDetalhesViewModel`
 
 **Serviços**
 - [ ] Criar `ServicoRegistroViewModel`
