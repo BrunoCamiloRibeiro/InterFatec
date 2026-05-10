@@ -3,11 +3,11 @@ using FabysUnha.Repositories;
 
 namespace FabysUnha.Services;
 
-public class ProdutoService : IProdutosService
+public class ProdutosService : IProdutosService
 {
     private readonly IProdutosRepository _produtoRepository;
 
-    public ProdutoService(IProdutosRepository produtoRepository)
+    public ProdutosService(IProdutosRepository produtoRepository)
     {
         _produtoRepository = produtoRepository;
     }
