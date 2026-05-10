@@ -26,6 +26,7 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.AddProfile<FuncionariosProfile>();
     cfg.AddProfile<ClientesProfile>();
     cfg.AddProfile<EspecialidadesProfile>(); 
+    cfg.AddProfile<ProdutosProfile>();
 });
 
 // Registrando os repositórios e serviços
@@ -40,6 +41,9 @@ builder.Services.AddScoped<IFuncionariosService, FuncionariosService>();
 
 builder.Services.AddScoped<IEspecialidadeRepository, EspecialidadesRepository>();
 builder.Services.AddScoped<IEspecialidadeService, EspecialidadeService>();
+
+builder.Services.AddScoped<IProdutosRepository, ProdutoRepository>();
+builder.Services.AddScoped<IProdutosService, ProdutosService>();
 
 var app = builder.Build();
 
