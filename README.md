@@ -12,8 +12,8 @@
 ## Tarefas
 
 #### Em Banco de dados:
-- [ ] Descobrir oque fazer com o atributo "Status".
-- [ ] Refazer o DER.
+- [x] Descobrir oque fazer com o atributo "Status".
+- [x] Refazer o DER.
 - [ ] Fazer as Views do Banco.
 - [ ] Fazer as Functions do Banco.
 - [ ] Fazer as Procedures do Banco.
@@ -24,7 +24,7 @@
 - [x] Criar a estrutura de pastas.
 - [x] Criar os arquivos basicos (Controllers).
 - [x] Fazer as Models.
-- [ ] Verificar se as Models estão certas (Qualquer um menos o Bruno).
+- [x] Verificar se as Models estão certas (Qualquer um menos o Bruno).
 - [ ] Fazer os Controllers.
 - [ ] Fazer os Services e Interfaces.
 - [ ] Fazer os Repositories e Interfaces.
@@ -35,7 +35,7 @@
 - [ ] Conectar com o SqlServer sem explodir nada.
 
 #### Em Engenharia de Software:
-- [ ] Refazer os casos de uso (**Importante**).
+- [x] Refazer os casos de uso (**Importante**).
 - [ ] Refazer o Diagrama de Classes.
 - [ ] Refazer os Diagramas de casos de uso.
 - [ ] Atualizar no relatório o Objetivo.
