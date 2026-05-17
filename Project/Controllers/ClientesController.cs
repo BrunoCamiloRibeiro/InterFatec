@@ -78,6 +78,12 @@ public class ClientesController : Controller
 
         try
         {
+            var clienteAtual = await _clientesService.ObterClientePorId(id);
+            if (clienteAtual == null) return NotFound();
+
+            if (!Request.HasFormContentType || !Request.Form.ContainsKey(nameof(clienteViewModel.Status)))
+                clienteViewModel.Status = clienteAtual.Status;
+
             var cliente = _mapper.Map<Models.Clientes>(clienteViewModel);
             await _clientesService.AtualizarCliente(cliente);
             return RedirectToAction(nameof(Index));

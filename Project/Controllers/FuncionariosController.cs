@@ -77,6 +77,12 @@ public class FuncionariosController : Controller
 
         try
         {
+            var funcionarioAtual = await _funcionariosService.ObterFuncionarioPorId(id);
+            if (funcionarioAtual == null) return NotFound();
+
+            if (!Request.HasFormContentType || !Request.Form.ContainsKey(nameof(funcionarioViewModel.Status)))
+                funcionarioViewModel.Status = funcionarioAtual.Status;
+
             var funcionario = _mapper.Map<Models.Funcionarios>(funcionarioViewModel);
             await _funcionariosService.AtualizarFuncionario(funcionario);
             return RedirectToAction(nameof(Index));
