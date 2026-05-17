@@ -1,0 +1,15 @@
+@model ProdutoDetalhesViewModel
+
+<h1>Detalhes do produto</h1>
+
+<p><strong>Código:</strong> @Model.Codigo</p>
+<p><strong>Nome:</strong> @Model.Nome</p>
+<p><strong>Marca:</strong> @Model.NomeMarca</p>
+<p><strong>Preço:</strong> @Model.PrecoFormatado</p>
+<p><strong>Imagem:</strong> @Model.PathImagem</p>
+<p><strong>Status:</strong> @Model.Status</p>
+
+<p>
+    <a asp-action="Editar" asp-route-id="@Model.Codigo">Editar</a>
+    <a asp-action="Index">Voltar</a>
+</p>

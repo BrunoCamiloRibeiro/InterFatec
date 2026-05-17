@@ -27,7 +27,7 @@ public class EspecialidadesController : Controller
     [HttpGet]
     public IActionResult Criar()
     {
-        return View();
+        return View(new EspecialidadeViewModel());
     }
 
     [HttpPost]

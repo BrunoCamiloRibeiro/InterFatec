@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using FabysUnha.Enums;
 
 namespace FabysUnha.ViewModels;
 
@@ -26,6 +27,9 @@ public class ProdutoEditarViewModel
 
     [Display(Name = "Caminho ou URL da Imagem")]
     public string PathImagem { get; set; } = string.Empty;
+
+    [Display(Name = "Status")]
+    public ProdutoStatus Status { get; set; } = ProdutoStatus.Ativo;
 
     // Propriedade auxiliar para montar o <select> no HTML.
     public IEnumerable<SelectListItem>? MarcasList { get; set; }

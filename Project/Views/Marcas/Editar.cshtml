@@ -1,4 +1,4 @@
-@model FabysUnha.ViewModels.MarcasViewModel
+@model MarcasViewModel
 
 <h1>Editar Marca</h1>
 
@@ -11,6 +11,12 @@
         <label asp-for="Nome">Nome da Marca:</label>
         <input asp-for="Nome" />
         <span asp-validation-for="Nome"></span>
+    </div>
+
+    <div>
+        <label asp-for="Status"></label>
+        <select asp-for="Status" asp-items="Html.GetEnumSelectList<MarcaStatus>()"></select>
+        <span asp-validation-for="Status"></span>
     </div>
     
     <br />

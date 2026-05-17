@@ -1,0 +1,44 @@
+@model IEnumerable<ServicoListagemViewModel>
+
+<h1>Serviços</h1>
+
+<p>
+	<a asp-action="Criar">Novo serviço</a>
+</p>
+
+@if (Model != null && Model.Any())
+{
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Descrição</th>
+				<th>Preço</th>
+				<th>Duração</th>
+				<th>Status</th>
+				<th>Ações</th>
+			</tr>
+		</thead>
+		<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>@item.Id</td>
+				<td>@item.Descricao</td>
+				<td>@item.PrecoFormatado</td>
+				<td>@item.TempoFormatado</td>
+				<td>@item.Status</td>
+				<td>
+					<a asp-action="Detalhes" asp-route-id="@item.Id">Detalhes</a>
+					<a asp-action="Editar" asp-route-id="@item.Id">Editar</a>
+					<a asp-action="Excluir" asp-route-id="@item.Id">Excluir</a>
+				</td>
+			</tr>
+		}
+		</tbody>
+	</table>
+}
+else
+{
+	<p>Nenhum serviço cadastrado.</p>
+}

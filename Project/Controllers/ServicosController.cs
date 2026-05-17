@@ -77,6 +77,12 @@ public class ServicosController : Controller
 
         try
         {
+            var servicoAtual = await _servicosService.ObterServicoPorId(viewModel.Id);
+            if (servicoAtual == null) return NotFound();
+
+            if (!Request.HasFormContentType || !Request.Form.ContainsKey(nameof(viewModel.Status)))
+                viewModel.Status = servicoAtual.Status;
+
             var servico = _mapper.Map<Models.Servicos>(viewModel);
             await _servicosService.AtualizarServico(servico);
             

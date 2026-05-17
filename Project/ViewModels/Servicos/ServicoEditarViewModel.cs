@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using FabysUnha.Enums;
 
 namespace FabysUnha.ViewModels.Servicos;
 
@@ -23,4 +24,7 @@ public class ServicoEditarViewModel
     [DataType(DataType.Time)] 
     [Display(Name = "Tempo Estimado (HH:mm)")]
     public TimeSpan Tempo { get; set; }
+
+    [Display(Name = "Status")]
+    public ServicoStatus Status { get; set; } = ServicoStatus.Ativo;
 }

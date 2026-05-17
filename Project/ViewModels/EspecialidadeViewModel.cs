@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using FabysUnha.Enums;
 
 namespace FabysUnha.ViewModels;
 
@@ -11,4 +12,7 @@ public class EspecialidadeViewModel
     [MaxLength(25, ErrorMessage = "O campo Nome deve conter no máximo 25 caracteres.")]
     [Display(Name = "Nome da Especialidade")]
     public string Nome { get; set; } = string.Empty;
+
+    [Display(Name = "Status")]
+    public EspecialidadeStatus Status { get; set; } = EspecialidadeStatus.Ativo;
 }

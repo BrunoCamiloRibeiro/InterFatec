@@ -1,0 +1,44 @@
+@model IEnumerable<ProdutoListagemViewModel>
+
+<h1>Produtos</h1>
+
+<p>
+	<a asp-action="Criar">Novo produto</a>
+</p>
+
+@if (Model != null && Model.Any())
+{
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Código</th>
+				<th>Nome</th>
+				<th>Marca</th>
+				<th>Preço</th>
+				<th>Status</th>
+				<th>Ações</th>
+			</tr>
+		</thead>
+		<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>@item.Codigo</td>
+				<td>@item.Nome</td>
+				<td>@item.NomeMarca</td>
+				<td>@item.PrecoFormatado</td>
+				<td>@item.Status</td>
+				<td>
+					<a asp-action="Detalhes" asp-route-id="@item.Codigo">Detalhes</a>
+					<a asp-action="Editar" asp-route-id="@item.Codigo">Editar</a>
+					<a asp-action="Excluir" asp-route-id="@item.Codigo">Excluir</a>
+				</td>
+			</tr>
+		}
+		</tbody>
+	</table>
+}
+else
+{
+	<p>Nenhum produto cadastrado.</p>
+}

@@ -25,7 +25,7 @@ public class MarcasController : Controller
     [HttpGet]
     public IActionResult Criar()
     {
-        return View();
+        return View(new MarcasViewModel());
     }
 
     [HttpPost]
@@ -53,6 +53,12 @@ public class MarcasController : Controller
     public async Task<IActionResult> Editar(MarcasViewModel marcaViewModel)
     {
         if (!ModelState.IsValid) return View(marcaViewModel);
+
+        var marcaAtual = await _MarcasService.ObterMarcaPorId(marcaViewModel.Id);
+        if (marcaAtual == null) return NotFound();
+
+        if (!Request.HasFormContentType || !Request.Form.ContainsKey(nameof(marcaViewModel.Status)))
+            marcaViewModel.Status = marcaAtual.Status;
 
         var marca = _mapper.Map<Models.Marcas>(marcaViewModel);
         await _MarcasService.AtualizarMarca(marca);

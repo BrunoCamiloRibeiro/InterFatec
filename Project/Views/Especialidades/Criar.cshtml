@@ -1,31 +1,27 @@
-@model MarcasViewModel
+@model EspecialidadeViewModel
 
-<h1>Criar Marca</h1>
-
-<hr />
+<h1>Criar especialidade</h1>
 
 <form asp-action="Criar" method="post">
+    <div asp-validation-summary="All"></div>
+
     <div>
-        <label asp-for="Nome">Nome da Marca:</label>
+        <label asp-for="Nome"></label>
         <input asp-for="Nome" />
         <span asp-validation-for="Nome"></span>
     </div>
 
     <div>
         <label asp-for="Status"></label>
-        <select asp-for="Status" asp-items="Html.GetEnumSelectList<MarcaStatus>()"></select>
+        <select asp-for="Status" asp-items="Html.GetEnumSelectList<EspecialidadeStatus>()"></select>
         <span asp-validation-for="Status"></span>
     </div>
-    
-    <br />
-    
+
     <div>
         <button type="submit">Salvar</button>
     </div>
 </form>
 
-<br />
-
-<div>
-    <a asp-action="Index">Voltar para a lista</a>
-</div>
+<p>
+    <a asp-action="Index">Voltar</a>
+</p>

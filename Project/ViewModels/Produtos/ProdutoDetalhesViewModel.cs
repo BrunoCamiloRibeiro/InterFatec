@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using FabysUnha.Enums;
 
 namespace FabysUnha.ViewModels;
 
@@ -17,4 +18,7 @@ public class ProdutoDetalhesViewModel
 
     [Display(Name = "Imagem")]
     public string PathImagem { get; set; } = string.Empty;
+
+    [Display(Name = "Status")]
+    public ProdutoStatus Status { get; set; }
 }

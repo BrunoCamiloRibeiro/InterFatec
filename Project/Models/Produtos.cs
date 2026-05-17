@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using FabysUnha.Enums;
 
 namespace FabysUnha.Models;
 
@@ -7,6 +8,7 @@ public class Produtos
     [Key]
     public int Codigo { get; set; }
     public string Nome { get; set; } = string.Empty;
+    public ProdutoStatus Status { get; set; } = ProdutoStatus.Ativo;
 
     // FK
     public int MarcaId { get; set; }

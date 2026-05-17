@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using FabysUnha.Enums;
 
 namespace FabysUnha.ViewModels.Servicos;
 
@@ -19,4 +20,7 @@ public class ServicoRegistroViewModel
     [DataType(DataType.Time)] 
     [Display(Name = "Tempo Estimado (HH:mm)")]
     public TimeSpan Tempo { get; set; }
+
+    [Display(Name = "Status")]
+    public ServicoStatus Status { get; set; } = ServicoStatus.Ativo;
 }

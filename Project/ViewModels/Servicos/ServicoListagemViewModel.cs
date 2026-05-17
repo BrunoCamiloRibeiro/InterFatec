@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using FabysUnha.Enums;
 
 namespace FabysUnha.ViewModels.Servicos;
 
@@ -14,4 +15,7 @@ public class ServicoListagemViewModel
 
     [Display(Name = "Duração")]
     public string TempoFormatado { get; set; } = string.Empty;
+
+    [Display(Name = "Status")]
+    public ServicoStatus Status { get; set; }
 }

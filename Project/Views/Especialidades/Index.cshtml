@@ -1,1 +1,34 @@
-<!-- Em Teoria é pra ser um modal dps -->
+@model IEnumerable<EspecialidadeViewModel>
+
+<h1>Especialidades</h1>
+
+<p>
+	<a asp-action="Criar">Nova especialidade</a>
+</p>
+
+@if (Model != null && Model.Any())
+{
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Nome</th>
+				<th>Status</th>
+			</tr>
+		</thead>
+		<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>@item.Id</td>
+				<td>@item.Nome</td>
+				<td>@item.Status</td>
+			</tr>
+		}
+		</tbody>
+	</table>
+}
+else
+{
+	<p>Nenhuma especialidade cadastrada.</p>
+}

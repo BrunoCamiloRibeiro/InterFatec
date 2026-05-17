@@ -1,4 +1,4 @@
-@model IEnumerable<FabysUnha.ViewModels.MarcasViewModel>
+@model IEnumerable<MarcasViewModel>
 
 <h1>Marcas</h1>
 
@@ -11,6 +11,7 @@
         <tr>
             <th>Id</th>
             <th>Nome</th>
+            <th>Status</th>
             <th>Ações</th>
         </tr>
     </thead>
@@ -22,6 +23,9 @@
             </td>
             <td>
                 @item.Nome
+            </td>
+            <td>
+                @item.Status
             </td>
             <td>
                 <a asp-action="Editar" asp-route-id="@item.Id">Editar</a> |

@@ -95,6 +95,12 @@ public class ProdutosController : Controller
 
         try
         {
+            var produtoAtual = await _produtosService.ObterProdutoPorId(viewModel.Codigo);
+            if (produtoAtual == null) return NotFound();
+
+            if (!Request.HasFormContentType || !Request.Form.ContainsKey(nameof(viewModel.Status)))
+                viewModel.Status = produtoAtual.Status;
+
             var produto = _mapper.Map<Models.Produtos>(viewModel);
             await _produtosService.AtualizarProduto(produto);
             return RedirectToAction(nameof(Index));
