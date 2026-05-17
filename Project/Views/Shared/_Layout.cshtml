@@ -1,22 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@ViewData["Title"]</title>
 </head>
 <body>
     <header>
         <nav>
-            <ul>
-                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                <li><a asp-controller="Marcas" asp-action="Index">Marcas</a></li>
-                <li><a asp-controller="Cliente" asp-action="Index">Clientes</a></li>
-            </ul>
+            <a asp-controller="Home" asp-action="Index">Home</a> |
+            <a asp-controller="Agendamentos" asp-action="Index">Agendamentos</a> |
+            <a asp-controller="Clientes" asp-action="Index">Clientes</a> |
+            <a asp-controller="Funcionarios" asp-action="Index">Funcionários</a> |
+            <a asp-controller="Especialidades" asp-action="Index">Especialidades</a> |
+            <a asp-controller="Marcas" asp-action="Index">Marcas</a> |
+            <a asp-controller="Produtos" asp-action="Index">Produtos</a> |
+            <a asp-controller="Servicos" asp-action="Index">Serviços</a>
         </nav>
     </header>
 
-    <main style="padding: 20px;">
+    <main>
         @RenderBody()
     </main>
 
