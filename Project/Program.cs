@@ -8,16 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
-// Por enquanto, usando InMemoryDatabase
-builder.Services.AddDbContext<AppDbContext>(options =>options.UseInMemoryDatabase("FabysUnhaDB"));
-
-/*
-// Para o SQL SERVER Depois
-
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
-
-*/
+builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("FabysUnhaDB"));
 
 // Configurando AutoMapper
 builder.Services.AddAutoMapper(cfg =>
@@ -28,6 +19,7 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.AddProfile<EspecialidadesProfile>(); 
     cfg.AddProfile<ProdutosProfile>();
     cfg.AddProfile<ServicosProfile>();
+    cfg.AddProfile<global::FabysUnha.Mappings.AgendamentosProfile>();
 });
 
 // Registrando os repositórios e serviços
@@ -36,7 +28,7 @@ builder.Services.AddScoped<IMarcasService, MarcasService>();
 
 builder.Services.AddScoped<IClientesRepository, ClientesRepository>();
 builder.Services.AddScoped<IClientesService, ClientesService>();
-
+ 
 builder.Services.AddScoped<IFuncionariosRepository, FuncionariosRepository>();
 builder.Services.AddScoped<IFuncionariosService, FuncionariosService>();
 
@@ -48,6 +40,9 @@ builder.Services.AddScoped<IProdutosService, ProdutosService>();
 
 builder.Services.AddScoped<IServicosRepository, ServicosRepository>();
 builder.Services.AddScoped<IServicosService, ServicosService>();
+
+builder.Services.AddScoped<IAgendamentosRepository, AgendamentosRepository>();
+builder.Services.AddScoped<IAgendamentosService, AgendamentosService>();
 
 var app = builder.Build();
 

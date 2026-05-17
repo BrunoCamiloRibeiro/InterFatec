@@ -2,7 +2,7 @@ namespace FabysUnha.Models;
 
 public class Produtos_Agendados
 {
-    public decimal Valor { get; set; }
+    public decimal Preco { get; set; }
 
     // FK
     public int AgendamentoNr { get; set; }

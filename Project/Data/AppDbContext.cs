@@ -19,6 +19,9 @@ public class AppDbContext : DbContext
     public DbSet<Especialidades> Especialidades { get; set; }
     public DbSet<Produtos> Produtos { get; set; }
     public DbSet<Servicos> Servicos { get; set; }
+    public DbSet<Agendamentos> Agendamentos { get; set; }
+    public DbSet<Servicos_Agendados> Servicos_Agendados { get; set; }
+    public DbSet<Produtos_Agendados> Produtos_Agendados { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

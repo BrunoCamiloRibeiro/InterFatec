@@ -1,0 +1,285 @@
+@model AgendamentoRegistroViewModel
+
+@{
+    var serviceItems = Model.ServicosSelecionados.Count > 0
+        ? Model.ServicosSelecionados
+        : new List<ServicoAgendadoViewModel> { new ServicoAgendadoViewModel() };
+
+    var productItems = Model.ProdutosSelecionados.Count > 0
+        ? Model.ProdutosSelecionados
+        : new List<ProdutoAgendadoViewModel> { new ProdutoAgendadoViewModel() };
+}
+
+<h1>Criar agendamento</h1>
+
+<form asp-action="Criar" method="post">
+    <div asp-validation-summary="All"></div>
+
+    <div>
+        <label asp-for="ClienteId"></label>
+        <select asp-for="ClienteId" asp-items="Model.ClientesList">
+            <option value="">Selecione</option>
+        </select>
+        <span asp-validation-for="ClienteId"></span>
+    </div>
+
+    <div>
+        <label asp-for="DataHora"></label>
+        <input asp-for="DataHora" type="datetime-local" value="@(Model.DataHora == default ? DateTime.Now.ToString("yyyy-MM-ddTHH:mm") : Model.DataHora.ToString("yyyy-MM-ddTHH:mm"))" />
+        <span asp-validation-for="DataHora"></span>
+    </div>
+
+    <div>
+        <label asp-for="Status"></label>
+        <select asp-for="Status" asp-items="Html.GetEnumSelectList<AgendamentoStatus>()"></select>
+        <span asp-validation-for="Status"></span>
+    </div>
+
+    <h2>Serviços</h2>
+    <div id="service-rows">
+        @for (var i = 0; i < serviceItems.Count; i++)
+        {
+            var item = serviceItems[i];
+            var servicosOptions = (Model.ServicosList ?? Enumerable.Empty<SelectListItem>())
+                .Select(option => new SelectListItem { Text = option.Text, Value = option.Value, Selected = option.Value == item.ServicoId.ToString() })
+                .ToList();
+
+            var funcionariosOptions = (Model.FuncionariosList ?? Enumerable.Empty<SelectListItem>())
+                .Select(option => new SelectListItem { Text = option.Text, Value = option.Value, Selected = option.Value == item.FuncionarioId.ToString() })
+                .ToList();
+
+            var servicePrefix = $"ServicosSelecionados[{i}]";
+
+            <div class="js-service-row">
+                <div>
+                    <label>Serviço</label>
+                    <select data-field="ServicoId" name="@($"{servicePrefix}.ServicoId")" asp-items="servicosOptions">
+                        <option value="">Selecione</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Funcionário</label>
+                    <select data-field="FuncionarioId" name="@($"{servicePrefix}.FuncionarioId")" asp-items="funcionariosOptions">
+                        <option value="">Selecione</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Horário</label>
+                    <input data-field="Horario" type="time" name="@($"{servicePrefix}.Horario")" value="@(item.Horario == default ? string.Empty : DateTime.Today.Add(item.Horario).ToString("HH:mm"))" />
+                </div>
+
+                <div>
+                    <label>Observação</label>
+                    <input data-field="Obs" type="text" name="@($"{servicePrefix}.Obs")" value="@item.Obs" />
+                </div>
+
+                <div>
+                    <button type="button" class="js-remove-row">Remover serviço</button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <p>
+        <button type="button" id="add-service">Adicionar serviço</button>
+    </p>
+
+    <template id="service-template">
+        <div class="js-service-row">
+            <div>
+                <label>Serviço</label>
+                <select data-field="ServicoId" asp-items="Model.ServicosList">
+                    <option value="">Selecione</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Funcionário</label>
+                <select data-field="FuncionarioId" asp-items="Model.FuncionariosList">
+                    <option value="">Selecione</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Horário</label>
+                <input data-field="Horario" type="time" />
+            </div>
+
+            <div>
+                <label>Observação</label>
+                <input data-field="Obs" type="text" />
+            </div>
+
+            <div>
+                <button type="button" class="js-remove-row">Remover serviço</button>
+            </div>
+        </div>
+    </template>
+
+    <h2>Produtos</h2>
+    <div id="product-rows">
+        @for (var i = 0; i < productItems.Count; i++)
+        {
+            var item = productItems[i];
+            var produtosOptions = (Model.ProdutosList ?? Enumerable.Empty<SelectListItem>())
+                .Select(option => new SelectListItem { Text = option.Text, Value = option.Value, Selected = option.Value == item.ProdutoCodigo.ToString() })
+                .ToList();
+
+            var produtoServicoOptions = (Model.ServicosList ?? Enumerable.Empty<SelectListItem>())
+                .Select(option => new SelectListItem { Text = option.Text, Value = option.Value, Selected = option.Value == item.ServicoId.ToString() })
+                .ToList();
+
+            var productPrefix = $"ProdutosSelecionados[{i}]";
+
+            <div class="js-product-row">
+                <div>
+                    <label>Produto</label>
+                    <select data-field="ProdutoCodigo" name="@($"{productPrefix}.ProdutoCodigo")" asp-items="produtosOptions">
+                        <option value="">Selecione</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Serviço</label>
+                    <select data-field="ServicoId" name="@($"{productPrefix}.ServicoId")" asp-items="produtoServicoOptions">
+                        <option value="">Selecione</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Preço</label>
+                    <input data-field="Preco" type="number" step="0.01" name="@($"{productPrefix}.Preco")" value="@(item.Preco == 0 ? string.Empty : item.Preco.ToString(System.Globalization.CultureInfo.InvariantCulture))" />
+                </div>
+
+                <div>
+                    <button type="button" class="js-remove-row">Remover produto</button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <p>
+        <button type="button" id="add-product">Adicionar produto</button>
+    </p>
+
+    <template id="product-template">
+        <div class="js-product-row">
+            <div>
+                <label>Produto</label>
+                <select data-field="ProdutoCodigo" asp-items="Model.ProdutosList">
+                    <option value="">Selecione</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Serviço</label>
+                <select data-field="ServicoId" asp-items="Model.ServicosList">
+                    <option value="">Selecione</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Preço</label>
+                <input data-field="Preco" type="number" step="0.01" />
+            </div>
+
+            <div>
+                <button type="button" class="js-remove-row">Remover produto</button>
+            </div>
+        </div>
+    </template>
+
+    <div>
+        <button type="submit">Salvar</button>
+    </div>
+</form>
+
+<p>
+    <a asp-action="Index">Voltar</a>
+</p>
+
+@section Scripts {
+    <script>
+        (function () {
+            function renumberRows(containerId, rowSelector, prefix) {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+
+                const rows = container.querySelectorAll(rowSelector);
+                rows.forEach(function (row, index) {
+                    row.querySelectorAll('[data-field]').forEach(function (element) {
+                        element.name = prefix + '[' + index + '].' + element.dataset.field;
+                    });
+                });
+            }
+
+            function addRow(templateId, containerId, rowSelector, prefix) {
+                const container = document.getElementById(containerId);
+                const template = document.getElementById(templateId);
+                if (!container || !template) return;
+
+                container.appendChild(template.content.cloneNode(true));
+                renumberRows(containerId, rowSelector, prefix);
+            }
+
+            function hookButtons() {
+                const serviceContainer = document.getElementById('service-rows');
+                const productContainer = document.getElementById('product-rows');
+
+                const addServiceButton = document.getElementById('add-service');
+                const addProductButton = document.getElementById('add-product');
+
+                if (addServiceButton) {
+                    addServiceButton.addEventListener('click', function () {
+                        addRow('service-template', 'service-rows', '.js-service-row', 'ServicosSelecionados');
+                    });
+                }
+
+                if (addProductButton) {
+                    addProductButton.addEventListener('click', function () {
+                        addRow('product-template', 'product-rows', '.js-product-row', 'ProdutosSelecionados');
+                    });
+                }
+
+                if (serviceContainer) {
+                    serviceContainer.addEventListener('click', function (event) {
+                        const target = event.target;
+                        if (!(target instanceof HTMLElement) || !target.classList.contains('js-remove-row')) return;
+
+                        const rows = serviceContainer.querySelectorAll('.js-service-row');
+                        if (rows.length <= 1) return;
+
+                        const row = target.closest('.js-service-row');
+                        if (row) {
+                            row.remove();
+                            renumberRows('service-rows', '.js-service-row', 'ServicosSelecionados');
+                        }
+                    });
+                }
+
+                if (productContainer) {
+                    productContainer.addEventListener('click', function (event) {
+                        const target = event.target;
+                        if (!(target instanceof HTMLElement) || !target.classList.contains('js-remove-row')) return;
+
+                        const rows = productContainer.querySelectorAll('.js-product-row');
+                        if (rows.length <= 1) return;
+
+                        const row = target.closest('.js-product-row');
+                        if (row) {
+                            row.remove();
+                            renumberRows('product-rows', '.js-product-row', 'ProdutosSelecionados');
+                        }
+                    });
+                }
+
+                renumberRows('service-rows', '.js-service-row', 'ServicosSelecionados');
+                renumberRows('product-rows', '.js-product-row', 'ProdutosSelecionados');
+            }
+
+            document.addEventListener('DOMContentLoaded', hookButtons);
+        })();
+    </script>
+}

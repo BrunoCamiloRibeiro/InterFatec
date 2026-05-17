@@ -1,0 +1,20 @@
+@model AgendamentoDetalhesViewModel
+
+<h1>Excluir agendamento</h1>
+
+<p>Tem certeza que deseja excluir este agendamento?</p>
+
+<p><strong>Número:</strong> @Model.Nr</p>
+<p><strong>Cliente:</strong> @Model.ClienteNome</p>
+<p><strong>Data e Hora:</strong> @Model.DataHora</p>
+<p><strong>Status:</strong> @Model.Status</p>
+<p><strong>Total:</strong> @Model.Total</p>
+
+<form asp-action="Excluir" method="post">
+    <input type="hidden" asp-for="Nr" />
+    <button type="submit">Confirmar exclusão</button>
+</form>
+
+<p>
+    <a asp-action="Index">Voltar</a>
+</p>
