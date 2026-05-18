@@ -1,0 +1,48 @@
+@model AgendamentoDetalhesViewModel
+
+<h1>Detalhes do agendamento</h1>
+
+<p><strong>Número:</strong> @Model.Nr</p>
+<p><strong>Cliente:</strong> @Model.ClienteNome</p>
+<p><strong>Data e Hora:</strong> @Model.DataHora</p>
+<p><strong>Status:</strong> @Model.Status</p>
+<p><strong>Total:</strong> @Model.Total</p>
+
+<h2>Serviços</h2>
+@if (Model.ServicosAgendados.Count > 0)
+{
+    <ul>
+        @foreach (var item in Model.ServicosAgendados)
+        {
+            <li>
+                Serviço: @item.ServicoNome | Funcionário: @item.FuncionarioNome | Horário: @item.Horario | Obs: @item.Obs | Valor: @item.Valor
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>Sem serviços.</p>
+}
+
+<h2>Produtos</h2>
+@if (Model.ProdutosAgendados.Count > 0)
+{
+    <ul>
+        @foreach (var item in Model.ProdutosAgendados)
+        {
+            <li>
+                Produto: @item.ProdutoNome | Serviço: @item.ServicoNome | Preço: @item.Preco
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>Sem produtos.</p>
+}
+
+<p>
+    <a asp-action="Editar" asp-route-id="@Model.Nr">Editar</a>
+    <a asp-action="Index">Voltar</a>
+</p>

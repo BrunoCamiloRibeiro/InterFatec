@@ -1,0 +1,46 @@
+@model FuncionarioEditarViewModel
+
+<h1>Editar funcionário</h1>
+
+<form asp-action="Editar" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="All"></div>
+
+    <div>
+        <label asp-for="Nome"></label>
+        <input asp-for="Nome" />
+        <span asp-validation-for="Nome"></span>
+    </div>
+
+    <div>
+        <label asp-for="Telefone"></label>
+        <input asp-for="Telefone" />
+        <span asp-validation-for="Telefone"></span>
+    </div>
+
+    <div>
+        <label asp-for="Status"></label>
+        <select asp-for="Status" asp-items="Html.GetEnumSelectList<PessoaStatus>()"></select>
+        <span asp-validation-for="Status"></span>
+    </div>
+
+    <div>
+        <label asp-for="Salario"></label>
+        <input asp-for="Salario" />
+        <span asp-validation-for="Salario"></span>
+    </div>
+
+    <div>
+        <label asp-for="EspecialidadeId"></label>
+        <input asp-for="EspecialidadeId" />
+        <span asp-validation-for="EspecialidadeId"></span>
+    </div>
+
+    <div>
+        <button type="submit">Salvar</button>
+    </div>
+</form>
+
+<p>
+    <a asp-action="Index">Voltar</a>
+</p>

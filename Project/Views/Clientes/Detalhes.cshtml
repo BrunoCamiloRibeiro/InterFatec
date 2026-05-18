@@ -1,0 +1,13 @@
+@model ClienteDetalhesViewModel
+
+<h1>Detalhes do cliente</h1>
+
+<p><strong>Id:</strong> @Model.Id</p>
+<p><strong>Nome:</strong> @Model.Nome</p>
+<p><strong>Telefone:</strong> @Model.Telefone</p>
+<p><strong>Status:</strong> @Model.Status</p>
+
+<p>
+    <a asp-action="Editar" asp-route-id="@Model.Id">Editar</a>
+    <a asp-action="Index">Voltar</a>
+</p>

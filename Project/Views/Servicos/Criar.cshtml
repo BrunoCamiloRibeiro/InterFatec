@@ -1,0 +1,39 @@
+@model ServicoRegistroViewModel
+
+<h1>Criar serviço</h1>
+
+<form asp-action="Criar" method="post">
+    <div asp-validation-summary="All"></div>
+
+    <div>
+        <label asp-for="Descricao"></label>
+        <input asp-for="Descricao" />
+        <span asp-validation-for="Descricao"></span>
+    </div>
+
+    <div>
+        <label asp-for="Preco"></label>
+        <input asp-for="Preco" />
+        <span asp-validation-for="Preco"></span>
+    </div>
+
+    <div>
+        <label asp-for="Tempo"></label>
+        <input asp-for="Tempo" type="time" />
+        <span asp-validation-for="Tempo"></span>
+    </div>
+
+    <div>
+        <label asp-for="Status"></label>
+        <select asp-for="Status" asp-items="Html.GetEnumSelectList<ServicoStatus>()"></select>
+        <span asp-validation-for="Status"></span>
+    </div>
+
+    <div>
+        <button type="submit">Salvar</button>
+    </div>
+</form>
+
+<p>
+    <a asp-action="Index">Voltar</a>
+</p>

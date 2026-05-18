@@ -1,0 +1,46 @@
+@model IEnumerable<ClienteListagemViewModel>
+
+<h1>Clientes</h1>
+
+<p>
+	<a asp-action="Criar">Novo cliente</a>
+</p>
+
+@if (Model != null && Model.Any())
+{
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Nome</th>
+				<th>Telefone</th>
+				<th>Status</th>
+				<th>Total de Agendamentos</th>
+				<th>Último Agendamento</th>
+				<th>Ações</th>
+			</tr>
+		</thead>
+		<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>@item.Id</td>
+				<td>@item.Nome</td>
+				<td>@item.Telefone</td>
+				<td>@item.Status</td>
+				<td>@item.TotalAgendamentos</td>
+				<td>@item.DataUltimoAgendamento</td>
+				<td>
+					<a asp-action="Detalhes" asp-route-id="@item.Id">Detalhes</a>
+					<a asp-action="Editar" asp-route-id="@item.Id">Editar</a>
+					<a asp-action="Excluir" asp-route-id="@item.Id">Excluir</a>
+				</td>
+			</tr>
+		}
+		</tbody>
+	</table>
+}
+else
+{
+	<p>Nenhum cliente cadastrado.</p>
+}

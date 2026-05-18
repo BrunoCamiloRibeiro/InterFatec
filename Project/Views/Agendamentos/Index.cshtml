@@ -1,0 +1,51 @@
+@model IEnumerable<AgendamentoListagemViewModel>
+
+<h1>Agendamentos</h1>
+
+<p>
+	<a asp-action="Criar">Novo agendamento</a>
+</p>
+
+@if (Model != null && Model.Any())
+{
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Número</th>
+				<th>Cliente</th>
+				<th>Data e Hora</th>
+				<th>Status</th>
+				<th>Total</th>
+				<th>Serviços</th>
+				<th>Produtos</th>
+				<th>Ações</th>
+			</tr>
+		</thead>
+		<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>@item.Nr</td>
+				<td>@item.ClienteNome</td>
+				<td>@item.DataHora</td>
+				<td>@item.Status</td>
+				<td>@item.Total</td>
+				<td>@item.QuantidadeServicos</td>
+				<td>@item.QuantidadeProdutos</td>
+				<td>
+					<a asp-action="Detalhes" asp-route-id="@item.Nr">Detalhes</a>
+					<a asp-action="Editar" asp-route-id="@item.Nr">Editar</a>
+					<form asp-action="Cancelar" asp-route-id="@item.Nr" method="post">
+						<button type="submit">Cancelar</button>
+					</form>
+					<a asp-action="Excluir" asp-route-id="@item.Nr">Excluir</a>
+				</td>
+			</tr>
+		}
+		</tbody>
+	</table>
+}
+else
+{
+	<p>Nenhum agendamento cadastrado.</p>
+}

@@ -1,0 +1,21 @@
+@model ProdutoDetalhesViewModel
+
+<h1>Excluir produto</h1>
+
+<p>Tem certeza que deseja excluir este produto?</p>
+
+<p><strong>Código:</strong> @Model.Codigo</p>
+<p><strong>Nome:</strong> @Model.Nome</p>
+<p><strong>Marca:</strong> @Model.NomeMarca</p>
+<p><strong>Preço:</strong> @Model.PrecoFormatado</p>
+<p><strong>Imagem:</strong> @Model.PathImagem</p>
+<p><strong>Status:</strong> @Model.Status</p>
+
+<form asp-action="Excluir" method="post">
+    <input type="hidden" asp-for="Codigo" />
+    <button type="submit">Confirmar exclusão</button>
+</form>
+
+<p>
+    <a asp-action="Index">Voltar</a>
+</p>

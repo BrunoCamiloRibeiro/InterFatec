@@ -1,0 +1,20 @@
+@model ServicoDetalhesViewModel
+
+<h1>Excluir serviço</h1>
+
+<p>Tem certeza que deseja excluir este serviço?</p>
+
+<p><strong>Id:</strong> @Model.Id</p>
+<p><strong>Descrição:</strong> @Model.Descricao</p>
+<p><strong>Preço:</strong> @Model.PrecoFormatado</p>
+<p><strong>Tempo:</strong> @Model.TempoFormatado</p>
+<p><strong>Status:</strong> @Model.Status</p>
+
+<form asp-action="Excluir" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit">Confirmar exclusão</button>
+</form>
+
+<p>
+    <a asp-action="Index">Voltar</a>
+</p>

@@ -1,0 +1,48 @@
+@model ProdutoEditarViewModel
+
+<h1>Editar produto</h1>
+
+<form asp-action="Editar" method="post">
+    <input type="hidden" asp-for="Codigo" />
+    <div asp-validation-summary="All"></div>
+
+    <div>
+        <label asp-for="Nome"></label>
+        <input asp-for="Nome" />
+        <span asp-validation-for="Nome"></span>
+    </div>
+
+    <div>
+        <label asp-for="MarcaId"></label>
+        <select asp-for="MarcaId" asp-items="Model.MarcasList">
+            <option value="">Selecione</option>
+        </select>
+        <span asp-validation-for="MarcaId"></span>
+    </div>
+
+    <div>
+        <label asp-for="Preco"></label>
+        <input asp-for="Preco" />
+        <span asp-validation-for="Preco"></span>
+    </div>
+
+    <div>
+        <label asp-for="PathImagem"></label>
+        <input asp-for="PathImagem" />
+        <span asp-validation-for="PathImagem"></span>
+    </div>
+
+    <div>
+        <label asp-for="Status"></label>
+        <select asp-for="Status" asp-items="Html.GetEnumSelectList<ProdutoStatus>()"></select>
+        <span asp-validation-for="Status"></span>
+    </div>
+
+    <div>
+        <button type="submit">Salvar</button>
+    </div>
+</form>
+
+<p>
+    <a asp-action="Index">Voltar</a>
+</p>

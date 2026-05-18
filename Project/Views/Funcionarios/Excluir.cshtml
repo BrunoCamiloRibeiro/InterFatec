@@ -1,0 +1,21 @@
+@model FuncionarioDetalhesViewModel
+
+<h1>Excluir funcionário</h1>
+
+<p>Tem certeza que deseja excluir este funcionário?</p>
+
+<p><strong>Id:</strong> @Model.Id</p>
+<p><strong>Nome:</strong> @Model.Nome</p>
+<p><strong>Telefone:</strong> @Model.Telefone</p>
+<p><strong>Status:</strong> @Model.Status</p>
+<p><strong>Salário:</strong> @Model.Salario</p>
+<p><strong>Especialidade:</strong> @Model.EspecialidadeNome</p>
+
+<form asp-action="Excluir" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit">Confirmar exclusão</button>
+</form>
+
+<p>
+    <a asp-action="Index">Voltar</a>
+</p>
