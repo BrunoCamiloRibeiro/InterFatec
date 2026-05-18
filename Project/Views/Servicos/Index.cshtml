@@ -1,9 +1,9 @@
 @model IEnumerable<ServicoListagemViewModel>
 
-<h1>Serviços</h1>
+<h1 class="h1 text-center mx-3">Serviços</h1>
 
-<p>
-	<a asp-action="Criar">Novo serviço</a>
+<p class="container-fluid row justify-content-end">
+	<a class="btn btn-primary w-25" asp-action="Criar">Novo serviço</a>
 </p>
 
 @if (Model != null && Model.Any())

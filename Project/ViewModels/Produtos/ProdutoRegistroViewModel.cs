@@ -6,6 +6,7 @@ namespace FabysUnha.ViewModels;
 
 public class ProdutoRegistroViewModel
 {
+    
     [Required(ErrorMessage = "O campo Nome é obrigatório.")]
     [MinLength(2, ErrorMessage = "O campo Nome deve conter pelo menos 2 caracteres.")]
     [MaxLength(100, ErrorMessage = "O campo Nome deve conter no máximo 100 caracteres.")]

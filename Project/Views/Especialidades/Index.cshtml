@@ -1,9 +1,9 @@
 @model IEnumerable<EspecialidadeViewModel>
 
-<h1>Especialidades</h1>
+<h1 class="h1 text-center mx-3">Especialidades</h1>
 
-<p>
-	<a asp-action="Criar">Nova especialidade</a>
+<p class="container-fluid row justify-content-end">
+	<a class="btn btn-primary w-25" asp-action="Criar">Nova especialidade</a>
 </p>
 
 @if (Model != null && Model.Any())
