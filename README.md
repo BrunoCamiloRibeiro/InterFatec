@@ -1,9 +1,9 @@
 
 <div align="center">
  
-![C#](https://img.shields.io/badge/C%23-58.9%25-68217A?style=flat)
-![TSQL](https://img.shields.io/badge/TSQL-35.0%25-00758F?style=flat)
-![HTML](https://img.shields.io/badge/HTML-6.1%25-e34c26?style=flat)
+![C#](https://img.shields.io/badge/C%23-37.8%25-68217A?style=flat)
+![TSQL](https://img.shields.io/badge/TSQL-21.4%25-00758F?style=flat)
+![HTML](https://img.shields.io/badge/HTML-40.8%25-e34c26?style=flat)
 # **Interdisciplinar FATEC**
 ### 4º Semestre
 
