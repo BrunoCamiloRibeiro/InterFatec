@@ -76,18 +76,31 @@ public class AgendamentosRepository : IAgendamentosRepository
     // Mudar esses includes pra porra de um view dps
     public async Task<Agendamentos?> ObterAgendamentoPorId(int id)
     {
-        return await _context.Agendamentos
-            .Include(a => a.Cliente)
+        var agendamento = await _context.Agendamentos
             .Include(a => a.Servicos_Agendados) 
                 .ThenInclude(sa => sa.Servico)
-            .Include(a => a.Servicos_Agendados)
-                .ThenInclude(sa => sa.Funcionario)
             .Include(a => a.Produtos_Agendados)
                 .ThenInclude(pa => pa.Produto)
             .Include(a => a.Produtos_Agendados)
-                .ThenInclude(pa => pa.ServicoAgendado)
+                .ThenInclude(pa => pa.ServicoAgendado!)
                     .ThenInclude(sa => sa.Servico)
             .FirstOrDefaultAsync(a => a.Nr == id);
+
+        if (agendamento == null)
+            return null;
+
+        agendamento.Cliente = await CarregarClienteAsync(agendamento.ClienteId);
+
+        var funcionarios = await CarregarFuncionariosAsync(
+            agendamento.Servicos_Agendados.Select(sa => sa.FuncionarioId));
+
+        foreach (var servicoAgendado in agendamento.Servicos_Agendados)
+        {
+            if (funcionarios.TryGetValue(servicoAgendado.FuncionarioId, out var funcionario))
+                servicoAgendado.Funcionario = funcionario;
+        }
+
+        return agendamento;
     }
 
     public async Task CriarAgendamento(Agendamentos agendamento)
@@ -113,16 +126,62 @@ public class AgendamentosRepository : IAgendamentosRepository
         var dataInicio = data.Date;
         var dataFim = dataInicio.AddDays(1);
 
-        return await _context.Servicos_Agendados
-            .AsNoTracking()
-            .Where(sa => sa.FuncionarioId == funcionarioId
-                && sa.Agendamento != null
-                && sa.Agendamento.Data >= dataInicio
-                && sa.Agendamento.Data < dataFim
-                && sa.Agendamento.Status != Enums.AgendamentoStatus.Cancelado)
-            .Select(sa => sa.Horario)
+        return await (from servicoAgendado in _context.Servicos_Agendados.AsNoTracking()
+                      join agendamento in _context.Agendamentos.AsNoTracking()
+                          on servicoAgendado.AgendamentoNr equals agendamento.Nr
+                      where servicoAgendado.FuncionarioId == funcionarioId
+                          && agendamento.Data >= dataInicio
+                          && agendamento.Data < dataFim
+                          && agendamento.Status != Enums.AgendamentoStatus.Cancelado
+                      select servicoAgendado.Horario)
             .Distinct()
             .OrderBy(h => h)
             .ToListAsync();
+    }
+
+    private async Task<Clientes?> CarregarClienteAsync(int clienteId)
+    {
+        var clienteView = await _context.Set<ListaClientesView>()
+            .AsNoTracking()
+            .FirstOrDefaultAsync(cliente => cliente.Id == clienteId);
+
+        if (clienteView == null)
+            return null;
+
+        return new Clientes
+        {
+            Id = clienteView.Id,
+            Nome = clienteView.Nome,
+            Telefone = clienteView.Telefone,
+            Status = (PessoaStatus)clienteView.StatusId
+        };
+    }
+
+    private async Task<Dictionary<int, Funcionarios>> CarregarFuncionariosAsync(IEnumerable<int> funcionariosIds)
+    {
+        var ids = funcionariosIds.Distinct().ToList();
+
+        if (ids.Count == 0)
+            return new Dictionary<int, Funcionarios>();
+
+        var funcionariosView = await _context.Set<ListaFuncionariosView>()
+            .AsNoTracking()
+            .Where(funcionario => ids.Contains(funcionario.Id))
+            .ToListAsync();
+
+        return funcionariosView.ToDictionary(
+            funcionario => funcionario.Id,
+            funcionario => new Funcionarios
+            {
+                Id = funcionario.Id,
+                Nome = funcionario.Nome,
+                Telefone = funcionario.Telefone,
+                Status = (PessoaStatus)funcionario.StatusId,
+                Salario = funcionario.Salario,
+                Especialidade = new Especialidades
+                {
+                    Descricao = funcionario.Especialidade
+                }
+            });
     }
 }
