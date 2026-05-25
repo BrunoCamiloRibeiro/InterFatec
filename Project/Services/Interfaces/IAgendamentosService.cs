@@ -12,4 +12,7 @@ public interface IAgendamentosService
     
     Task CancelarAgendamento(int nr);
     Task ExcluirAgendamento(int nr);
+
+    Task CriarAgendamentoCliente(AgendamentoClienteViewModel viewModel);
+    Task<List<TimeSpan>> ObterHorariosDisponiveis(int funcionarioId, DateTime data);
 }

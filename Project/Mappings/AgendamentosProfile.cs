@@ -14,7 +14,7 @@ public class AgendamentosProfile : Profile
 
         CreateMap<Produtos_Agendados, ProdutoAgendadoViewModel>()
             .ForMember(dest => dest.ProdutoNome, opt => opt.MapFrom(src => src.Produto != null ? src.Produto.Nome : string.Empty))
-            .ForMember(dest => dest.ServicoNome, opt => opt.MapFrom(src => src.Servico != null ? src.Servico.Descricao : string.Empty));
+            .ForMember(dest => dest.ServicoNome, opt => opt.MapFrom(src => src.ServicoAgendado != null && src.ServicoAgendado.Servico != null ? src.ServicoAgendado.Servico.Descricao : string.Empty));
 
         CreateMap<Agendamentos, AgendamentoListagemViewModel>()
             .ForMember(dest => dest.DataHora, opt => opt.MapFrom(src => src.Data))

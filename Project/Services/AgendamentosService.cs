@@ -183,4 +183,111 @@ public class AgendamentosService : IAgendamentosService
 
         return produto;
     }
+
+    public async Task CriarAgendamentoCliente(AgendamentoClienteViewModel viewModel)
+    {
+        // 1. Identificar ou criar o cliente pelo telefone
+        var telefone = viewModel.Telefone?.Trim() ?? string.Empty;
+        var nome = viewModel.Nome?.Trim() ?? string.Empty;
+
+        if (string.IsNullOrWhiteSpace(telefone))
+            throw new ArgumentException("O telefone é obrigatório.");
+
+        if (string.IsNullOrWhiteSpace(nome))
+            throw new ArgumentException("O nome é obrigatório.");
+
+        var clienteExistente = await _clientesRepository.ObterClientePorTelefone(telefone);
+        int clienteId;
+
+        if (clienteExistente != null)
+        {
+            clienteId = clienteExistente.Id;
+        }
+        else
+        {
+            var novoCliente = new Clientes
+            {
+                Nome = nome,
+                Telefone = telefone,
+                Status = Enums.PessoaStatus.Ativo
+            };
+            await _clientesRepository.RegistrarCliente(novoCliente);
+
+            var clienteCriado = await _clientesRepository.ObterClientePorTelefone(telefone);
+            if (clienteCriado == null)
+                throw new InvalidOperationException("Erro ao registrar o cliente.");
+
+            clienteId = clienteCriado.Id;
+        }
+
+        // 2. Validar serviços
+        if (viewModel.Servicos == null || viewModel.Servicos.Count == 0)
+            throw new ArgumentException("Selecione pelo menos um serviço.");
+
+        // 3. Montar o agendamento
+        var agendamento = new Agendamentos
+        {
+            ClienteId = clienteId,
+            Data = viewModel.Data,
+            Status = Enums.AgendamentoStatus.Pendente,
+            Total = 0
+        };
+
+        foreach (var servicoItem in viewModel.Servicos)
+        {
+            var servicoDb = await ObterServicoObrigatorioAsync(servicoItem.ServicoId);
+            var funcionarioDb = await ObterFuncionarioObrigatorioAsync(servicoItem.FuncionarioId);
+
+            var servicoAgendado = new Servicos_Agendados
+            {
+                ServicoId = servicoDb.Id,
+                FuncionarioId = funcionarioDb.Id,
+                Horario = servicoItem.Horario,
+                Obs = servicoItem.Obs?.Trim() ?? string.Empty,
+                Valor = servicoDb.Preco
+            };
+
+            agendamento.Servicos_Agendados.Add(servicoAgendado);
+            agendamento.Total += servicoDb.Preco;
+
+            // Produtos dentro deste serviço
+            if (servicoItem.ProdutosCodigos != null)
+            {
+                foreach (var produtoCodigo in servicoItem.ProdutosCodigos)
+                {
+                    if (produtoCodigo <= 0) continue;
+
+                    var produtoDb = await ObterProdutoObrigatorioAsync(produtoCodigo);
+
+                    agendamento.Produtos_Agendados.Add(new Produtos_Agendados
+                    {
+                        ServicoId = servicoDb.Id,
+                        ProdutoCodigo = produtoDb.Codigo,
+                        Preco = produtoDb.Preco
+                    });
+
+                    agendamento.Total += produtoDb.Preco;
+                }
+            }
+        }
+
+        if (agendamento.Total <= 0)
+            throw new ArgumentException("O agendamento deve conter pelo menos um serviço.");
+
+        await _agendamentosRepository.CriarAgendamento(agendamento);
+    }
+
+    public async Task<List<TimeSpan>> ObterHorariosDisponiveis(int funcionarioId, DateTime data)
+    {
+        var ocupados = await _agendamentosRepository.ObterHorariosOcupados(funcionarioId, data);
+
+        // Horários de funcionamento: 08:00 às 18:00, slots de 1 hora
+        var todosHorarios = new List<TimeSpan>();
+        for (var hora = 8; hora < 18; hora++)
+        {
+            todosHorarios.Add(new TimeSpan(hora, 0, 0));
+        }
+
+        return todosHorarios.Where(h => !ocupados.Contains(h)).ToList();
+    }
 }

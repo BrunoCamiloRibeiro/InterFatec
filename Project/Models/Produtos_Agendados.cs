@@ -9,7 +9,7 @@ public class Produtos_Agendados
     public Agendamentos? Agendamento { get; set; }
 
     public int ServicoId { get; set; }
-    public Servicos? Servico { get; set; }
+    public Servicos_Agendados? ServicoAgendado { get; set; }
 
     public int ProdutoCodigo { get; set; }
     public Produtos? Produto { get; set; }

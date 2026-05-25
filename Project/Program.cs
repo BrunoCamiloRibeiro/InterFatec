@@ -8,7 +8,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("FabysUnhaDB"));
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString, sql =>
+{
+    sql.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+}));
 
 // Configurando AutoMapper
 builder.Services.AddAutoMapper(cfg =>

@@ -1,0 +1,21 @@
+@{
+    ViewData["Title"] = "Agendamento confirmado";
+}
+
+<div class="d-flex justify-content-center align-items-center" style="min-height: 50vh;">
+    <div class="card border-danger-subtle shadow-sm" style="max-width: 500px; width: 100%;">
+        <div class="card-body text-center p-5">
+            <div class="mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="text-success" viewBox="0 0 16 16">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.97 11.03a.75.75 0 0 0 1.07 0l3.992-4.99a.75.75 0 0 0-1.08-1.04L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06z"/>
+                </svg>
+            </div>
+            <h1 class="h3 mb-2 text-success">Agendamento confirmado!</h1>
+            <p class="text-body-secondary mb-4">Seu atendimento foi registrado com sucesso. A equipe irá preparar tudo para você.</p>
+            <div class="d-flex justify-content-center gap-2">
+                <a asp-action="Agendar" class="btn btn-danger">Novo agendamento</a>
+                <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Voltar ao início</a>
+            </div>
+        </div>
+    </div>
+</div>

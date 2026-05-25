@@ -9,4 +9,5 @@ public interface IAgendamentosRepository
     Task CriarAgendamento(Agendamentos agendamento);
     Task AtualizarAgendamento(Agendamentos agendamento);
     Task ExcluirAgendamento(Agendamentos agendamento);
+    Task<List<TimeSpan>> ObterHorariosOcupados(int funcionarioId, DateTime data);
 }

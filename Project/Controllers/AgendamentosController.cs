@@ -166,4 +166,68 @@ public class AgendamentosController : Controller
         viewModel.ServicosList = new SelectList(servicos, nameof(Servicos.Id), nameof(Servicos.Descricao));
         viewModel.ProdutosList = new SelectList(produtos, nameof(Produtos.Codigo), nameof(Produtos.Nome));
     }
+
+    // ==========================================
+    // Versão do CLIENTE
+    // ==========================================
+
+    [HttpGet]
+    public async Task<IActionResult> Agendar()
+    {
+        var viewModel = new AgendamentoClienteViewModel();
+        await PrepararListasClienteAsync(viewModel);
+        return View(viewModel);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Agendar(AgendamentoClienteViewModel viewModel)
+    {
+        if (!ModelState.IsValid)
+        {
+            await PrepararListasClienteAsync(viewModel);
+            return View(viewModel);
+        }
+
+        try
+        {
+            await _agendamentosService.CriarAgendamentoCliente(viewModel);
+            TempData["Sucesso"] = "Agendamento realizado com sucesso!";
+            return RedirectToAction(nameof(AgendamentoConfirmado));
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, $"Erro ao realizar agendamento: {ex.Message}");
+            await PrepararListasClienteAsync(viewModel);
+            return View(viewModel);
+        }
+    }
+
+    [HttpGet]
+    public IActionResult AgendamentoConfirmado()
+    {
+        return View();
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> ObterHorariosDisponiveis(int funcionarioId, string data)
+    {
+        if (!DateTime.TryParse(data, out var dataParsed))
+            return Json(new List<string>());
+
+        var horarios = await _agendamentosService.ObterHorariosDisponiveis(funcionarioId, dataParsed);
+        var resultado = horarios.Select(h => new { valor = h.ToString(@"hh\:mm"), texto = h.ToString(@"hh\:mm") });
+        return Json(resultado);
+    }
+
+    private async Task PrepararListasClienteAsync(AgendamentoClienteViewModel viewModel)
+    {
+        var funcionarios = await _funcionariosService.ObterTodosFuncionarios();
+        var servicos = await _servicosService.ObterTodosServicos();
+        var produtos = await _produtosService.ObterTodosProdutos();
+
+        viewModel.FuncionariosList = new SelectList(funcionarios, nameof(Funcionarios.Id), nameof(Funcionarios.Nome));
+        viewModel.ServicosList = new SelectList(servicos, nameof(Servicos.Id), nameof(Servicos.Descricao));
+        viewModel.ProdutosList = new SelectList(produtos, nameof(Produtos.Codigo), nameof(Produtos.Nome));
+    }
 }
