@@ -2,7 +2,7 @@
 
 Este documento define as regras básicas de organização para o nosso repositório. O foco é praticidade e evitar conflitos de código.
 
----
+--- 
 
 ## 📂 1. Estrutura de Pastas
 
