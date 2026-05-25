@@ -40,9 +40,14 @@ public class FuncionariosController : Controller
     }
 
     [HttpGet]
-    public IActionResult Criar()
+    public async Task<IActionResult> Criar()
     {
-        return View(new FuncionarioRegistroViewModel());
+        var funcionarioViewModel = new FuncionarioRegistroViewModel();
+
+        // Alimenta a lista de especialidades logo no primeiro carregamento
+        await PrepararEspecialidadesAsync(funcionarioViewModel);
+
+        return View(funcionarioViewModel);
     }
 
     [HttpPost]
