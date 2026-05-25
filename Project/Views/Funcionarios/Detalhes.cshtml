@@ -1,16 +1,87 @@
 @model FuncionarioDetalhesViewModel
 
-<h1 class="h1 text-center mb-3">Detalhes do funcionário</h1>
+@{
+    ViewData["Title"] = "Detalhes do funcionário";
+}
 
-<p><strong>Id:</strong> @Model.Id</p>
-<p><strong>Nome:</strong> @Model.Nome</p>
-<p><strong>Telefone:</strong> @Model.Telefone</p>
-<p><strong>Status:</strong> @Model.Status</p>
-<p><strong>Salário:</strong> @Model.Salario</p>
-<p><strong>Especialidade:</strong> @Model.EspecialidadeNome</p>
-<p><strong>Serviços agendados:</strong> @Model.ServicosAgendados.Count</p>
+<div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+    <div>
+        <p class="text-uppercase small fw-semibold text-danger-emphasis mb-1">Equipe</p>
+        <h1 class="display-6 fw-bold mb-1">Detalhes do funcionário</h1>
+        <p class="text-body-secondary mb-0">Resumo com dados pessoais, salário e serviços já agendados.</p>
+    </div>
 
-<p>
-    <a asp-action="Editar" asp-route-id="@Model.Id">Editar</a>
-    <a asp-action="Index">Voltar</a>
-</p>
+    <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-outline-danger" asp-action="Editar" asp-route-id="@Model.Id">Editar</a>
+        <a class="btn btn-outline-secondary" asp-action="Index">Voltar</a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-xl-5">
+        <div class="card border-danger-subtle shadow-sm h-100">
+            <div class="card-header bg-danger-subtle border-danger-subtle d-flex justify-content-between align-items-center">
+                <h2 class="h5 mb-0">Resumo</h2>
+                <span class="badge rounded-pill bg-danger-subtle text-danger-emphasis">#@Model.Id</span>
+            </div>
+            <div class="card-body p-4">
+                <dl class="row mb-0">
+                    <dt class="col-sm-5 text-body-secondary">Nome</dt>
+                    <dd class="col-sm-7">@Model.Nome</dd>
+
+                    <dt class="col-sm-5 text-body-secondary">Telefone</dt>
+                    <dd class="col-sm-7">@Model.Telefone</dd>
+
+                    <dt class="col-sm-5 text-body-secondary">Status</dt>
+                    <dd class="col-sm-7">@Model.Status</dd>
+
+                    <dt class="col-sm-5 text-body-secondary">Salário</dt>
+                    <dd class="col-sm-7">@Model.Salario.ToString("C")</dd>
+
+                    <dt class="col-sm-5 text-body-secondary">Especialidade</dt>
+                    <dd class="col-sm-7 mb-0">@Model.EspecialidadeNome</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-7">
+        <div class="card border-danger-subtle shadow-sm">
+            <div class="card-header bg-danger-subtle border-danger-subtle">
+                <h2 class="h5 mb-0">Serviços agendados</h2>
+            </div>
+            <div class="card-body p-0">
+                @if (Model.ServicosAgendados != null && Model.ServicosAgendados.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover align-middle mb-0">
+                            <thead class="table-danger">
+                                <tr>
+                                    <th>Serviço</th>
+                                    <th>Horário</th>
+                                    <th>Observação</th>
+                                    <th>Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var item in Model.ServicosAgendados)
+                            {
+                                <tr>
+                                    <td>@item.ServicoNome</td>
+                                    <td>@item.Horario.ToString(@"hh\:mm")</td>
+                                    <td>@item.Obs</td>
+                                    <td>@item.Valor.ToString("C")</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="p-4 text-body-secondary">Nenhum serviço agendado encontrado.</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

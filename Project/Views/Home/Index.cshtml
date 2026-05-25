@@ -1,7 +1,79 @@
-<section class="container-fluid">
+@{
+    ViewData["Title"] = "Início";
+}
 
-    <h1 class="h1 text-center">Home</h1>
+<section class="row align-items-center g-4">
+    <div class="col-lg-7">
+        <span class="badge rounded-pill bg-danger-subtle text-danger-emphasis px-3 py-2 mb-3">Fabys Unha</span>
+        <h1 class="display-5 fw-bold lh-sm mb-3">Uma gestão suave, organizada e bonita para o seu salão.</h1>
+        <p class="lead text-body-secondary mt-3">
+            Acompanhe agendamentos, clientes, serviços, produtos e funcionários com uma interface leve, clara e agradável aos olhos.
+        </p>
+        <div class="d-flex flex-wrap gap-2 mt-4">
+            <a class="btn btn-danger btn-lg" asp-controller="Agendamentos" asp-action="Index">Ver agendamentos</a>
+            <a class="btn btn-outline-danger btn-lg" asp-controller="Clientes" asp-action="Index">Ver clientes</a>
+        </div>
 
-    <p>Use o menu acima para acessar as telas.</p>
+        <div class="row g-3 mt-4">
+            <div class="col-md-4">
+                <div class="card border-danger-subtle h-100 shadow-sm">
+                    <div class="card-body">
+                        <p class="text-uppercase small fw-semibold text-danger-emphasis mb-2">Agenda</p>
+                        <h2 class="h5 mb-2">Fluxo rápido</h2>
+                        <p class="text-body-secondary mb-0">Crie, revise e acompanhe atendimentos sem perder o ritmo.</p>
+                    </div>
+                </div>
+            </div>
 
+            <div class="col-md-4">
+                <div class="card border-danger-subtle h-100 shadow-sm">
+                    <div class="card-body">
+                        <p class="text-uppercase small fw-semibold text-danger-emphasis mb-2">Cadastro</p>
+                        <h2 class="h5 mb-2">Tudo centralizado</h2>
+                        <p class="text-body-secondary mb-0">Clientes, serviços, produtos e funcionários no mesmo painel.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card border-danger-subtle h-100 shadow-sm">
+                    <div class="card-body">
+                        <p class="text-uppercase small fw-semibold text-danger-emphasis mb-2">Visual</p>
+                        <h2 class="h5 mb-2">Leve e delicado</h2>
+                        <p class="text-body-secondary mb-0">O tema claro e rosado deixa a navegação mais confortável.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card border-danger-subtle shadow-sm">
+            <div class="card-header bg-danger-subtle border-danger-subtle">
+                <h2 class="h5 mb-0">Atalhos</h2>
+            </div>
+            <div class="list-group list-group-flush">
+                <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3" asp-controller="Funcionarios" asp-action="Index">
+                    <span>Funcionários</span>
+                    <span class="badge rounded-pill bg-danger-subtle text-danger-emphasis">Abrir</span>
+                </a>
+                <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3" asp-controller="Servicos" asp-action="Index">
+                    <span>Serviços</span>
+                    <span class="badge rounded-pill bg-danger-subtle text-danger-emphasis">Abrir</span>
+                </a>
+                <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3" asp-controller="Produtos" asp-action="Index">
+                    <span>Produtos</span>
+                    <span class="badge rounded-pill bg-danger-subtle text-danger-emphasis">Abrir</span>
+                </a>
+                <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3" asp-controller="Marcas" asp-action="Index">
+                    <span>Marcas</span>
+                    <span class="badge rounded-pill bg-danger-subtle text-danger-emphasis">Abrir</span>
+                </a>
+                <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3" asp-controller="Especialidades" asp-action="Index">
+                    <span>Especialidades</span>
+                    <span class="badge rounded-pill bg-danger-subtle text-danger-emphasis">Abrir</span>
+                </a>
+            </div>
+        </div>
+    </div>
 </section>

@@ -1,46 +1,62 @@
 @model IEnumerable<ClienteListagemViewModel>
 
-<h1 class="h1 text-center mx-3">Clientes</h1>
+@{
+	ViewData["Title"] = "Clientes";
+}
 
-<p class="container-fluid row justify-content-end">
-	<a class="btn btn-primary w-25" asp-action="Criar">Novo cliente</a>
-</p>
+<div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+	<div>
+		<p class="text-uppercase small fw-semibold text-danger-emphasis mb-1">Cadastro</p>
+		<h1 class="display-6 fw-bold mb-1">Clientes</h1>
+		<p class="text-body-secondary mb-0">Acompanhe contatos, status e histórico dos atendimentos.</p>
+	</div>
 
-@if (Model != null && Model.Any())
+	<a class="btn btn-danger btn-lg" asp-action="Criar">Novo cliente</a>
+</div>
+
+@if (Model?.Any() == true)
 {
-	<table border="1">
-		<thead>
-			<tr>
-				<th>Id</th>
-				<th>Nome</th>
-				<th>Telefone</th>
-				<th>Status</th>
-				<th>Total de Agendamentos</th>
-				<th>Último Agendamento</th>
-				<th>Ações</th>
-			</tr>
-		</thead>
-		<tbody>
-		@foreach (var item in Model)
-		{
-			<tr>
-				<td>@item.Id</td>
-				<td>@item.Nome</td>
-				<td>@item.Telefone</td>
-				<td>@item.Status</td>
-				<td>@item.TotalAgendamentos</td>
-				<td>@item.DataUltimoAgendamento</td>
-				<td>
-					<a asp-action="Detalhes" asp-route-id="@item.Id">Detalhes</a>
-					<a asp-action="Editar" asp-route-id="@item.Id">Editar</a>
-					<a asp-action="Excluir" asp-route-id="@item.Id">Excluir</a>
-				</td>
-			</tr>
-		}
-		</tbody>
-	</table>
+	<div class="card border-danger-subtle shadow-sm">
+		<div class="table-responsive">
+			<table class="table table-hover align-middle mb-0">
+				<thead class="table-danger">
+					<tr>
+						<th>Id</th>
+						<th>Nome</th>
+						<th>Telefone</th>
+						<th>Status</th>
+						<th>Total de agendamentos</th>
+						<th>Último agendamento</th>
+						<th class="text-end">Ações</th>
+					</tr>
+				</thead>
+				<tbody>
+				@foreach (var item in Model)
+				{
+					<tr>
+						<td>@item.Id</td>
+						<td class="fw-semibold">@item.Nome</td>
+						<td>@item.Telefone</td>
+						<td>@item.Status</td>
+						<td>@item.TotalAgendamentos</td>
+						<td>@(item.DataUltimoAgendamento?.ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
+						<td>
+							<div class="d-flex flex-wrap justify-content-end gap-2">
+								<a class="btn btn-sm btn-outline-secondary" asp-action="Detalhes" asp-route-id="@item.Id">Detalhes</a>
+								<a class="btn btn-sm btn-outline-danger" asp-action="Editar" asp-route-id="@item.Id">Editar</a>
+								<a class="btn btn-sm btn-danger" asp-action="Excluir" asp-route-id="@item.Id">Excluir</a>
+							</div>
+						</td>
+					</tr>
+				}
+				</tbody>
+			</table>
+		</div>
+	</div>
 }
 else
 {
-	<p>Nenhum cliente cadastrado.</p>
+	<div class="alert alert-light border border-danger-subtle mb-0">
+		Nenhum cliente cadastrado.
+	</div>
 }

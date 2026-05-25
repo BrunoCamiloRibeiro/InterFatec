@@ -1,48 +1,60 @@
 @model ProdutoEditarViewModel
 
-<h1 class="h1 text-center mb-3">Editar produto</h1>
+@{
+    ViewData["Title"] = "Editar produto";
+}
 
-<form asp-action="Editar" method="post">
-    <input type="hidden" asp-for="Codigo" />
-    <div asp-validation-summary="All"></div>
+<div class="row justify-content-center">
+    <div class="col-xl-8">
+        <div class="card border-danger-subtle shadow-sm">
+            <div class="card-header bg-danger-subtle border-danger-subtle">
+                <h1 class="h3 mb-0 text-danger-emphasis">Editar produto</h1>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Editar" method="post" class="vstack gap-3">
+                    <input type="hidden" asp-for="Codigo" />
+                    <div asp-validation-summary="All" class="alert alert-danger mb-0" role="alert"></div>
 
-    <div>
-        <label asp-for="Nome"></label>
-        <input asp-for="Nome" />
-        <span asp-validation-for="Nome"></span>
+                    <div>
+                        <label asp-for="Nome" class="form-label"></label>
+                        <input asp-for="Nome" class="form-control" />
+                        <span asp-validation-for="Nome" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label asp-for="MarcaId" class="form-label"></label>
+                            <select asp-for="MarcaId" asp-items="Model.MarcasList" class="form-select">
+                                <option value="">Selecione</option>
+                            </select>
+                            <span asp-validation-for="MarcaId" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Status" class="form-label"></label>
+                            <select asp-for="Status" asp-items="Html.GetEnumSelectList<ProdutoStatus>()" class="form-select"></select>
+                            <span asp-validation-for="Status" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Preco" class="form-label"></label>
+                            <input asp-for="Preco" class="form-control" />
+                            <span asp-validation-for="Preco" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="PathImagem" class="form-label"></label>
+                            <input asp-for="PathImagem" class="form-control" />
+                            <span asp-validation-for="PathImagem" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center pt-2">
+                        <a class="btn btn-outline-secondary" asp-action="Index">Voltar</a>
+                        <button type="submit" class="btn btn-danger">Salvar alterações</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-
-    <div>
-        <label asp-for="MarcaId"></label>
-        <select asp-for="MarcaId" asp-items="Model.MarcasList">
-            <option value="">Selecione</option>
-        </select>
-        <span asp-validation-for="MarcaId"></span>
-    </div>
-
-    <div>
-        <label asp-for="Preco"></label>
-        <input asp-for="Preco" />
-        <span asp-validation-for="Preco"></span>
-    </div>
-
-    <div>
-        <label asp-for="PathImagem"></label>
-        <input asp-for="PathImagem" />
-        <span asp-validation-for="PathImagem"></span>
-    </div>
-
-    <div>
-        <label asp-for="Status"></label>
-        <select asp-for="Status" asp-items="Html.GetEnumSelectList<ProdutoStatus>()"></select>
-        <span asp-validation-for="Status"></span>
-    </div>
-
-    <div>
-        <button type="submit">Salvar</button>
-    </div>
-</form>
-
-<p>
-    <a asp-action="Index">Voltar</a>
-</p>
+</div>

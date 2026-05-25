@@ -1,21 +1,47 @@
 @model FuncionarioDetalhesViewModel
 
-<h1 class="h1 text-center mb-3">Excluir funcionário</h1>
+@{
+    ViewData["Title"] = "Excluir funcionário";
+}
 
-<p>Tem certeza que deseja excluir este funcionário?</p>
+<div class="row justify-content-center">
+    <div class="col-xl-8">
+        <div class="card border-danger-subtle shadow-sm">
+            <div class="card-header bg-danger-subtle border-danger-subtle">
+                <h1 class="h3 mb-0 text-danger-emphasis">Excluir funcionário</h1>
+            </div>
 
-<p><strong>Id:</strong> @Model.Id</p>
-<p><strong>Nome:</strong> @Model.Nome</p>
-<p><strong>Telefone:</strong> @Model.Telefone</p>
-<p><strong>Status:</strong> @Model.Status</p>
-<p><strong>Salário:</strong> @Model.Salario</p>
-<p><strong>Especialidade:</strong> @Model.EspecialidadeNome</p>
+            <div class="card-body p-4">
+                <div class="alert alert-danger mb-4" role="alert">
+                    Tem certeza que deseja excluir este funcionário? Esta ação não pode ser desfeita.
+                </div>
 
-<form asp-action="Excluir" method="post">
-    <input type="hidden" asp-for="Id" />
-    <button type="submit">Confirmar exclusão</button>
-</form>
+                <dl class="row mb-0">
+                    <dt class="col-sm-4 text-body-secondary">Id</dt>
+                    <dd class="col-sm-8">@Model.Id</dd>
 
-<p>
-    <a asp-action="Index">Voltar</a>
-</p>
+                    <dt class="col-sm-4 text-body-secondary">Nome</dt>
+                    <dd class="col-sm-8">@Model.Nome</dd>
+
+                    <dt class="col-sm-4 text-body-secondary">Telefone</dt>
+                    <dd class="col-sm-8">@Model.Telefone</dd>
+
+                    <dt class="col-sm-4 text-body-secondary">Status</dt>
+                    <dd class="col-sm-8">@Model.Status</dd>
+
+                    <dt class="col-sm-4 text-body-secondary">Salário</dt>
+                    <dd class="col-sm-8">@Model.Salario.ToString("C")</dd>
+
+                    <dt class="col-sm-4 text-body-secondary">Especialidade</dt>
+                    <dd class="col-sm-8">@Model.EspecialidadeNome</dd>
+                </dl>
+
+                <form asp-action="Excluir" method="post" class="d-flex flex-wrap justify-content-end gap-2 mt-4">
+                    <input type="hidden" asp-for="Id" />
+                    <a class="btn btn-outline-secondary" asp-action="Index">Cancelar</a>
+                    <button type="submit" class="btn btn-danger">Confirmar exclusão</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,40 +1,52 @@
 @model ServicoEditarViewModel
 
-<h1 class="h1 text-center mb-3">Editar serviço</h1>
+@{
+    ViewData["Title"] = "Editar serviço";
+}
 
-<form asp-action="Editar" method="post">
-    <input type="hidden" asp-for="Id" />
-    <div asp-validation-summary="All"></div>
+<div class="row justify-content-center">
+    <div class="col-xl-7">
+        <div class="card border-danger-subtle shadow-sm">
+            <div class="card-header bg-danger-subtle border-danger-subtle">
+                <h1 class="h3 mb-0 text-danger-emphasis">Editar serviço</h1>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Editar" method="post" class="vstack gap-3">
+                    <input type="hidden" asp-for="Id" />
+                    <div asp-validation-summary="All" class="alert alert-danger mb-0" role="alert"></div>
 
-    <div>
-        <label asp-for="Descricao"></label>
-        <input asp-for="Descricao" />
-        <span asp-validation-for="Descricao"></span>
+                    <div>
+                        <label asp-for="Descricao" class="form-label"></label>
+                        <input asp-for="Descricao" class="form-control" />
+                        <span asp-validation-for="Descricao" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label asp-for="Preco" class="form-label"></label>
+                            <input asp-for="Preco" class="form-control" />
+                            <span asp-validation-for="Preco" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Tempo" class="form-label"></label>
+                            <input asp-for="Tempo" type="time" class="form-control" />
+                            <span asp-validation-for="Tempo" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label asp-for="Status" class="form-label"></label>
+                        <select asp-for="Status" asp-items="Html.GetEnumSelectList<ServicoStatus>()" class="form-select"></select>
+                        <span asp-validation-for="Status" class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center pt-2">
+                        <a class="btn btn-outline-secondary" asp-action="Index">Voltar</a>
+                        <button type="submit" class="btn btn-danger">Salvar alterações</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-
-    <div>
-        <label asp-for="Preco"></label>
-        <input asp-for="Preco" />
-        <span asp-validation-for="Preco"></span>
-    </div>
-
-    <div>
-        <label asp-for="Tempo"></label>
-        <input asp-for="Tempo" type="time" />
-        <span asp-validation-for="Tempo"></span>
-    </div>
-
-    <div>
-        <label asp-for="Status"></label>
-        <select asp-for="Status" asp-items="Html.GetEnumSelectList<ServicoStatus>()"></select>
-        <span asp-validation-for="Status"></span>
-    </div>
-
-    <div>
-        <button type="submit">Salvar</button>
-    </div>
-</form>
-
-<p>
-    <a asp-action="Index">Voltar</a>
-</p>
+</div>

@@ -1,27 +1,37 @@
 @model EspecialidadeViewModel
 
-<h1 class="h1 text-center mb-3">Criar especialidade</h1>
+@{
+    ViewData["Title"] = "Criar especialidade";
+}
 
-<form asp-action="Criar" method="post">
-    <div asp-validation-summary="All"></div>
+<div class="row justify-content-center">
+    <div class="col-lg-7 col-xl-6">
+        <div class="card border-danger-subtle shadow-sm">
+            <div class="card-header bg-danger-subtle border-danger-subtle">
+                <h1 class="h3 mb-0 text-danger-emphasis">Criar especialidade</h1>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Criar" method="post" class="vstack gap-3">
+                    <div asp-validation-summary="All" class="alert alert-danger mb-0" role="alert"></div>
 
-    <div>
-        <label asp-for="Nome"></label>
-        <input asp-for="Nome" />
-        <span asp-validation-for="Nome"></span>
+                    <div>
+                        <label asp-for="Nome" class="form-label"></label>
+                        <input asp-for="Nome" class="form-control" />
+                        <span asp-validation-for="Nome" class="text-danger small"></span>
+                    </div>
+
+                    <div>
+                        <label asp-for="Status" class="form-label"></label>
+                        <select asp-for="Status" asp-items="Html.GetEnumSelectList<EspecialidadeStatus>()" class="form-select"></select>
+                        <span asp-validation-for="Status" class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center pt-2">
+                        <a class="btn btn-outline-secondary" asp-action="Index">Voltar</a>
+                        <button type="submit" class="btn btn-danger">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-
-    <div>
-        <label asp-for="Status"></label>
-        <select asp-for="Status" asp-items="Html.GetEnumSelectList<EspecialidadeStatus>()"></select>
-        <span asp-validation-for="Status"></span>
-    </div>
-
-    <div>
-        <button type="submit">Salvar</button>
-    </div>
-</form>
-
-<p>
-    <a asp-action="Index">Voltar</a>
-</p>
+</div>
