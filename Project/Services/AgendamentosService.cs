@@ -64,6 +64,7 @@ public class AgendamentosService : IAgendamentosService
         if (agendamento == null)
             throw new ArgumentException("Agendamento não encontrado.");
 
+        agendamento.Cliente = null;
         await ObterClienteObrigatorioAsync(viewModel.ClienteId);
 
         agendamento.ClienteId = viewModel.ClienteId;
