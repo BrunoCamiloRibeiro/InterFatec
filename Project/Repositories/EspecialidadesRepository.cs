@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using FabysUnha.Models;
 using FabysUnha.Data;
+using FabysUnha.Enums;
 
 namespace FabysUnha.Repositories;
 
@@ -25,14 +26,14 @@ public class EspecialidadesRepository : IEspecialidadeRepository
 
     public async Task CriarEspecialidade(Especialidades especialidade)
     {
-        _context.Especialidades.Add(especialidade);
-        await _context.SaveChangesAsync();
+        await _context.Database.ExecuteSqlInterpolatedAsync(
+            $"EXEC sp_InsertEspecialidade {especialidade.Descricao}, {(int)especialidade.Status}");
     }
 
     public async Task AtualizarEspecialidade(Especialidades especialidade)
     {
-        _context.Especialidades.Update(especialidade);
-        await _context.SaveChangesAsync();
+        await _context.Database.ExecuteSqlInterpolatedAsync(
+            $"EXEC sp_UpdateEspecialidade {especialidade.Id}, {especialidade.Descricao}, {(int)especialidade.Status}");
     }
 
     public async Task ExcluirEspecialidade(Especialidades especialidade)

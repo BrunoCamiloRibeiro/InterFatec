@@ -37,4 +37,9 @@ public class ClientesService : IClientesService
         var cliente = await _clientesRepository.ObterClientePorId(id);
         if (cliente != null) await _clientesRepository.ExcluirCliente(cliente);
     }
+
+    public async Task<Clientes?> ObterClientePorTelefone(string telefone)
+    {
+        return await _clientesRepository.ObterClientePorTelefone(telefone);
+    }
 }

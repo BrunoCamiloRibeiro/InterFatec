@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FabysUnha.ViewModels;
 
@@ -11,4 +12,6 @@ public class FuncionarioRegistroViewModel : PessoasViewModel
     [Required(ErrorMessage = "Selecione uma especialidade.")]
     [Display(Name = "Especialidade")]
     public int EspecialidadeId { get; set; }
+
+    public IEnumerable<SelectListItem>? EspecialidadesList { get; set; }
 }

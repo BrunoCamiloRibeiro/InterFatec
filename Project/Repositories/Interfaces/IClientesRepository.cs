@@ -9,4 +9,5 @@ public interface IClientesRepository
     Task RegistrarCliente(Clientes cliente);
     Task AtualizarCliente(Clientes cliente);
     Task ExcluirCliente(Clientes cliente);
+    Task<Clientes?> ObterClientePorTelefone(string telefone);
 }

@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using FabysUnha.Models;
 using FabysUnha.Data;
+using FabysUnha.Enums;
+using FabysUnha.Models.SqlViews;
 
 namespace FabysUnha.Repositories;
 
@@ -15,7 +17,17 @@ public class MarcasRepository : IMarcasRepository
 
     public async Task<IEnumerable<Marcas>> ObterTodasMarcas()
     {
-        return await _db.Marcas.ToListAsync();
+        var marcasView = await _db.Set<ListaMarcasView>()
+            .AsNoTracking()
+            .OrderBy(marca => marca.Nome)
+            .ToListAsync();
+
+        return marcasView.Select(marca => new Marcas
+        {
+            Id = marca.Id,
+            Nome = marca.Nome,
+            Status = (MarcaStatus)marca.Status
+        }).ToList();
     }
 
     public async Task<Marcas?> ObterMarcaPorId(int id)
@@ -25,14 +37,14 @@ public class MarcasRepository : IMarcasRepository
 
     public async Task CriarMarca(Marcas marca)
     {
-        _db.Marcas.Add(marca);
-        await _db.SaveChangesAsync();
+        await _db.Database.ExecuteSqlInterpolatedAsync(
+            $"EXEC sp_InsertMarca {marca.Nome}, {(int)marca.Status}");
     }
 
     public async Task AtualizarMarca(Marcas marca)
     {
-        _db.Marcas.Update(marca);
-        await _db.SaveChangesAsync();
+        await _db.Database.ExecuteSqlInterpolatedAsync(
+            $"EXEC sp_UpdateMarca {marca.Id}, {marca.Nome}, {(int)marca.Status}");
     }
 
     public async Task ExcluirMarca(Marcas marca)

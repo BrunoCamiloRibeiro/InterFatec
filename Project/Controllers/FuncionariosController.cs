@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using FabysUnha.Services;
 using FabysUnha.ViewModels;
 using AutoMapper;
@@ -8,11 +9,16 @@ namespace FabysUnha.Controllers;
 public class FuncionariosController : Controller
 {
     private readonly IFuncionariosService _funcionariosService;
+    private readonly IEspecialidadeService _especialidadeService;
     private readonly IMapper _mapper;
 
-    public FuncionariosController(IFuncionariosService funcionariosService, IMapper mapper)
+    public FuncionariosController(
+        IFuncionariosService funcionariosService,
+        IEspecialidadeService especialidadeService,
+        IMapper mapper)
     {
         _funcionariosService = funcionariosService;
+        _especialidadeService = especialidadeService;
         _mapper = mapper;
     }
 
@@ -43,6 +49,8 @@ public class FuncionariosController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Criar(FuncionarioRegistroViewModel funcionarioViewModel)
     {
+        await PrepararEspecialidadesAsync(funcionarioViewModel);
+
         if (!ModelState.IsValid) return View(funcionarioViewModel);
 
         try
@@ -54,6 +62,7 @@ public class FuncionariosController : Controller
         catch (Exception ex)
         {
             ModelState.AddModelError(string.Empty, $"Erro ao registrar funcionário: {ex.Message}");
+            await PrepararEspecialidadesAsync(funcionarioViewModel);
             return View(funcionarioViewModel);
         }
     }
@@ -65,6 +74,7 @@ public class FuncionariosController : Controller
         if (funcionario == null) return NotFound();
 
         var funcionarioViewModel = _mapper.Map<FuncionarioEditarViewModel>(funcionario);
+        await PrepararEspecialidadesAsync(funcionarioViewModel);
         return View(funcionarioViewModel);
     }
 
@@ -73,6 +83,9 @@ public class FuncionariosController : Controller
     public async Task<IActionResult> Editar(int id, FuncionarioEditarViewModel funcionarioViewModel)
     {
         if (id != funcionarioViewModel.Id) return BadRequest();
+
+        await PrepararEspecialidadesAsync(funcionarioViewModel);
+
         if (!ModelState.IsValid) return View(funcionarioViewModel);
 
         try
@@ -90,6 +103,7 @@ public class FuncionariosController : Controller
         catch (Exception ex)
         {
             ModelState.AddModelError(string.Empty, $"Erro ao atualizar funcionário: {ex.Message}");
+            await PrepararEspecialidadesAsync(funcionarioViewModel);
             return View(funcionarioViewModel);
         }
     }
@@ -110,5 +124,23 @@ public class FuncionariosController : Controller
     {
         await _funcionariosService.ExcluirFuncionario(id);
         return RedirectToAction(nameof(Index));
+    }
+
+    private async Task PrepararEspecialidadesAsync(FuncionarioRegistroViewModel viewModel)
+    {
+        viewModel.EspecialidadesList = new SelectList(
+            await _especialidadeService.ObterTodasEspecialidades(),
+            nameof(Models.Especialidades.Id),
+            nameof(Models.Especialidades.Descricao),
+            viewModel.EspecialidadeId);
+    }
+
+    private async Task PrepararEspecialidadesAsync(FuncionarioEditarViewModel viewModel)
+    {
+        viewModel.EspecialidadesList = new SelectList(
+            await _especialidadeService.ObterTodasEspecialidades(),
+            nameof(Models.Especialidades.Id),
+            nameof(Models.Especialidades.Descricao),
+            viewModel.EspecialidadeId);
     }
 }
