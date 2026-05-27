@@ -40,6 +40,7 @@ create table Funcionarios
 		pessoa_id			int				not null		primary key									,
 		salario				decimal(10,2)	not null	    											,
 		especialidade_id	int				not null													,
+		senha				varchar(25)		not null													,
 --Salario ajustado 
 --Especialidade não pode ser null			
 		constraint CK_Funcionarios_SalarioMin check (salario >= 1412.00),
