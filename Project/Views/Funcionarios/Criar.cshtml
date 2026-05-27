@@ -29,7 +29,8 @@
 
                         <div class="col-md-4">
                             <label asp-for="Status" class="form-label"></label>
-                            <select asp-for="Status" asp-items="Html.GetEnumSelectList<PessoaStatus>()" class="form-select"></select>
+                            <select asp-for="Status" asp-items="Html.GetEnumSelectList<PessoaStatus>()"
+                                    class="form-select"></select>
                             <span asp-validation-for="Status" class="text-danger small"></span>
                         </div>
 
@@ -45,6 +46,12 @@
                                 <option value="">Selecione</option>
                             </select>
                             <span asp-validation-for="EspecialidadeId" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Senha" class="form-label"></label>
+                            <input asp-for="Senha" class="form-control" />
+                            <span asp-validation-for="Senha" class="text-danger small"></span>
                         </div>
                     </div>
 

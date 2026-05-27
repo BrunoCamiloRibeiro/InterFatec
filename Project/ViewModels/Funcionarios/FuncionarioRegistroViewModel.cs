@@ -13,5 +13,9 @@ public class FuncionarioRegistroViewModel : PessoasViewModel
     [Display(Name = "Especialidade")]
     public int EspecialidadeId { get; set; }
 
+    [Required(ErrorMessage = "O campo Senha é obrigatório.")]
+    [StringLength(20, MinimumLength = 6, ErrorMessage = "A senha deve ter entre 6 e 20 caracteres.")]
+    [DataType(DataType.Password)]
+    public string Senha { get; set; } = string.Empty;
     public IEnumerable<SelectListItem>? EspecialidadesList { get; set; }
 }

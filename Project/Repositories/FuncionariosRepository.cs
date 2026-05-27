@@ -29,6 +29,7 @@ public class FuncionariosRepository : IFuncionariosRepository
             Telefone = funcionario.Telefone,
             Status = (PessoaStatus)funcionario.StatusId,
             Salario = funcionario.Salario,
+            Senha = funcionario.Senha,
             Especialidade = new Especialidades
             {
                 Descricao = funcionario.Especialidade
@@ -76,13 +77,13 @@ public class FuncionariosRepository : IFuncionariosRepository
     public async Task RegistrarFuncionario(Funcionarios funcionario)
     {
         await _db.Database.ExecuteSqlInterpolatedAsync(
-            $"EXEC sp_InsertFuncionario {funcionario.Nome}, {funcionario.Telefone}, {(int)funcionario.Status}, {funcionario.Salario}, {funcionario.EspecialidadeId}");
+            $"EXEC sp_InsertFuncionario {funcionario.Nome}, {funcionario.Telefone}, {(int)funcionario.Status}, {funcionario.Salario}, {funcionario.EspecialidadeId}, {funcionario.Senha}");
     }
 
     public async Task AtualizarFuncionario(Funcionarios funcionario)
     {
         await _db.Database.ExecuteSqlInterpolatedAsync(
-            $"EXEC sp_UpdateFuncionario {funcionario.Id}, {funcionario.Nome}, {funcionario.Telefone}, {(int)funcionario.Status}, {funcionario.Salario}, {funcionario.EspecialidadeId}");
+            $"EXEC sp_UpdateFuncionario {funcionario.Id}, {funcionario.Nome}, {funcionario.Telefone}, {(int)funcionario.Status}, {funcionario.Salario}, {funcionario.EspecialidadeId}, {funcionario.Senha}");
     }
 
     public async Task ExcluirFuncionario(Funcionarios funcionario)

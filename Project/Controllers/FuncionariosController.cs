@@ -60,6 +60,13 @@ public class FuncionariosController : Controller
 
         try
         {
+
+            if (string.IsNullOrWhiteSpace(funcionarioViewModel.Senha))
+        {
+            ModelState.AddModelError(nameof(funcionarioViewModel.Senha), "A senha é obrigatória.");
+            return View(funcionarioViewModel);
+        }
+
             var funcionario = _mapper.Map<Models.Funcionarios>(funcionarioViewModel);
             await _funcionariosService.RegistrarFuncionario(funcionario);
             return RedirectToAction(nameof(Index));
@@ -79,6 +86,7 @@ public class FuncionariosController : Controller
         if (funcionario == null) return NotFound();
 
         var funcionarioViewModel = _mapper.Map<FuncionarioEditarViewModel>(funcionario);
+
         await PrepararEspecialidadesAsync(funcionarioViewModel);
         return View(funcionarioViewModel);
     }
@@ -102,6 +110,11 @@ public class FuncionariosController : Controller
                 funcionarioViewModel.Status = funcionarioAtual.Status;
 
             var funcionario = _mapper.Map<Models.Funcionarios>(funcionarioViewModel);
+
+            if (string.IsNullOrWhiteSpace(funcionario.Senha))
+            funcionario.Senha = funcionarioAtual.Senha;
+
+            
             await _funcionariosService.AtualizarFuncionario(funcionario);
             return RedirectToAction(nameof(Index));
         }

@@ -9,4 +9,5 @@ public class ListaFuncionariosView
     public decimal Salario { get; set; }
     public int StatusId { get; set; }
     public string StatusDescricao { get; set; } = string.Empty;
+    public string Senha {get; set;} = string.Empty;
 }
