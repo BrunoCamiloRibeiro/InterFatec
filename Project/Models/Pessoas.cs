@@ -8,4 +8,5 @@ public abstract class Pessoas
     public string Nome { get; set; } = string.Empty;
     public string Telefone { get; set; } = string.Empty;
     public PessoaStatus Status { get; set; } = PessoaStatus.Ativo;
+    public string Senha { get; set; } = string.Empty;
 }

@@ -6,6 +6,18 @@ public class HomeController : Controller
 {
     public IActionResult Index()
     {
-        return View();
+        var usuarioTipo = HttpContext.Session.GetString("UsuarioTipo");
+
+        if (usuarioTipo == "Cliente")
+        {
+            return RedirectToAction("MeusAgendamentos", "Agendamentos");
+        }
+
+        if (usuarioTipo == "Funcionario")
+        {
+            return RedirectToAction("Index", "Funcionarios");
+        }
+
+        return RedirectToAction("Index", "Login");
     }
 }

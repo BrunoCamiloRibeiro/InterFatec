@@ -9,7 +9,7 @@ public class FuncionariosProfile : Profile
     public FuncionariosProfile()
     {
         CreateMap<Funcionarios, FuncionarioRegistroViewModel>()
-            .ForMember(dest => dest.Senha, opt => opt.MapFrom(src => src.Senha != null)) 
+            .ForMember(dest => dest.Senha, opt => opt.MapFrom(src => src.Senha))
             .ReverseMap();
 
         CreateMap<Funcionarios, FuncionarioDetalhesViewModel>()

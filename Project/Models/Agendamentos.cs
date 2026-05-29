@@ -10,6 +10,7 @@ public class Agendamentos
     public DateTime Data { get; set; }
     public decimal Total { get; set; }
     public AgendamentoStatus Status { get; set; } = AgendamentoStatus.Pendente;
+    public string CodigoRastreio { get; set; } = string.Empty; // Ex: FA-9832
 
     // FK
     public int ClienteId { get; set; }

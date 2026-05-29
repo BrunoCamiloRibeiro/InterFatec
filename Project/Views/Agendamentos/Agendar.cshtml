@@ -147,10 +147,16 @@
                         <input asp-for="Telefone" class="form-control" placeholder="Ex: 17999998888" maxlength="11" />
                         <span asp-validation-for="Telefone" class="text-danger small"></span>
                     </div>
+                    <div class="col-lg-6">
+                        <label asp-for="Senha" class="form-label"></label>
+                        <input asp-for="Senha" class="form-control" placeholder="Senha (opcional)" />
+                        <span asp-validation-for="Senha" class="text-danger small"></span>
+                        <div class="form-text">Deixe em branco para agendar como convidado e receber código de rastreio.</div>
+                    </div>
                 </div>
 
                 <div class="alert alert-light border-danger-subtle mt-3">
-                    <strong>Já é cliente?</strong> Se você já possui cadastro, basta informar o mesmo telefone. O sistema irá reconhecê-lo automaticamente.
+                    <strong>Já é cliente?</strong> Se você já possui cadastro, basta informar o mesmo telefone e senha. O sistema irá reconhecê-lo automaticamente.
                 </div>
 
                 <div class="d-flex justify-content-between mt-4">

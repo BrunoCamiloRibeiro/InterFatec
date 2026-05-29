@@ -16,6 +16,11 @@ public class AgendamentoClienteViewModel
     [Display(Name = "Telefone")]
     public string Telefone { get; set; } = string.Empty;
 
+    [Display(Name = "Senha")]
+    [StringLength(50)]
+    [DataType(DataType.Password)]
+    public string? Senha { get; set; }
+
     // Data do agendamento
     [Required(ErrorMessage = "A data do agendamento é obrigatória.")]
     [Display(Name = "Data")]

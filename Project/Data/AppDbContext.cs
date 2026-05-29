@@ -35,6 +35,7 @@ public class AppDbContext : DbContext
             entity.Property(p => p.Nome).HasColumnName("Nome");
             entity.Property(p => p.Telefone).HasColumnName("Telefone");
             entity.Property(p => p.Status).HasColumnName("status");
+            entity.Property(p => p.Senha).HasColumnName("senha");
             entity.HasKey(p => p.Id);
         });
 
@@ -126,6 +127,7 @@ public class AppDbContext : DbContext
             entity.Property(a => a.Total).HasColumnName("total").HasPrecision(10, 2);
             entity.Property(a => a.ClienteId).HasColumnName("cliente_id");
             entity.Property(a => a.Status).HasColumnName("status");
+            entity.Property(a => a.CodigoRastreio).HasColumnName("codigo_rastreio");
             entity.HasOne(a => a.Cliente)
                 .WithMany(c => c.Agendamentos)
                 .HasForeignKey(a => a.ClienteId);

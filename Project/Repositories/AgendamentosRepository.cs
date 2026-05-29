@@ -103,6 +103,21 @@ public class AgendamentosRepository : IAgendamentosRepository
         return agendamento;
     }
 
+    public async Task<IEnumerable<Agendamentos>> ObterAgendamentosPorCliente(int clienteId)
+    {
+        var agendamentos = await _context.Agendamentos
+            .Where(a => a.ClienteId == clienteId)
+            .OrderByDescending(a => a.Data)
+            .Include(a => a.Servicos_Agendados)
+                .ThenInclude(sa => sa.Servico)
+            .Include(a => a.Produtos_Agendados)
+                .ThenInclude(pa => pa.Produto)
+            .AsNoTracking()
+            .ToListAsync();
+
+        return agendamentos;
+    }
+
     public async Task CriarAgendamento(Agendamentos agendamento)
     {
         await _context.Agendamentos.AddAsync(agendamento);
@@ -174,14 +189,13 @@ public class AgendamentosRepository : IAgendamentosRepository
             funcionario => new Funcionarios
             {
                 Id = funcionario.Id,
-                Nome = funcionario.Nome,
-                Telefone = funcionario.Telefone,
+                Nome = funcionario.Nome ?? string.Empty,
+                Telefone = funcionario.Telefone ?? string.Empty,
                 Status = (PessoaStatus)funcionario.StatusId,
                 Salario = funcionario.Salario,
-                Especialidade = new Especialidades
-                {
-                    Descricao = funcionario.Especialidade
-                }
+                Especialidade = !string.IsNullOrEmpty(funcionario.Especialidade)
+                    ? new Especialidades { Descricao = funcionario.Especialidade }
+                    : null
             });
     }
 }

@@ -37,6 +37,12 @@ public class AgendamentosService : IAgendamentosService
         return await _agendamentosRepository.ObterAgendamentoPorId(nr);
     }
 
+    public async Task<IEnumerable<Agendamentos>> ObterAgendamentosPorCliente(int clienteId)
+    {
+        var agendamentos = await _agendamentosRepository.ObterTodosAgendamentos();
+        return agendamentos.Where(a => a.ClienteId == clienteId);
+    }
+
     public async Task CriarAgendamento(AgendamentoRegistroViewModel viewModel)
     {
         var cliente = await ObterClienteObrigatorioAsync(viewModel.ClienteId);
@@ -200,9 +206,15 @@ public class AgendamentosService : IAgendamentosService
         var clienteExistente = await _clientesRepository.ObterClientePorTelefone(telefone);
         int clienteId;
 
+        var isGuest = string.IsNullOrWhiteSpace(viewModel.Senha);
+
         if (clienteExistente != null)
         {
             clienteId = clienteExistente.Id;
+            if (string.IsNullOrWhiteSpace(clienteExistente.Senha))
+            {
+                isGuest = true;
+            }
         }
         else
         {
@@ -210,7 +222,8 @@ public class AgendamentosService : IAgendamentosService
             {
                 Nome = nome,
                 Telefone = telefone,
-                Status = Enums.PessoaStatus.Ativo
+                Status = Enums.PessoaStatus.Ativo,
+                Senha = viewModel.Senha?.Trim() ?? string.Empty
             };
             await _clientesRepository.RegistrarCliente(novoCliente);
 
@@ -275,7 +288,22 @@ public class AgendamentosService : IAgendamentosService
         if (agendamento.Total <= 0)
             throw new ArgumentException("O agendamento deve conter pelo menos um serviço.");
 
+        if (isGuest)
+        {
+            agendamento.CodigoRastreio = GerarCodigoRastreio();
+        }
+
         await _agendamentosRepository.CriarAgendamento(agendamento);
+    }
+
+    /// <summary>
+    /// Gera um código de rastreio único no formato FA-XXXX (ex: FA-9832)
+    /// </summary>
+    private string GerarCodigoRastreio()
+    {
+        var random = new Random();
+        var numero = random.Next(1000, 10000);
+        return $"FA-{numero}";
     }
 
     public async Task<List<TimeSpan>> ObterHorariosDisponiveis(int funcionarioId, DateTime data)

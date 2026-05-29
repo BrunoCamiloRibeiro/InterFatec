@@ -24,8 +24,11 @@ public class FuncionariosService : IFuncionariosService
 
     public async Task RegistrarFuncionario(Funcionarios funcionario)
     {
-        if(funcionario.Salario <= 0) throw new ArgumentException("O salário deve ser um valor positivo.");
-        if(funcionario.Salario < 1412.00m) throw new ArgumentException("O salário deve ser no mínimo o valor do salário mínimo.");
+        // if(funcionario.Salario.HasValue)
+        // {
+        //     if(funcionario.Salario <= 0) throw new ArgumentException("O salário deve ser um valor positivo.");
+        //     if(funcionario.Salario < 1412.00m) throw new ArgumentException("O salário deve ser no mínimo o valor do salário mínimo.");
+        // }
         
         await _funcionariosRepository.RegistrarFuncionario(funcionario);
     }

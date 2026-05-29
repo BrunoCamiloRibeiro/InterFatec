@@ -25,15 +25,14 @@ public class FuncionariosRepository : IFuncionariosRepository
         return funcionariosView.Select(funcionario => new Funcionarios
         {
             Id = funcionario.Id,
-            Nome = funcionario.Nome,
-            Telefone = funcionario.Telefone,
+            Nome = funcionario.Nome ?? string.Empty,
+            Telefone = funcionario.Telefone ?? string.Empty,
             Status = (PessoaStatus)funcionario.StatusId,
             Salario = funcionario.Salario,
-            Senha = funcionario.Senha,
-            Especialidade = new Especialidades
-            {
-                Descricao = funcionario.Especialidade
-            }
+            Senha = funcionario.Senha ?? string.Empty,
+            Especialidade = !string.IsNullOrEmpty(funcionario.Especialidade)
+                ? new Especialidades { Descricao = funcionario.Especialidade }
+                : null
         }).ToList();
     }
 
@@ -49,14 +48,13 @@ public class FuncionariosRepository : IFuncionariosRepository
         var funcionario = new Funcionarios
         {
             Id = funcionarioView.Id,
-            Nome = funcionarioView.Nome,
-            Telefone = funcionarioView.Telefone,
+            Nome = funcionarioView.Nome ?? string.Empty,
+            Telefone = funcionarioView.Telefone ?? string.Empty,
             Status = (PessoaStatus)funcionarioView.StatusId,
             Salario = funcionarioView.Salario,
-            Especialidade = new Especialidades
-            {
-                Descricao = funcionarioView.Especialidade
-            }
+            Especialidade = !string.IsNullOrEmpty(funcionarioView.Especialidade)
+                ? new Especialidades { Descricao = funcionarioView.Especialidade }
+                : null
         };
 
         var servicosAgendados = await _db.Servicos_Agendados

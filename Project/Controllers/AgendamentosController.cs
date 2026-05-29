@@ -230,4 +230,29 @@ public class AgendamentosController : Controller
         viewModel.ServicosList = new SelectList(servicos, nameof(Servicos.Id), nameof(Servicos.Descricao));
         viewModel.ProdutosList = new SelectList(produtos, nameof(Produtos.Codigo), nameof(Produtos.Nome));
     }
+
+    /// <summary>
+    /// Exibe os agendamentos do cliente logado via Session
+    /// </summary>
+    [HttpGet]
+    public async Task<IActionResult> MeusAgendamentos()
+    {
+        var clienteId = HttpContext.Session.GetInt32("ClienteId");
+        var clienteTelefone = HttpContext.Session.GetString("ClienteTelefone");
+
+        if (!clienteId.HasValue || string.IsNullOrEmpty(clienteTelefone))
+            return RedirectToAction("Index", "Login");
+
+        var agendamentos = await _agendamentosService.ObterAgendamentosPorCliente(clienteId.Value);
+        var viewModel = _mapper.Map<IEnumerable<AgendamentoListagemViewModel>>(agendamentos);
+
+        return View(viewModel);
+    }
+
+    [HttpGet]
+    public IActionResult Logout()
+    {
+        HttpContext.Session.Clear();
+        return RedirectToAction("Index", "Home");
+    }
 }
