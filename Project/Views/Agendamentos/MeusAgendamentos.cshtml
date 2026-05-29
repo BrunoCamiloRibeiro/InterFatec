@@ -1,0 +1,75 @@
+@model IEnumerable<FabysUnha.ViewModels.AgendamentoListagemViewModel>
+
+@{
+    ViewData["Title"] = "Meus Agendamentos";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2>Meus Agendamentos</h2>
+            <p class="text-muted">
+                Bem-vindo, <strong>@ViewContext.HttpContext.Session.GetString("ClienteNome")</strong>!
+            </p>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="@Url.Action("Logout", "Agendamentos")" class="btn btn-outline-danger">
+                Sair
+            </a>
+        </div>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="row">
+            @foreach (var agendamento in Model)
+            {
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-info text-white">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h6 class="mb-0">Agendamento #@agendamento.Nr</h6>
+                                </div>
+                                <div class="col-auto">
+                                    <span class="badge bg-success">@agendamento.Status</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-2">
+                                <div class="col">
+                                    <small class="text-muted">Data</small>
+                                    <p class="mb-0"><strong>@agendamento.DataHora.ToString("dd/MM/yyyy HH:mm")</strong></p>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col">
+                                    <small class="text-muted">Total</small>
+                                    <p class="mb-0"><strong>R$ @agendamento.Total.ToString("F2")</strong></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-light">
+                            <a href="@Url.Action("Detalhes", new { id = agendamento.Nr })" 
+                               class="btn btn-sm btn-primary">
+                                Ver Detalhes
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            <h5 class="alert-heading">Nenhum agendamento</h5>
+            <p>Você ainda não possui agendamentos cadastrados.</p>
+            <hr>
+            <a href="@Url.Action("Agendar", "Agendamentos")" class="btn btn-primary">
+                Fazer um Agendamento
+            </a>
+        </div>
+    }
+</div>
