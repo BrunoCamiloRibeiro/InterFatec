@@ -120,20 +120,105 @@ public class AgendamentosRepository : IAgendamentosRepository
 
     public async Task CriarAgendamento(Agendamentos agendamento)
     {
-        await _context.Agendamentos.AddAsync(agendamento);
-        await _context.SaveChangesAsync(); 
+        var query = "EXEC sp_InsertAgendamento @Data, @Total, @Cliente_id, @Status";
+        
+        var nrList = await _context.Database.SqlQueryRaw<int>(query, 
+            new Microsoft.Data.SqlClient.SqlParameter("@Data", agendamento.Data),
+            new Microsoft.Data.SqlClient.SqlParameter("@Total", agendamento.Total),
+            new Microsoft.Data.SqlClient.SqlParameter("@Cliente_id", agendamento.ClienteId),
+            new Microsoft.Data.SqlClient.SqlParameter("@Status", (int)agendamento.Status)
+        ).ToListAsync();
+
+        var nrGerado = nrList.FirstOrDefault();
+
+        if (nrGerado == 0) throw new Exception("Falha ao criar agendamento via procedure.");
+
+        agendamento.Nr = nrGerado;
+
+        foreach (var sa in agendamento.Servicos_Agendados)
+        {
+            await _context.Database.ExecuteSqlRawAsync(
+                "EXEC sp_InsertServicoAgendado @Agendamento_nr, @Servico_id, @Obs, @Horario, @Funcionario_id, @Valor",
+                new Microsoft.Data.SqlClient.SqlParameter("@Agendamento_nr", agendamento.Nr),
+                new Microsoft.Data.SqlClient.SqlParameter("@Servico_id", sa.ServicoId),
+                new Microsoft.Data.SqlClient.SqlParameter("@Obs", sa.Obs ?? (object)DBNull.Value),
+                new Microsoft.Data.SqlClient.SqlParameter("@Horario", sa.Horario),
+                new Microsoft.Data.SqlClient.SqlParameter("@Funcionario_id", sa.FuncionarioId),
+                new Microsoft.Data.SqlClient.SqlParameter("@Valor", sa.Valor)
+            );
+        }
+
+        foreach (var pa in agendamento.Produtos_Agendados)
+        {
+            await _context.Database.ExecuteSqlRawAsync(
+                "EXEC sp_InsertProdutoAgendado @Agendamento_nr, @Servico_id, @Produto_codigo, @Preco",
+                new Microsoft.Data.SqlClient.SqlParameter("@Agendamento_nr", agendamento.Nr),
+                new Microsoft.Data.SqlClient.SqlParameter("@Servico_id", pa.ServicoId),
+                new Microsoft.Data.SqlClient.SqlParameter("@Produto_codigo", pa.ProdutoCodigo),
+                new Microsoft.Data.SqlClient.SqlParameter("@Preco", pa.Preco)
+            );
+        }
     }
 
     public async Task AtualizarAgendamento(Agendamentos agendamento)
     {
-        _context.Agendamentos.Update(agendamento);
-        await _context.SaveChangesAsync();
+        await _context.Database.ExecuteSqlRawAsync(
+            "EXEC sp_UpdateAgendamento @Nr, @Data, @Total, @Cliente_id, @Status",
+            new Microsoft.Data.SqlClient.SqlParameter("@Nr", agendamento.Nr),
+            new Microsoft.Data.SqlClient.SqlParameter("@Data", agendamento.Data),
+            new Microsoft.Data.SqlClient.SqlParameter("@Total", agendamento.Total),
+            new Microsoft.Data.SqlClient.SqlParameter("@Cliente_id", agendamento.ClienteId),
+            new Microsoft.Data.SqlClient.SqlParameter("@Status", (int)agendamento.Status)
+        );
+
+        await _context.Database.ExecuteSqlRawAsync(
+            "DELETE FROM Produtos_Agendados WHERE agendamento_nr = @Nr",
+            new Microsoft.Data.SqlClient.SqlParameter("@Nr", agendamento.Nr)
+        );
+        await _context.Database.ExecuteSqlRawAsync(
+            "DELETE FROM Servicos_Agendados WHERE agendamento_nr = @Nr",
+            new Microsoft.Data.SqlClient.SqlParameter("@Nr", agendamento.Nr)
+        );
+
+        foreach (var sa in agendamento.Servicos_Agendados)
+        {
+            await _context.Database.ExecuteSqlRawAsync(
+                "EXEC sp_InsertServicoAgendado @Agendamento_nr, @Servico_id, @Obs, @Horario, @Funcionario_id, @Valor",
+                new Microsoft.Data.SqlClient.SqlParameter("@Agendamento_nr", agendamento.Nr),
+                new Microsoft.Data.SqlClient.SqlParameter("@Servico_id", sa.ServicoId),
+                new Microsoft.Data.SqlClient.SqlParameter("@Obs", sa.Obs ?? (object)DBNull.Value),
+                new Microsoft.Data.SqlClient.SqlParameter("@Horario", sa.Horario),
+                new Microsoft.Data.SqlClient.SqlParameter("@Funcionario_id", sa.FuncionarioId),
+                new Microsoft.Data.SqlClient.SqlParameter("@Valor", sa.Valor)
+            );
+        }
+
+        foreach (var pa in agendamento.Produtos_Agendados)
+        {
+            await _context.Database.ExecuteSqlRawAsync(
+                "EXEC sp_InsertProdutoAgendado @Agendamento_nr, @Servico_id, @Produto_codigo, @Preco",
+                new Microsoft.Data.SqlClient.SqlParameter("@Agendamento_nr", agendamento.Nr),
+                new Microsoft.Data.SqlClient.SqlParameter("@Servico_id", pa.ServicoId),
+                new Microsoft.Data.SqlClient.SqlParameter("@Produto_codigo", pa.ProdutoCodigo),
+                new Microsoft.Data.SqlClient.SqlParameter("@Preco", pa.Preco)
+            );
+        }
     }
 
     public async Task ExcluirAgendamento(Agendamentos agendamento)
     {
-        _context.Agendamentos.Remove(agendamento);
-        await _context.SaveChangesAsync();
+        await _context.Database.ExecuteSqlRawAsync(
+            "DELETE FROM Produtos_Agendados WHERE agendamento_nr = @Nr",
+            new Microsoft.Data.SqlClient.SqlParameter("@Nr", agendamento.Nr)
+        );
+        await _context.Database.ExecuteSqlRawAsync(
+            "DELETE FROM Servicos_Agendados WHERE agendamento_nr = @Nr",
+            new Microsoft.Data.SqlClient.SqlParameter("@Nr", agendamento.Nr)
+        );
+        await _context.Database.ExecuteSqlRawAsync(
+            "DELETE FROM Agendamentos WHERE nr = @Nr",
+            new Microsoft.Data.SqlClient.SqlParameter("@Nr", agendamento.Nr)
+        );
     }
 
     public async Task<List<TimeSpan>> ObterHorariosOcupados(int funcionarioId, DateTime data)
