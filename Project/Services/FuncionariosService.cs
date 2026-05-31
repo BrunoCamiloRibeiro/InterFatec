@@ -30,13 +30,27 @@ public class FuncionariosService : IFuncionariosService
         //     if(funcionario.Salario < 1412.00m) throw new ArgumentException("O salário deve ser no mínimo o valor do salário mínimo.");
         // }
         
+        if (!string.IsNullOrWhiteSpace(funcionario.Senha) && !funcionario.Senha.StartsWith("$2a$") && !funcionario.Senha.StartsWith("$2b$") && !funcionario.Senha.StartsWith("$2x$") && !funcionario.Senha.StartsWith("$2y$"))
+            funcionario.Senha = BCrypt.Net.BCrypt.HashPassword(funcionario.Senha);
+
         await _funcionariosRepository.RegistrarFuncionario(funcionario);
     }
 
-    public async Task AtualizarFuncionario(Funcionarios funcionario)
+    public async Task AtualizarFuncionario(Funcionarios funcionario, bool hasStatusUpdate)
     {
         if(funcionario.Salario <= 0) throw new ArgumentException("O salário deve ser um valor positivo.");
         if(funcionario.Salario < 1412.00m) throw new ArgumentException("O salário deve ser no mínimo o valor do salário mínimo.");
+
+        var funcionarioAtual = await _funcionariosRepository.ObterFuncionarioPorId(funcionario.Id);
+        if (funcionarioAtual == null) throw new ArgumentException("Funcionário não encontrado.");
+
+        if (!hasStatusUpdate)
+            funcionario.Status = funcionarioAtual.Status;
+
+        if (string.IsNullOrWhiteSpace(funcionario.Senha))
+            funcionario.Senha = funcionarioAtual.Senha;
+        else if (!funcionario.Senha.StartsWith("$2a$") && !funcionario.Senha.StartsWith("$2b$") && !funcionario.Senha.StartsWith("$2x$") && !funcionario.Senha.StartsWith("$2y$"))
+            funcionario.Senha = BCrypt.Net.BCrypt.HashPassword(funcionario.Senha);
 
         await _funcionariosRepository.AtualizarFuncionario(funcionario);
     }
