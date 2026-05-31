@@ -127,7 +127,7 @@ public class AppDbContext : DbContext
             entity.Property(a => a.Total).HasColumnName("total").HasPrecision(10, 2);
             entity.Property(a => a.ClienteId).HasColumnName("cliente_id");
             entity.Property(a => a.Status).HasColumnName("status");
-            entity.Property(a => a.CodigoRastreio).HasColumnName("codigo_rastreio");
+
             entity.HasOne(a => a.Cliente)
                 .WithMany(c => c.Agendamentos)
                 .HasForeignKey(a => a.ClienteId);
@@ -232,7 +232,7 @@ public class AppDbContext : DbContext
         {
             entity.HasNoKey();
             entity.ToView("vw_ListaAgendamento");
-            entity.Property(e => e.NumeroAgendamento).HasColumnName("NúmeroAgendamento");
+            entity.Property(e => e.NumeroAgendamento).HasColumnName("NumeroAgendamento");
             entity.Property(e => e.Total).HasPrecision(10, 2);
             entity.Property(e => e.StatusDescricao).HasColumnName("Status_Descricao");
         });
@@ -241,9 +241,9 @@ public class AppDbContext : DbContext
         {
             entity.HasNoKey();
             entity.ToView("vw_ListaServicoAgendamento");
-            entity.Property(e => e.NumeroAgendamento).HasColumnName("NúmeroAgendamento");
-            entity.Property(e => e.Observacao).HasColumnName("Observação");
-            entity.Property(e => e.Horario).HasColumnName("Horário");
+            entity.Property(e => e.NumeroAgendamento).HasColumnName("NumeroAgendamento");
+            entity.Property(e => e.Observacao).HasColumnName("Observacao");
+            entity.Property(e => e.Horario).HasColumnName("Horario");
             entity.Property(e => e.Valor).HasPrecision(10, 2);
         });
 
@@ -251,9 +251,9 @@ public class AppDbContext : DbContext
         {
             entity.HasNoKey();
             entity.ToView("vw_ListaProdutoAgendamento");
-            entity.Property(e => e.NumeroAgendamento).HasColumnName("NúmeroAgendamento");
-            entity.Property(e => e.Observacao).HasColumnName("Observação");
-            entity.Property(e => e.Preco).HasColumnName("Preço").HasPrecision(10, 2);
+            entity.Property(e => e.NumeroAgendamento).HasColumnName("NumeroAgendamento");
+            entity.Property(e => e.Observacao).HasColumnName("Observacao");
+            entity.Property(e => e.Preco).HasColumnName("Preco").HasPrecision(10, 2);
         });
 
         modelBuilder.Entity<FuncionarioProducaoView>(entity =>
