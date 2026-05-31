@@ -11,7 +11,7 @@
                 <h1 class="h3 mb-0 text-danger-emphasis">Editar produto</h1>
             </div>
             <div class="card-body p-4">
-                <form asp-action="Editar" method="post" class="vstack gap-3">
+                <form asp-action="Editar" method="post" class="vstack gap-3" enctype="multipart/form-data">
                     <input type="hidden" asp-for="Codigo" />
                     <div asp-validation-summary="All" class="alert alert-danger mb-0" role="alert"></div>
 
@@ -43,8 +43,20 @@
                         </div>
 
                         <div class="col-md-6">
+                            <label asp-for="ImagemUpload" class="form-label"></label>
+                            <input asp-for="ImagemUpload" class="form-control" type="file" accept="image/*" />
+                            <span asp-validation-for="ImagemUpload" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
                             <label asp-for="PathImagem" class="form-label"></label>
-                            <input asp-for="PathImagem" class="form-control" />
+                            <div class="d-flex align-items-center gap-2">
+                                @if (!string.IsNullOrWhiteSpace(Model.PathImagem))
+                                {
+                                    <img src="@Model.PathImagem" alt="Imagem" width="40" height="40" class="rounded object-fit-cover" />
+                                }
+                                <input asp-for="PathImagem" class="form-control" placeholder="Ou insira o link da imagem..." />
+                            </div>
                             <span asp-validation-for="PathImagem" class="text-danger small"></span>
                         </div>
                     </div>
