@@ -1,0 +1,95 @@
+@model LoginViewModel
+
+@{
+    ViewData["Title"] = "Cadastro";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-danger-subtle text-danger-emphasis border-bottom border-danger-subtle">
+                    <h4 class="mb-0 fw-semibold">Crie sua Conta</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="@Url.Action("RegistrarUsuario", "Login")">
+                        @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+                        <div class="mb-3">
+                            <label class="form-label">Tipo de cadastro</label>
+                            <div class="d-flex gap-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="CadastroTipo" id="cadastroTipoCliente" value="Cliente" @(Model.CadastroTipo == FabysUnha.Enums.TipoUsuario.Cliente ? "checked" : "")>
+                                    <label class="form-check-label" for="cadastroTipoCliente">Cliente</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="CadastroTipo" id="cadastroTipoFuncionario" value="Funcionario" @(Model.CadastroTipo == FabysUnha.Enums.TipoUsuario.Funcionario ? "checked" : "")>
+                                    <label class="form-check-label" for="cadastroTipoFuncionario">Funcionário</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="cadastroNome" class="form-label">Nome</label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="cadastroNome"
+                                   name="CadastroNome"
+                                   placeholder="Seu nome completo"
+                                   value="@Model.CadastroNome"
+                                   required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="cadastroTelefone" class="form-label">Telefone</label>
+                            <input type="tel"
+                                   class="form-control"
+                                   id="cadastroTelefone"
+                                   name="CadastroTelefone"
+                                   placeholder="(11) 98765-4321"
+                                   value="@Model.CadastroTelefone"
+                                   required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="cadastroSenha" class="form-label">Senha</label>
+                            <input type="password"
+                                   class="form-control"
+                                   id="cadastroSenha"
+                                   name="CadastroSenha"
+                                   placeholder="••••••••"
+                                   value="@Model.CadastroSenha"
+                                   required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="cadastroConfirmacaoSenha" class="form-label">Confirmar Senha</label>
+                            <input type="password"
+                                   class="form-control"
+                                   id="cadastroConfirmacaoSenha"
+                                   name="CadastroConfirmacaoSenha"
+                                   placeholder="••••••••"
+                                   value="@Model.CadastroConfirmacaoSenha"
+                                   required>
+                        </div>
+
+                        <button type="submit" class="btn btn-danger w-100">
+                            Criar Conta
+                        </button>
+                    </form>
+
+                    <hr>
+                    <p class="text-center text-muted mb-0">
+                        <small>Já possui uma conta? <a href="@Url.Action("Index", "Login")" class="text-danger text-decoration-none">Faça Login</a></small>
+                    </p>
+                </div>
+
+                <div class="card-footer bg-light text-center">
+                    <small class="text-muted">
+                        Sistema de Agendamentos • Fabys Unha
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
