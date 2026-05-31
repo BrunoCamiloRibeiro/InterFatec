@@ -26,7 +26,7 @@
             {
                 <div class="col-md-6 mb-3">
                     <div class="card h-100 shadow-sm">
-                        <div class="card-header bg-info text-white">
+                        <div class="card-header bg-danger-subtle text-danger-emphasis">
                             <div class="row align-items-center">
                                 <div class="col">
                                     <h6 class="mb-0">Agendamento #@agendamento.Nr</h6>
@@ -50,12 +50,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer bg-light">
-                            <a href="@Url.Action("Detalhes", new { id = agendamento.Nr })" 
-                               class="btn btn-sm btn-primary">
-                                Ver Detalhes
-                            </a>
-                        </div>
+
                     </div>
                 </div>
             }
@@ -67,7 +62,7 @@
             <h5 class="alert-heading">Nenhum agendamento</h5>
             <p>Você ainda não possui agendamentos cadastrados.</p>
             <hr>
-            <a href="@Url.Action("Agendar", "Agendamentos")" class="btn btn-primary">
+            <a href="@Url.Action("Agendar", "Agendamentos")" class="btn btn-danger">
                 Fazer um Agendamento
             </a>
         </div>
