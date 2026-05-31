@@ -7,6 +7,6 @@ public interface IFuncionariosService
     Task<IEnumerable<Funcionarios>> ObterTodosFuncionarios();
     Task<Funcionarios?> ObterFuncionarioPorId(int id);
     Task RegistrarFuncionario(Funcionarios funcionario);
-    Task AtualizarFuncionario(Funcionarios funcionario  );
+    Task AtualizarFuncionario(Funcionarios funcionario, bool hasStatusUpdate);
     Task ExcluirFuncionario(int id);
 }
