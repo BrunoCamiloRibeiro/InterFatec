@@ -43,13 +43,13 @@ public class ClientesRepository : IClientesRepository
     public async Task RegistrarCliente(Clientes cliente)
     {
         await _db.Database.ExecuteSqlInterpolatedAsync(
-            $"EXEC sp_InsertCliente {cliente.Nome}, {cliente.Telefone}, {(int)cliente.Status}");
+            $"EXEC sp_InsertCliente {cliente.Nome}, {cliente.Telefone}, {(int)cliente.Status}, {cliente.Senha}");
     }
 
     public async Task AtualizarCliente(Clientes cliente)
     {
         await _db.Database.ExecuteSqlInterpolatedAsync(
-            $"EXEC sp_UpdateCliente {cliente.Id}, {cliente.Nome}, {cliente.Telefone}, {(int)cliente.Status}");
+            $"EXEC sp_UpdateCliente {cliente.Id}, {cliente.Nome}, {cliente.Telefone}, {(int)cliente.Status}, {cliente.Senha}");
     }
 
     public async Task ExcluirCliente(Clientes cliente)
