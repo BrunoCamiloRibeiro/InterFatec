@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Http;
 using FabysUnha.Services;
 using FabysUnha.ViewModels;
 using AutoMapper;
@@ -15,6 +17,16 @@ public class EspecialidadesController : Controller
     {
         _especialidadeService = especialidadeService;
         _mapper = mapper;
+    }
+
+    public override void OnActionExecuting(ActionExecutingContext context)
+    {
+        var tipoUsuario = HttpContext.Session.GetString("UsuarioTipo");
+        if (tipoUsuario != "Funcionario")
+        {
+            context.Result = new RedirectToActionResult("Index", "Login", null);
+        }
+        base.OnActionExecuting(context);
     }
 
     public async Task<IActionResult> Index()
