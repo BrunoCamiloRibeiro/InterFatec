@@ -105,7 +105,7 @@ GO
 -- Agendamentos Básico
 CREATE OR ALTER VIEW vw_ListaAgendamento AS
 SELECT
-    a.nr AS NúmeroAgendamento,
+    a.nr AS NumeroAgendamento,
     a.data,
     a.total,
     p.nome AS Cliente,
@@ -124,11 +124,11 @@ GO
 -- Serviços do Agendamento
 CREATE OR ALTER VIEW vw_ListaServicoAgendamento AS
 SELECT
-    sa.agendamento_nr AS NúmeroAgendamento,
+    sa.agendamento_nr AS NumeroAgendamento,
     s.descricao AS NomeServico,
-    sa.obs AS Observação,
-    sa.horario AS Horário,
-    p.Nome AS Funcionário,
+    sa.obs AS Observacao,
+    sa.horario AS Horario,
+    p.Nome AS Funcionario,
     sa.valor AS Valor
 FROM Servicos_Agendados sa, Agendamentos a, Servicos s, Funcionarios f, Pessoas p
 WHERE p.id = f.pessoa_id 
@@ -140,12 +140,12 @@ GO
 -- Produtos do Agendamento
 CREATE OR ALTER VIEW vw_ListaProdutoAgendamento AS
 SELECT
-    pa.agendamento_nr AS NúmeroAgendamento,
+    pa.agendamento_nr AS NumeroAgendamento,
     s.descricao AS NomeServico,
-    sa.obs AS Observação,
+    sa.obs AS Observacao,
     p.nome AS NomeProduto,
     m.nome AS Marca,
-    pa.preco AS Preço
+    pa.preco AS Preco
 FROM Servicos_Agendados sa, Servicos s, Produtos p, Produtos_Agendados pa, Marcas m
 WHERE sa.servico_id = s.id 
   AND pa.agendamento_nr = sa.agendamento_nr 
@@ -190,7 +190,6 @@ SELECT
     p.telefone,
     p.senha,
     a.nr AS agendamento_nr,
-    a.codigo_rastreio,
     a.data,
     a.total,
     a.status
