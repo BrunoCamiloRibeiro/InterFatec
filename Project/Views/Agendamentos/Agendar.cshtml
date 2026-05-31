@@ -10,7 +10,7 @@
             <h1 class="h3 mb-1 text-danger-emphasis">Agendar atendimento</h1>
             <p class="mb-0 text-body-secondary">Monte seu agendamento escolhendo serviços, horários e produtos.</p>
         </div>
-        <span class="badge text-bg-danger align-self-start align-self-lg-center" id="wizard-step-indicator">Etapa 1 de 3</span>
+        <span class="badge text-bg-danger align-self-start align-self-lg-center" id="wizard-step-indicator">Etapa 1 de 2</span>
     </div>
 
     <div class="card-body p-4">
@@ -20,8 +20,7 @@
 
             <div class="d-flex flex-wrap gap-2" id="wizard-step-buttons">
                 <button type="button" class="btn btn-danger" data-step-button="0">1. Serviços</button>
-                <button type="button" class="btn btn-outline-danger" data-step-button="1">2. Identificação</button>
-                <button type="button" class="btn btn-outline-danger" data-step-button="2">3. Revisão</button>
+                <button type="button" class="btn btn-outline-danger" data-step-button="1">2. Revisão</button>
             </div>
 
             @* ============================== ETAPA 1 — SERVIÇOS ============================== *@
@@ -110,9 +109,12 @@
                                                 .ToList();
                                             <div class="js-product-item d-flex gap-2 align-items-end">
                                                 <div class="flex-grow-1">
-                                                    <select data-field-product="ProdutosCodigos" name="@($"{prefix}.ProdutosCodigos[{j}]")" asp-items="prodOptions" class="form-select form-select-sm">
-                                                        <option value="">Selecione o produto</option>
-                                                    </select>
+                                                    <div class="d-flex gap-2 align-items-center">
+                                                        <select data-field-product="ProdutosCodigos" name="@($"{prefix}.ProdutosCodigos[{j}]")" asp-items="prodOptions" class="form-select form-select-sm js-product-select">
+                                                            <option value="">Selecione o produto</option>
+                                                        </select>
+                                                        <div class="js-product-img-container" style="width: 40px; height: 40px;"></div>
+                                                    </div>
                                                 </div>
                                                 <button type="button" class="btn btn-sm btn-outline-danger js-remove-product">Remover</button>
                                             </div>
@@ -129,44 +131,10 @@
                 </div>
             </section>
 
-            @* ============================== ETAPA 2 — IDENTIFICAÇÃO ============================== *@
+            @* Etapa 2 foi removida (Identificação é feita pela Session) *@
+
+            @* ============================== ETAPA 2 — REVISÃO ============================== *@
             <section class="wizard-step d-none" data-wizard-step="1">
-                <div class="mb-3">
-                    <h2 class="h4 mb-1">Identificação</h2>
-                    <p class="text-body-secondary mb-0">Informe seus dados para registrar o agendamento. Se já possui cadastro, basta informar o mesmo telefone.</p>
-                </div>
-
-                <div class="row g-3">
-                    <div class="col-lg-6">
-                        <label asp-for="Nome" class="form-label"></label>
-                        <input asp-for="Nome" class="form-control" placeholder="Seu nome completo" />
-                        <span asp-validation-for="Nome" class="text-danger small"></span>
-                    </div>
-                    <div class="col-lg-6">
-                        <label asp-for="Telefone" class="form-label"></label>
-                        <input asp-for="Telefone" class="form-control" placeholder="Ex: 17999998888" maxlength="11" />
-                        <span asp-validation-for="Telefone" class="text-danger small"></span>
-                    </div>
-                    <div class="col-lg-6">
-                        <label asp-for="Senha" class="form-label"></label>
-                        <input asp-for="Senha" class="form-control" placeholder="Senha (opcional)" />
-                        <span asp-validation-for="Senha" class="text-danger small"></span>
-                        <div class="form-text">Deixe em branco para agendar como convidado e receber código de rastreio.</div>
-                    </div>
-                </div>
-
-                <div class="alert alert-light border-danger-subtle mt-3">
-                    <strong>Já é cliente?</strong> Se você já possui cadastro, basta informar o mesmo telefone e senha. O sistema irá reconhecê-lo automaticamente.
-                </div>
-
-                <div class="d-flex justify-content-between mt-4">
-                    <button type="button" class="btn btn-outline-danger" data-wizard-prev>Anterior</button>
-                    <button type="button" class="btn btn-danger" data-wizard-next>Próximo</button>
-                </div>
-            </section>
-
-            @* ============================== ETAPA 3 — REVISÃO ============================== *@
-            <section class="wizard-step d-none" data-wizard-step="2">
                 <div class="row g-3">
                     <div class="col-lg-7">
                         <div class="card border-danger-subtle h-100">
@@ -177,11 +145,11 @@
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                                         <span class="text-body-secondary">Cliente</span>
-                                        <strong id="summary-client-name">-</strong>
+                                        <strong>@Context.Session.GetString("ClienteNome")</strong>
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                                         <span class="text-body-secondary">Telefone</span>
-                                        <strong id="summary-client-phone">-</strong>
+                                        <strong>@Context.Session.GetString("ClienteTelefone")</strong>
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                                         <span class="text-body-secondary">Data</span>
@@ -194,6 +162,10 @@
                                     <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                                         <span class="text-body-secondary">Produtos</span>
                                         <strong id="summary-prod-count">0</strong>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center px-0 bg-danger-subtle border-top border-danger-subtle mt-2 pt-2">
+                                        <span class="fw-bold text-danger-emphasis">Total Estimado</span>
+                                        <strong class="fs-5 text-danger-emphasis" id="summary-total-price">R$ 0,00</strong>
                                     </li>
                                 </ul>
 
@@ -274,9 +246,12 @@
 <template id="product-client-template">
     <div class="js-product-item d-flex gap-2 align-items-end">
         <div class="flex-grow-1">
-            <select data-field-product="ProdutosCodigos" asp-items="Model.ProdutosList" class="form-select form-select-sm">
-                <option value="">Selecione o produto</option>
-            </select>
+            <div class="d-flex gap-2 align-items-center">
+                <select data-field-product="ProdutosCodigos" asp-items="Model.ProdutosList" class="form-select form-select-sm js-product-select">
+                    <option value="">Selecione o produto</option>
+                </select>
+                <div class="js-product-img-container" style="width: 40px; height: 40px;"></div>
+            </div>
         </div>
         <button type="button" class="btn btn-sm btn-outline-danger js-remove-product">Remover</button>
     </div>
@@ -292,8 +267,9 @@
     var svcTemplate = document.getElementById('svc-client-template');
     var prodTemplate = document.getElementById('product-client-template');
     var dateInput = document.getElementById('client-data');
-    var nomeInput = document.getElementById('Nome');
-    var telefoneInput = document.getElementById('Telefone');
+
+    var produtosJson = @Html.Raw(ViewBag.ProdutosJson ?? "[]");
+    var servicosJson = @Html.Raw(ViewBag.ServicosJson ?? "[]");
 
     var steps = Array.from(document.querySelectorAll('[data-wizard-step]'));
     var stepButtons = Array.from(document.querySelectorAll('[data-step-button]'));
@@ -399,6 +375,25 @@
     });
 
     // ==========================================
+    // EXIBIÇÃO DE IMAGEM DO PRODUTO
+    // ==========================================
+    svcContainer.addEventListener('change', function (e) {
+        if (e.target.classList.contains('js-product-select')) {
+            var val = e.target.value;
+            var container = e.target.closest('.js-product-item').querySelector('.js-product-img-container');
+            if (container) {
+                container.innerHTML = '';
+                if (val) {
+                    var prod = produtosJson.find(p => p.Codigo == val);
+                    if (prod && prod.PathImagem) {
+                        container.innerHTML = '<img src="' + prod.PathImagem + '" alt="Produto" class="w-100 h-100 object-fit-cover rounded border" />';
+                    }
+                }
+            }
+        }
+    });
+
+    // ==========================================
     // HORÁRIOS DISPONÍVEIS (AJAX)
     // ==========================================
     function loadHorarios(svcRow) {
@@ -464,15 +459,11 @@
     }
 
     function updateSummary() {
-        var summaryName = document.getElementById('summary-client-name');
-        var summaryPhone = document.getElementById('summary-client-phone');
         var summaryDate = document.getElementById('summary-date');
         var summaryServiceCount = document.getElementById('summary-svc-count');
         var summaryProductCount = document.getElementById('summary-prod-count');
         var summaryDetail = document.getElementById('summary-services-detail');
-
-        if (summaryName) summaryName.textContent = nomeInput ? nomeInput.value || '-' : '-';
-        if (summaryPhone) summaryPhone.textContent = telefoneInput ? telefoneInput.value || '-' : '-';
+        var summaryTotal = document.getElementById('summary-total-price');
 
         if (summaryDate && dateInput && dateInput.value) {
             var parts = dateInput.value.split('-');
@@ -483,12 +474,30 @@
         if (summaryServiceCount) summaryServiceCount.textContent = svcRows.length;
 
         var totalProducts = 0;
+        var totalPrice = 0;
         var detailHtml = '';
         svcRows.forEach(function (row, idx) {
             var svcSel = row.querySelector('[data-field="ServicoId"]');
             var funcSel = row.querySelector('[data-field="FuncionarioId"]');
             var horSel = row.querySelector('[data-field="Horario"]');
-            var prodCount = row.querySelectorAll('.js-product-item').length;
+            
+            var svcVal = svcSel ? svcSel.value : '';
+            var svcPrice = 0;
+            if (svcVal) {
+                var s = servicosJson.find(x => x.Id == svcVal);
+                if (s) svcPrice = s.Preco;
+            }
+            totalPrice += svcPrice;
+
+            var prodSels = row.querySelectorAll('[data-field-product="ProdutosCodigos"]');
+            var prodCount = 0;
+            prodSels.forEach(function(ps) {
+                if (ps.value) {
+                    prodCount++;
+                    var p = produtosJson.find(x => x.Codigo == ps.value);
+                    if (p) totalPrice += p.Preco;
+                }
+            });
             totalProducts += prodCount;
 
             detailHtml += '<div class="border rounded p-2 mb-2 bg-body-tertiary">';
@@ -502,6 +511,9 @@
         });
         if (summaryProductCount) summaryProductCount.textContent = totalProducts;
         if (summaryDetail) summaryDetail.innerHTML = detailHtml;
+        if (summaryTotal) {
+            summaryTotal.textContent = totalPrice.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
     }
 
     // ==========================================
@@ -511,6 +523,11 @@
         renumberAll();
         hookHorarioListeners();
         setStep(0);
+        
+        // Trigger image display on load
+        document.querySelectorAll('.js-product-select').forEach(sel => {
+            sel.dispatchEvent(new Event('change', { bubbles: true }));
+        });
     });
 })();
 </script>
