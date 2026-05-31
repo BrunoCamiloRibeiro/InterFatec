@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Http;
 using FabysUnha.Services;
 using FabysUnha.ViewModels;
 using AutoMapper; 
@@ -14,6 +16,16 @@ public class ClientesController : Controller
     {
         _clientesService = clientesService;
         _mapper = mapper;
+    }
+
+    public override void OnActionExecuting(ActionExecutingContext context)
+    {
+        var tipoUsuario = HttpContext.Session.GetString("UsuarioTipo");
+        if (tipoUsuario != "Funcionario")
+        {
+            context.Result = new RedirectToActionResult("Index", "Login", null);
+        }
+        base.OnActionExecuting(context);
     }
 
     public async Task<IActionResult> Index()
@@ -69,7 +81,7 @@ public class ClientesController : Controller
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
+
     public async Task<IActionResult> Editar(int id, ClienteEditarViewModel clienteViewModel)
     {
         if (id != clienteViewModel.Id) return BadRequest();
@@ -106,7 +118,7 @@ public class ClientesController : Controller
     }
 
     [HttpPost, ActionName("Excluir")]
-    [ValidateAntiForgeryToken]
+
     public async Task<IActionResult> ExcluirConfirmado(int id)
     {
         await _clientesService.ExcluirCliente(id);
