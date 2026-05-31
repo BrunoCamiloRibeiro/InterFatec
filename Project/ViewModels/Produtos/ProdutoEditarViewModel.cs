@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
 using FabysUnha.Enums;
 
 namespace FabysUnha.ViewModels;
@@ -26,7 +27,10 @@ public class ProdutoEditarViewModel
     public decimal Preco { get; set; }
 
     [Display(Name = "Caminho ou URL da Imagem")]
-    public string PathImagem { get; set; } = string.Empty;
+    public string? PathImagem { get; set; } = string.Empty;
+
+    [Display(Name = "Upload de Nova Imagem (Substituir)")]
+    public IFormFile? ImagemUpload { get; set; }
 
     [Display(Name = "Status")]
     public ProdutoStatus Status { get; set; } = ProdutoStatus.Ativo;
