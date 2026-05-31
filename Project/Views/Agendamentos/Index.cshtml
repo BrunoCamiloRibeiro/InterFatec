@@ -52,6 +52,9 @@
 								<form asp-action="Cancelar" asp-route-id="@item.Nr" method="post" class="d-inline">
 									<button class="btn btn-sm btn-outline-danger" type="submit">Cancelar</button>
 								</form>
+								<form asp-action="Finalizar" asp-route-id="@item.Nr" method="post" class="d-inline">
+									<button class="btn btn-sm btn-outline-success" type="submit">Finalizar</button>
+								</form>
 								<a class="btn btn-sm btn-danger" asp-action="Excluir" asp-route-id="@item.Nr">Excluir</a>
 							</div>
 						</td>
