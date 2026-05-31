@@ -1,6 +1,8 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Http;
 using FabysUnha.Enums;
 using FabysUnha.Models;
 using FabysUnha.Services;
@@ -31,6 +33,29 @@ public class AgendamentosController : Controller
         _servicosService = servicosService;
         _produtosService = produtosService;
         _mapper = mapper;
+    }
+
+    public override void OnActionExecuting(ActionExecutingContext context)
+    {
+        var actionName = context.ActionDescriptor.RouteValues["action"];
+        var isClientAction = actionName == "Agendar" || 
+                             actionName == "AgendamentoConfirmado" || 
+                             actionName == "ObterHorariosDisponiveis" || 
+                             actionName == "MeusAgendamentos" || 
+                             actionName == "Logout";
+                             
+        var tipoUsuario = HttpContext.Session.GetString("UsuarioTipo");
+
+        if (string.IsNullOrEmpty(tipoUsuario))
+        {
+            context.Result = new RedirectToActionResult("Index", "Login", null);
+        }
+        else if (tipoUsuario == "Cliente" && !isClientAction)
+        {
+            context.Result = new RedirectToActionResult("MeusAgendamentos", "Agendamentos", null);
+        }
+
+        base.OnActionExecuting(context);
     }
 
     public async Task<IActionResult> Index()
@@ -64,7 +89,7 @@ public class AgendamentosController : Controller
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
+
     public async Task<IActionResult> Criar(AgendamentoRegistroViewModel viewModel)
     {
         if (!ModelState.IsValid)
@@ -98,7 +123,7 @@ public class AgendamentosController : Controller
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
+
     public async Task<IActionResult> Editar(int id, AgendamentoEditarViewModel viewModel)
     {
         if (id != viewModel.Nr) return BadRequest();
@@ -139,7 +164,7 @@ public class AgendamentosController : Controller
     }
 
     [HttpPost, ActionName("Excluir")]
-    [ValidateAntiForgeryToken]
+
     public async Task<IActionResult> ConfirmarExclusao(int id)
     {
         await _agendamentosService.ExcluirAgendamento(id);
@@ -147,10 +172,18 @@ public class AgendamentosController : Controller
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
+
     public async Task<IActionResult> Cancelar(int id)
     {
         await _agendamentosService.CancelarAgendamento(id);
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+
+    public async Task<IActionResult> Finalizar(int id)
+    {
+        await _agendamentosService.FinalizarAgendamento(id);
         return RedirectToAction(nameof(Index));
     }
 
@@ -180,18 +213,31 @@ public class AgendamentosController : Controller
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Agendar(AgendamentoClienteViewModel viewModel)
     {
+        // Remove validações dos campos que não usaremos mais
+        ModelState.Remove("Nome");
+        ModelState.Remove("Telefone");
+
         if (!ModelState.IsValid)
         {
+            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            System.IO.File.WriteAllText("modelstate_errors.txt", string.Join("\n", errors));
+            
             await PrepararListasClienteAsync(viewModel);
             return View(viewModel);
         }
 
+        System.IO.File.WriteAllText("post_debug.txt", System.Text.Json.JsonSerializer.Serialize(viewModel));
+
+
+        var clienteId = HttpContext.Session.GetInt32("ClienteId");
+        if (clienteId == null)
+            return RedirectToAction("Index", "Login");
+
         try
         {
-            await _agendamentosService.CriarAgendamentoCliente(viewModel);
+            await _agendamentosService.CriarAgendamentoCliente(viewModel, clienteId.Value);
             TempData["Sucesso"] = "Agendamento realizado com sucesso!";
             return RedirectToAction(nameof(AgendamentoConfirmado));
         }
@@ -216,7 +262,7 @@ public class AgendamentosController : Controller
             return Json(new List<string>());
 
         var horarios = await _agendamentosService.ObterHorariosDisponiveis(funcionarioId, dataParsed);
-        var resultado = horarios.Select(h => new { valor = h.ToString(@"hh\:mm"), texto = h.ToString(@"hh\:mm") });
+        var resultado = horarios.Select(h => new { valor = h.ToString(@"hh\:mm\:ss"), texto = h.ToString(@"hh\:mm") });
         return Json(resultado);
     }
 
@@ -227,8 +273,26 @@ public class AgendamentosController : Controller
         var produtos = await _produtosService.ObterTodosProdutos();
 
         viewModel.FuncionariosList = new SelectList(funcionarios, nameof(Funcionarios.Id), nameof(Funcionarios.Nome));
-        viewModel.ServicosList = new SelectList(servicos, nameof(Servicos.Id), nameof(Servicos.Descricao));
-        viewModel.ProdutosList = new SelectList(produtos, nameof(Produtos.Codigo), nameof(Produtos.Nome));
+        
+        var servicosItens = servicos.Select(s => new {
+            Id = s.Id,
+            Descricao = s.Descricao,
+            Preco = s.Preco,
+            TextoFormatado = $"{s.Descricao} - R$ {s.Preco:F2}"
+        }).ToList();
+        viewModel.ServicosList = new SelectList(servicosItens, "Id", "TextoFormatado");
+
+        var produtosItens = produtos.Select(p => new {
+            Codigo = p.Codigo,
+            Nome = p.Nome,
+            Preco = p.Preco,
+            PathImagem = p.PathImagem,
+            TextoFormatado = $"{p.Nome} - R$ {p.Preco:F2}"
+        }).ToList();
+        viewModel.ProdutosList = new SelectList(produtosItens, "Codigo", "TextoFormatado");
+
+        ViewBag.ProdutosJson = System.Text.Json.JsonSerializer.Serialize(produtosItens);
+        ViewBag.ServicosJson = System.Text.Json.JsonSerializer.Serialize(servicosItens);
     }
 
     /// <summary>
@@ -239,6 +303,11 @@ public class AgendamentosController : Controller
     {
         var clienteId = HttpContext.Session.GetInt32("ClienteId");
         var clienteTelefone = HttpContext.Session.GetString("ClienteTelefone");
+
+        var tipoUsuario = HttpContext.Session.GetString("UsuarioTipo");
+
+        if (tipoUsuario == "Funcionario")
+            return RedirectToAction("Index", "Agendamentos");
 
         if (!clienteId.HasValue || string.IsNullOrEmpty(clienteTelefone))
             return RedirectToAction("Index", "Login");
