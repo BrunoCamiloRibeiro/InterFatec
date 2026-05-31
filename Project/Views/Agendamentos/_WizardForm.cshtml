@@ -112,7 +112,7 @@
 
                                     <div class="col-lg-2">
                                         <label class="form-label">Horário</label>
-                                        <input data-field="Horario" type="time" name="@($"{servicePrefix}.Horario")" value="@(item.Horario == default ? string.Empty : DateTime.Today.Add(item.Horario).ToString("HH:mm"))" class="form-control" />
+                                        <input data-field="Horario" type="time" name="@($"{servicePrefix}.Horario")" value="@(string.IsNullOrEmpty(item.Horario) ? string.Empty : TimeSpan.TryParse(item.Horario, out var tsForm) ? new DateTime(tsForm.Ticks).ToString("HH:mm") : item.Horario)" class="form-control" />
                                     </div>
 
                                     <div class="col-lg-2">
