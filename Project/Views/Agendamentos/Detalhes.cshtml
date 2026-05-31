@@ -67,7 +67,7 @@
                                 <tr>
                                     <td>@item.ServicoNome</td>
                                     <td>@item.FuncionarioNome</td>
-                                    <td>@item.Horario.ToString(@"hh\:mm")</td>
+                                    <td>@(TimeSpan.TryParse(item.Horario, out var ts) ? ts.ToString(@"hh\:mm") : item.Horario)</td>
                                     <td>@item.Obs</td>
                                     <td>@item.Valor.ToString("C")</td>
                                 </tr>
