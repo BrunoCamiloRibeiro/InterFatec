@@ -158,29 +158,29 @@ GO
 -- 7. AGENDAMENTOS
 -- ==========================================
 -- Visitantes (com Token)
-EXEC sp_InsertAgendamento @Data = '2026-05-10', @Total = 35.00, @Cliente_id = 1, @Status = 2, @CodigoRastreio = 'TOK001';
-EXEC sp_InsertAgendamento @Data = '2026-05-11', @Total = 40.00, @Cliente_id = 2, @Status = 2, @CodigoRastreio = 'TOK002';
-EXEC sp_InsertAgendamento @Data = '2026-05-12', @Total = 70.00, @Cliente_id = 3, @Status = 0, @CodigoRastreio = 'TOK003';
-EXEC sp_InsertAgendamento @Data = '2026-05-13', @Total = 150.00, @Cliente_id = 4, @Status = 0, @CodigoRastreio = 'TOK004';
-EXEC sp_InsertAgendamento @Data = '2026-05-14', @Total = 130.00, @Cliente_id = 5, @Status = 0, @CodigoRastreio = 'TOK005';
-EXEC sp_InsertAgendamento @Data = '2026-05-15', @Total = 80.00, @Cliente_id = 6, @Status = 0, @CodigoRastreio = 'TOK006';
-EXEC sp_InsertAgendamento @Data = '2026-05-16', @Total = 60.00, @Cliente_id = 7, @Status = 1, @CodigoRastreio = 'TOK007';
-EXEC sp_InsertAgendamento @Data = '2026-05-17', @Total = 40.00, @Cliente_id = 8, @Status = 1, @CodigoRastreio = 'TOK008';
-EXEC sp_InsertAgendamento @Data = '2026-05-18', @Total = 55.00, @Cliente_id = 9, @Status = 1, @CodigoRastreio = 'TOK009';
-EXEC sp_InsertAgendamento @Data = '2026-05-19', @Total = 85.00, @Cliente_id = 10, @Status = 1, @CodigoRastreio = 'TOK010';
-EXEC sp_InsertAgendamento @Data = '2026-05-20', @Total = 25.00, @Cliente_id = 11, @Status = 0, @CodigoRastreio = 'TOK011';
+EXEC sp_InsertAgendamento @Data = '2026-05-10', @Total = 35.00, @Cliente_id = 1, @Status = 2;
+EXEC sp_InsertAgendamento @Data = '2026-05-11', @Total = 40.00, @Cliente_id = 2, @Status = 2;
+EXEC sp_InsertAgendamento @Data = '2026-05-12', @Total = 70.00, @Cliente_id = 3, @Status = 0;
+EXEC sp_InsertAgendamento @Data = '2026-05-13', @Total = 150.00, @Cliente_id = 4, @Status = 0;
+EXEC sp_InsertAgendamento @Data = '2026-05-14', @Total = 130.00, @Cliente_id = 5, @Status = 0;
+EXEC sp_InsertAgendamento @Data = '2026-05-15', @Total = 80.00, @Cliente_id = 6, @Status = 0;
+EXEC sp_InsertAgendamento @Data = '2026-05-16', @Total = 60.00, @Cliente_id = 7, @Status = 1;
+EXEC sp_InsertAgendamento @Data = '2026-05-17', @Total = 40.00, @Cliente_id = 8, @Status = 1;
+EXEC sp_InsertAgendamento @Data = '2026-05-18', @Total = 55.00, @Cliente_id = 9, @Status = 1;
+EXEC sp_InsertAgendamento @Data = '2026-05-19', @Total = 85.00, @Cliente_id = 10, @Status = 1;
+EXEC sp_InsertAgendamento @Data = '2026-05-20', @Total = 25.00, @Cliente_id = 11, @Status = 0;
 
 -- Clientes Cadastrados (sem Token)
-EXEC sp_InsertAgendamento @Data = '2026-05-21', @Total = 45.00, @Cliente_id = 12, @Status = 0, @CodigoRastreio = NULL;
-EXEC sp_InsertAgendamento @Data = '2026-05-22', @Total = 15.00, @Cliente_id = 13, @Status = 0, @CodigoRastreio = NULL;
-EXEC sp_InsertAgendamento @Data = '2026-05-23', @Total = 20.00, @Cliente_id = 14, @Status = 0, @CodigoRastreio = NULL;
-EXEC sp_InsertAgendamento @Data = '2026-05-24', @Total = 10.00, @Cliente_id = 15, @Status = 2, @CodigoRastreio = NULL;
-EXEC sp_InsertAgendamento @Data = '2026-05-25', @Total = 90.00, @Cliente_id = 16, @Status = 1, @CodigoRastreio = NULL;
-EXEC sp_InsertAgendamento @Data = '2026-05-26', @Total = 45.00, @Cliente_id = 17, @Status = 1, @CodigoRastreio = NULL;
-EXEC sp_InsertAgendamento @Data = '2026-05-27', @Total = 50.00, @Cliente_id = 18, @Status = 1, @CodigoRastreio = NULL;
-EXEC sp_InsertAgendamento @Data = '2026-05-28', @Total = 30.00, @Cliente_id = 19, @Status = 0, @CodigoRastreio = NULL;
-EXEC sp_InsertAgendamento @Data = '2026-05-29', @Total = 35.00, @Cliente_id = 20, @Status = 1, @CodigoRastreio = NULL;
-EXEC sp_InsertAgendamento @Data = '2026-05-30', @Total = 99.00, @Cliente_id = 20, @Status = 1, @CodigoRastreio = NULL;
+EXEC sp_InsertAgendamento @Data = '2026-05-21', @Total = 45.00, @Cliente_id = 12, @Status = 0;
+EXEC sp_InsertAgendamento @Data = '2026-05-22', @Total = 15.00, @Cliente_id = 13, @Status = 0;
+EXEC sp_InsertAgendamento @Data = '2026-05-23', @Total = 20.00, @Cliente_id = 14, @Status = 0;
+EXEC sp_InsertAgendamento @Data = '2026-05-24', @Total = 10.00, @Cliente_id = 15, @Status = 2;
+EXEC sp_InsertAgendamento @Data = '2026-05-25', @Total = 90.00, @Cliente_id = 16, @Status = 1;
+EXEC sp_InsertAgendamento @Data = '2026-05-26', @Total = 45.00, @Cliente_id = 17, @Status = 1;
+EXEC sp_InsertAgendamento @Data = '2026-05-27', @Total = 50.00, @Cliente_id = 18, @Status = 1;
+EXEC sp_InsertAgendamento @Data = '2026-05-28', @Total = 30.00, @Cliente_id = 19, @Status = 0;
+EXEC sp_InsertAgendamento @Data = '2026-05-29', @Total = 35.00, @Cliente_id = 20, @Status = 1;
+EXEC sp_InsertAgendamento @Data = '2026-05-30', @Total = 99.00, @Cliente_id = 20, @Status = 1;
 GO
 
 -- ==========================================
