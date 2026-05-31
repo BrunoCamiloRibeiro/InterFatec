@@ -13,7 +13,7 @@ create table Pessoas
 		Nome		varchar(100)	not null													,
 		Telefone	varchar(11)		not null											unique	,
 		status		int				not null		default 0									,--status virou atributo			
-		senha       varchar(25)     not null        default ''									
+		senha       varchar(100)    not null        default ''									
 	)
 go
 
@@ -87,13 +87,12 @@ go
 
 create table Agendamentos
 	(
---		Nome			Tipo			Nulo/N�o Nulo	Chave-Primaria	Auto-Incremento		Unico	,
+--		Nome			Tipo			Nulo/No Nulo	Chave-Primaria	Auto-Incremento		Unico	,
 		nr				int				not null		primary key		identity					,
 		data			datetime2(0)	not null													,
 		total			decimal(10,2)	not null													,
 		cliente_id		int				not null													,
 		status			int				not null		default 0									,
-		codigo_rastreio varchar(10)																	,
 
 		foreign key(cliente_id) references Clientes(pessoa_id)
 	)
