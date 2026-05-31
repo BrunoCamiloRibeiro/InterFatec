@@ -11,7 +11,7 @@
                 <h1 class="h3 mb-0 text-danger-emphasis">Criar produto</h1>
             </div>
             <div class="card-body p-4">
-                <form asp-action="Criar" method="post" class="vstack gap-3">
+                <form asp-action="Criar" method="post" class="vstack gap-3" enctype="multipart/form-data">
                     <div asp-validation-summary="All" class="alert alert-danger mb-0" role="alert"></div>
 
                     <div>
@@ -42,8 +42,14 @@
                         </div>
 
                         <div class="col-md-6">
+                            <label asp-for="ImagemUpload" class="form-label"></label>
+                            <input asp-for="ImagemUpload" class="form-control" type="file" accept="image/*" />
+                            <span asp-validation-for="ImagemUpload" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
                             <label asp-for="PathImagem" class="form-label"></label>
-                            <input asp-for="PathImagem" class="form-control" />
+                            <input asp-for="PathImagem" class="form-control" placeholder="Ou insira o link da imagem..." />
                             <span asp-validation-for="PathImagem" class="text-danger small"></span>
                         </div>
                     </div>
