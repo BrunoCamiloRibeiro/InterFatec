@@ -24,11 +24,23 @@ public class ClientesService : IClientesService
 
     public async Task RegistrarCliente(Clientes cliente)
     {
+        if (!string.IsNullOrWhiteSpace(cliente.Senha) && !cliente.Senha.StartsWith("$2a$") && !cliente.Senha.StartsWith("$2b$") && !cliente.Senha.StartsWith("$2x$") && !cliente.Senha.StartsWith("$2y$"))
+            cliente.Senha = BCrypt.Net.BCrypt.HashPassword(cliente.Senha);
+
         await _clientesRepository.RegistrarCliente(cliente);
     }
 
     public async Task AtualizarCliente(Clientes cliente)
     {
+        var clienteAtual = await _clientesRepository.ObterClientePorId(cliente.Id);
+        if (clienteAtual != null)
+        {
+            if (string.IsNullOrWhiteSpace(cliente.Senha))
+                cliente.Senha = clienteAtual.Senha;
+            else if (!cliente.Senha.StartsWith("$2a$") && !cliente.Senha.StartsWith("$2b$") && !cliente.Senha.StartsWith("$2x$") && !cliente.Senha.StartsWith("$2y$"))
+                cliente.Senha = BCrypt.Net.BCrypt.HashPassword(cliente.Senha);
+        }
+
         await _clientesRepository.AtualizarCliente(cliente);
     }
 
