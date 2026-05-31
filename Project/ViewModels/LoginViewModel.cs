@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 
+using FabysUnha.Enums;
+
 namespace FabysUnha.ViewModels;
 
 public class LoginViewModel
@@ -15,7 +17,7 @@ public class LoginViewModel
     public string FuncionarioSenha { get; set; } = string.Empty;
 
     // Cadastro unificado
-    public string CadastroTipo { get; set; } = "cliente";
+    public TipoUsuario CadastroTipo { get; set; } = TipoUsuario.Cliente;
     public string CadastroNome { get; set; } = string.Empty;
     public string CadastroTelefone { get; set; } = string.Empty;
     public string CadastroSenha { get; set; } = string.Empty;
