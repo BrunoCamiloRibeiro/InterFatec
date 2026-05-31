@@ -10,21 +10,18 @@ namespace FabysUnha.Controllers;
 
 public class LoginController : Controller
 {
-    private readonly IClienteAuthService _clienteAuthService;
+    private readonly ILoginAuthService _loginAuthService;
     private readonly IFuncionariosService _funcionariosService;
     private readonly IClientesService _clientesService;
-    private readonly IEspecialidadeService _especialidadeService;
 
     public LoginController(
-        IClienteAuthService clienteAuthService,
+        ILoginAuthService loginAuthService,
         IFuncionariosService funcionariosService,
-        IClientesService clientesService,
-        IEspecialidadeService especialidadeService)
+        IClientesService clientesService)
     {
-        _clienteAuthService = clienteAuthService;
+        _loginAuthService = loginAuthService;
         _funcionariosService = funcionariosService;
         _clientesService = clientesService;
-        _especialidadeService = especialidadeService;
     }
 
     [HttpGet]
@@ -34,41 +31,42 @@ public class LoginController : Controller
         return View(viewModel);
     }
 
-    private async Task<IEnumerable<SelectListItem>> ObterEspecialidadesAsync()
+    [HttpGet]
+    public IActionResult Cadastro()
     {
-        var especialidades = await _especialidadeService.ObterTodasEspecialidades();
-        return especialidades
-            .Select(e => new SelectListItem(e.Descricao, e.Id.ToString()))
-            .ToList();
+        var viewModel = new LoginViewModel();
+        return View(viewModel);
     }
 
+
+
     [HttpPost]
-    [ValidateAntiForgeryToken]
+
     public async Task<IActionResult> RegistrarUsuario(LoginViewModel model)
     {
 
         if (string.IsNullOrWhiteSpace(model.CadastroNome) || string.IsNullOrWhiteSpace(model.CadastroTelefone) || string.IsNullOrWhiteSpace(model.CadastroSenha))
         {
             ModelState.AddModelError(string.Empty, "Nome, telefone e senha são obrigatórios para cadastro.");
-            ViewBag.ActiveTab = "cadastrar";
-            return View("Index", model);
+            return View("Cadastro", model);
         }
 
         if (model.CadastroSenha != model.CadastroConfirmacaoSenha)
         {
             ModelState.AddModelError(string.Empty, "A confirmação da senha não confere.");
-            ViewBag.ActiveTab = "cadastrar";
-            return View("Index", model);
+            return View("Cadastro", model);
         }
 
-        if (model.CadastroTipo == "funcionario")
+        if (model.CadastroTipo == TipoUsuario.Funcionario)
         {
             var funcionario = new Funcionarios
             {
                 Nome = model.CadastroNome.Trim(),
                 Telefone = model.CadastroTelefone.Trim(),
                 Senha = model.CadastroSenha,
-                Status = PessoaStatus.Ativo
+                Status = PessoaStatus.Ativo,
+                Salario = 1412.00M,
+                EspecialidadeId = null
             };
 
             await _funcionariosService.RegistrarFuncionario(funcionario);
@@ -80,8 +78,7 @@ public class LoginController : Controller
         if (clienteExistente != null)
         {
             ModelState.AddModelError(string.Empty, "Este telefone já está cadastrado.");
-            ViewBag.ActiveTab = "cadastrar";
-            return View("Index", model);
+            return View("Cadastro", model);
         }
 
         var cliente = new Clientes
@@ -101,7 +98,7 @@ public class LoginController : Controller
     /// Login de Cliente: Telefone + Senha
     /// </summary>
     [HttpPost]
-    [ValidateAntiForgeryToken]
+
     public async Task<IActionResult> ClienteLogin(string telefone, string senha)
     {
         if (string.IsNullOrWhiteSpace(telefone) || string.IsNullOrWhiteSpace(senha))
@@ -110,7 +107,7 @@ public class LoginController : Controller
             return View("Index", new LoginViewModel());
         }
 
-        var (valido, cliente, agendamentos) = await _clienteAuthService
+        var (valido, cliente, agendamentos) = await _loginAuthService
             .AutenticarClientePorTelefoneESenha(telefone, senha);
 
         if (!valido)
@@ -123,7 +120,7 @@ public class LoginController : Controller
         HttpContext.Session.SetInt32("ClienteId", cliente!.Id);
         HttpContext.Session.SetString("ClienteTelefone", cliente.Telefone);
         HttpContext.Session.SetString("ClienteNome", cliente.Nome);
-        HttpContext.Session.SetString("UsuarioTipo", "Cliente");
+        HttpContext.Session.SetString("UsuarioTipo", nameof(TipoUsuario.Cliente));
 
         // Redirecionar para página de agendamentos do cliente
         return RedirectToAction("MeusAgendamentos", "Agendamentos");
@@ -134,7 +131,7 @@ public class LoginController : Controller
     /// (Implementação simplificada - você pode integrar com Identity depois)
     /// </summary>
     [HttpPost]
-    [ValidateAntiForgeryToken]
+
     public async Task<IActionResult> FuncionarioLogin(string telefone, string senha)
     {
         if (string.IsNullOrWhiteSpace(telefone) || string.IsNullOrWhiteSpace(senha))
@@ -144,9 +141,7 @@ public class LoginController : Controller
             return View("Index", new LoginViewModel());
         }
 
-        var funcionarios = await _funcionariosService.ObterTodosFuncionarios();
-        var funcionario = funcionarios
-            .FirstOrDefault(f => f.Telefone == telefone && f.Senha == senha);
+        var funcionario = await _loginAuthService.AutenticarFuncionario(telefone, senha);
 
         if (funcionario == null)
         {
@@ -158,7 +153,7 @@ public class LoginController : Controller
         HttpContext.Session.SetInt32("FuncionarioId", funcionario.Id);
         HttpContext.Session.SetString("FuncionarioNome", funcionario.Nome);
         HttpContext.Session.SetString("FuncionarioTelefone", funcionario.Telefone);
-        HttpContext.Session.SetString("UsuarioTipo", "Funcionario");
+        HttpContext.Session.SetString("UsuarioTipo", nameof(TipoUsuario.Funcionario));
 
         return RedirectToAction("Index", "Funcionarios");
     }
