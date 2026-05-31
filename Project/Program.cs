@@ -52,7 +52,7 @@ builder.Services.AddScoped<IAgendamentosRepository, AgendamentosRepository>();
 builder.Services.AddScoped<IAgendamentosService, AgendamentosService>();
 
 // Registrar serviço de autenticação de cliente
-builder.Services.AddScoped<IClienteAuthService, ClienteAuthService>();
+builder.Services.AddScoped<ILoginAuthService, LoginAuthService>();
 
 // Configurar Session
 builder.Services.AddSession(options =>
