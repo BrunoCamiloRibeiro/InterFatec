@@ -8,8 +8,8 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Faça seu Login</h4>
+                <div class="card-header bg-danger-subtle text-danger-emphasis border-bottom border-danger-subtle">
+                    <h4 class="mb-0 fw-semibold">Faça seu Login</h4>
                 </div>
                 <div class="card-body">
                     @if (TempData["RegistroSucesso"] != null)
@@ -27,13 +27,7 @@
                                 👤 Cliente
                             </button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="cadastrar-tab" data-bs-toggle="tab" 
-                                    data-bs-target="#cadastrar" type="button" role="tab" 
-                                    aria-controls="cadastrar" aria-selected="false">
-                                ✍️ Cadastrar
-                            </button>
-                        </li>
+
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="funcionario-tab" data-bs-toggle="tab" 
                                     data-bs-target="#funcionario" type="button" role="tab" 
@@ -48,7 +42,7 @@
                         <!-- ABA 1: CLIENTE -->
                         <div class="tab-pane fade show active" id="cliente" role="tabpanel" aria-labelledby="cliente-tab">
                             <form method="post" action="@Url.Action("ClienteLogin", "Login")">
-                                @Html.AntiForgeryToken()
+
                                 @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
 
                                 <div class="mb-3">
@@ -77,91 +71,23 @@
                                     </small>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary w-100">
+                                <button type="submit" class="btn btn-danger w-100">
                                     Acessar meus Agendamentos
                                 </button>
                             </form>
 
                             <hr>
                             <p class="text-center text-muted mb-0">
-                                <small>Primeira vez? Cadastre-se na aba "Cadastrar" para usar o sistema sem agendar agora.</small>
+                                <small>Primeira vez? <a href="@Url.Action("Cadastro", "Login")" class="text-danger text-decoration-none">Cadastre-se aqui</a> para usar o sistema.</small>
                             </p>
                         </div>
 
-                        <!-- ABA 2: CADASTRAR -->
-                        <div class="tab-pane fade" id="cadastrar" role="tabpanel" aria-labelledby="cadastrar-tab">
-                            <form method="post" action="@Url.Action("RegistrarUsuario", "Login")">
-                                @Html.AntiForgeryToken()
-                                @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
 
-                                <div class="mb-3">
-                                    <label class="form-label">Tipo de cadastro</label>
-                                    <div class="d-flex gap-3">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="CadastroTipo" id="cadastroTipoCliente" value="cliente" @(Model.CadastroTipo == "cliente" ? "checked" : "")>
-                                            <label class="form-check-label" for="cadastroTipoCliente">Cliente</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="CadastroTipo" id="cadastroTipoFuncionario" value="funcionario" @(Model.CadastroTipo == "funcionario" ? "checked" : "")>
-                                            <label class="form-check-label" for="cadastroTipoFuncionario">Funcionário</label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="cadastroNome" class="form-label">Nome</label>
-                                    <input type="text"
-                                           class="form-control"
-                                           id="cadastroNome"
-                                           name="CadastroNome"
-                                           placeholder="Seu nome completo"
-                                           value="@Model.CadastroNome"
-                                           required>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="cadastroTelefone" class="form-label">Telefone</label>
-                                    <input type="tel"
-                                           class="form-control"
-                                           id="cadastroTelefone"
-                                           name="CadastroTelefone"
-                                           placeholder="(11) 98765-4321"
-                                           value="@Model.CadastroTelefone"
-                                           required>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="cadastroSenha" class="form-label">Senha</label>
-                                    <input type="password"
-                                           class="form-control"
-                                           id="cadastroSenha"
-                                           name="CadastroSenha"
-                                           placeholder="••••••••"
-                                           value="@Model.CadastroSenha"
-                                           required>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="cadastroConfirmacaoSenha" class="form-label">Confirmar Senha</label>
-                                    <input type="password"
-                                           class="form-control"
-                                           id="cadastroConfirmacaoSenha"
-                                           name="CadastroConfirmacaoSenha"
-                                           placeholder="••••••••"
-                                           value="@Model.CadastroConfirmacaoSenha"
-                                           required>
-                                </div>
-
-                                <button type="submit" class="btn btn-primary w-100">
-                                    Criar Conta
-                                </button>
-                            </form>
-                        </div>
 
                         <!-- ABA 3: FUNCIONÁRIO -->
                         <div class="tab-pane fade" id="funcionario" role="tabpanel" aria-labelledby="funcionario-tab">
                             <form method="post" action="@Url.Action("FuncionarioLogin", "Login")">
-                                @Html.AntiForgeryToken()
+
                                 @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
 
                                 <div class="mb-3">
@@ -184,7 +110,7 @@
                                            required>
                                 </div>
 
-                                <button type="submit" class="btn btn-success w-100">
+                                <button type="submit" class="btn btn-danger w-100">
                                     Entrar na Área Administrativa
                                 </button>
                             </form>
@@ -211,36 +137,11 @@
                 return;
             }
 
-            if (activeTab === 'cadastrar') {
-                new bootstrap.Tab(document.getElementById('cadastrar-tab')).show();
-                return;
-            }
-
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('tipo') === 'funcionario') {
                 new bootstrap.Tab(document.getElementById('funcionario-tab')).show();
             }
-            if (urlParams.get('tipo') === 'cadastrar') {
-                new bootstrap.Tab(document.getElementById('cadastrar-tab')).show();
-            }
 
-            const tipoCliente = document.getElementById('cadastroTipoCliente');
-            const tipoFuncionario = document.getElementById('cadastroTipoFuncionario');
-            const funcionarioFields = document.getElementById('cadastroFuncionarioFields');
-
-            function updateFuncionarioFields() {
-                if (tipoFuncionario.checked) {
-                    funcionarioFields.classList.remove('d-none');
-                } else {
-                    funcionarioFields.classList.add('d-none');
-                }
-            }
-
-            if (tipoCliente && tipoFuncionario && funcionarioFields) {
-                tipoCliente.addEventListener('change', updateFuncionarioFields);
-                tipoFuncionario.addEventListener('change', updateFuncionarioFields);
-                updateFuncionarioFields();
-            }
         });
     </script>
 }
