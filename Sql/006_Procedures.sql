@@ -140,7 +140,7 @@ CREATE OR ALTER PROCEDURE sp_InsertCliente
     @Nome VARCHAR(100), 
     @Telefone VARCHAR(11), 
     @Status INT = 0,
-    @Senha VARCHAR(25) = ''
+    @Senha VARCHAR(100) = ''
 AS
 BEGIN
     DECLARE @Pessoa_ID INT;
@@ -167,7 +167,7 @@ CREATE OR ALTER PROCEDURE sp_UpdateCliente
     @Nome VARCHAR(100), 
     @Telefone VARCHAR(11), 
     @Status INT,
-    @Senha VARCHAR(25) = ''
+    @Senha VARCHAR(100) = ''
 AS
 BEGIN
     BEGIN TRY
@@ -199,7 +199,7 @@ CREATE OR ALTER PROCEDURE sp_InsertFuncionario
     @Status INT = 0, 
     @Salario DECIMAL(10,2), 
     @Especialidade_Id INT,
-    @Senha VARCHAR(25)
+    @Senha VARCHAR(100)
 AS
 BEGIN
     DECLARE @Pessoa_ID INT;
@@ -231,7 +231,7 @@ CREATE OR ALTER PROCEDURE sp_UpdateFuncionario
     @Status INT, 
     @Salario DECIMAL(10,2), 
     @Especialidade_Id INT,
-    @Senha VARCHAR(25)
+    @Senha VARCHAR(100)
 AS
 BEGIN
     BEGIN TRY
@@ -270,13 +270,14 @@ CREATE OR ALTER PROCEDURE sp_InsertAgendamento
     @Data DATETIME2(0), 
     @Total DECIMAL(10,2), 
     @Cliente_id INT, 
-    @Status INT = 0,
-    @CodigoRastreio VARCHAR(10) = ''
+    @Status INT = 0
 AS
 BEGIN
     SET NOCOUNT ON;
-    INSERT INTO Agendamentos (data, total, cliente_id, status, codigo_rastreio)
-    VALUES (@Data, @Total, @Cliente_id, @Status, @CodigoRastreio);
+    INSERT INTO Agendamentos (data, total, cliente_id, status)
+    VALUES (@Data, @Total, @Cliente_id, @Status);
+    
+    SELECT CAST(SCOPE_IDENTITY() AS INT);
 END
 GO
 
@@ -286,13 +287,12 @@ CREATE OR ALTER PROCEDURE sp_UpdateAgendamento
     @Data DATETIME2(0), 
     @Total DECIMAL(10,2), 
     @Cliente_id INT, 
-    @Status INT,
-    @CodigoRastreio VARCHAR(10) = ''
+    @Status INT
 AS
 BEGIN
     SET NOCOUNT ON;
     UPDATE Agendamentos 
-    SET data = @Data, total = @Total, cliente_id = @Cliente_id, status = @Status, codigo_rastreio = @CodigoRastreio 
+    SET data = @Data, total = @Total, cliente_id = @Cliente_id, status = @Status 
     WHERE nr = @Nr;
 END
 GO
@@ -466,24 +466,12 @@ GO
 -- 20. Aqui ele vai usar o token dentro de agendamento para uma sessão temporária e permitir a a criação sem cadastro
 
 CREATE OR ALTER PROCEDURE sp_ValidarAcessoAgendamento
-    @Telefone VARCHAR(11),
-    @CodigoRastreio VARCHAR(10) -- Se for nulo, o cliente é "logado" e a lógica muda
+    @Telefone VARCHAR(11)
 AS
 BEGIN
-    -- Se o código for informado, validamos o token
-    IF (@CodigoRastreio IS NOT NULL)
-    BEGIN
-        SELECT a.* FROM Agendamentos a, Clientes c, Pessoas p
-        WHERE p.id = c.pessoa_id and c.pessoa_id = a.cliente_id
-        and p.Telefone = @Telefone and a.codigo_rastreio = @CodigoRastreio
-    END
-    -- Se não, validamos apenas o usuário logado (aqui entra a senha)
-    ELSE
-    BEGIN
-        SELECT a.* FROM Agendamentos a,Clientes c, Pessoas p
-        WHERE p.id = c.pessoa_id and c.pessoa_id = a.cliente_id and
-        p.Telefone = @Telefone AND p.senha <> '' -- Ou outra lógica de validação de login
-    END
+    SELECT a.* FROM Agendamentos a,Clientes c, Pessoas p
+    WHERE p.id = c.pessoa_id and c.pessoa_id = a.cliente_id and
+    p.Telefone = @Telefone AND p.senha <> '' -- Ou outra lógica de validação de login
 END
 GO
 
@@ -496,7 +484,7 @@ GO
 CREATE OR ALTER PROCEDURE sp_CadastroDeCliente
     @Nome VARCHAR(100), 
     @Telefone VARCHAR(11), 
-    @Senha VARCHAR(25) = ''
+    @Senha VARCHAR(100) = ''
 AS
 BEGIN
     SET NOCOUNT ON;
