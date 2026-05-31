@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Http;
 using FabysUnha.Services;
 using FabysUnha.ViewModels;
 using AutoMapper;
@@ -20,6 +22,16 @@ public class FuncionariosController : Controller
         _funcionariosService = funcionariosService;
         _especialidadeService = especialidadeService;
         _mapper = mapper;
+    }
+
+    public override void OnActionExecuting(ActionExecutingContext context)
+    {
+        var tipoUsuario = HttpContext.Session.GetString("UsuarioTipo");
+        if (tipoUsuario != "Funcionario")
+        {
+            context.Result = new RedirectToActionResult("Index", "Login", null);
+        }
+        base.OnActionExecuting(context);
     }
 
     public async Task<IActionResult> Index()
@@ -51,7 +63,7 @@ public class FuncionariosController : Controller
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
+
     public async Task<IActionResult> Criar(FuncionarioRegistroViewModel funcionarioViewModel)
     {
         await PrepararEspecialidadesAsync(funcionarioViewModel);
@@ -92,7 +104,7 @@ public class FuncionariosController : Controller
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
+
     public async Task<IActionResult> Editar(int id, FuncionarioEditarViewModel funcionarioViewModel)
     {
         if (id != funcionarioViewModel.Id) return BadRequest();
@@ -103,19 +115,11 @@ public class FuncionariosController : Controller
 
         try
         {
-            var funcionarioAtual = await _funcionariosService.ObterFuncionarioPorId(id);
-            if (funcionarioAtual == null) return NotFound();
-
-            if (!Request.HasFormContentType || !Request.Form.ContainsKey(nameof(funcionarioViewModel.Status)))
-                funcionarioViewModel.Status = funcionarioAtual.Status;
+            bool hasStatusUpdate = Request.HasFormContentType && Request.Form.ContainsKey(nameof(funcionarioViewModel.Status));
 
             var funcionario = _mapper.Map<Models.Funcionarios>(funcionarioViewModel);
-
-            if (string.IsNullOrWhiteSpace(funcionario.Senha))
-            funcionario.Senha = funcionarioAtual.Senha;
-
             
-            await _funcionariosService.AtualizarFuncionario(funcionario);
+            await _funcionariosService.AtualizarFuncionario(funcionario, hasStatusUpdate);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception ex)
@@ -137,7 +141,7 @@ public class FuncionariosController : Controller
     }
 
     [HttpPost, ActionName("Excluir")]
-    [ValidateAntiForgeryToken]
+
     public async Task<IActionResult> ExcluirConfirmado(int id)
     {
         await _funcionariosService.ExcluirFuncionario(id);
