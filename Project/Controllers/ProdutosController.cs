@@ -1,8 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Http;
 using FabysUnha.Services;
 using FabysUnha.ViewModels; 
 using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace FabysUnha.Controllers;
 
@@ -11,12 +15,24 @@ public class ProdutosController : Controller
     private readonly IProdutosService _produtosService;
     private readonly IMarcasService _marcasService; 
     private readonly IMapper _mapper;
+    private readonly IWebHostEnvironment _env;
 
-    public ProdutosController(IProdutosService produtosService, IMarcasService marcasService, IMapper mapper)
+    public ProdutosController(IProdutosService produtosService, IMarcasService marcasService, IMapper mapper, IWebHostEnvironment env)
     {
         _produtosService = produtosService;
         _marcasService = marcasService;
         _mapper = mapper;
+        _env = env;
+    }
+
+    public override void OnActionExecuting(ActionExecutingContext context)
+    {
+        var tipoUsuario = HttpContext.Session.GetString("UsuarioTipo");
+        if (tipoUsuario != "Funcionario")
+        {
+            context.Result = new RedirectToActionResult("Index", "Login", null);
+        }
+        base.OnActionExecuting(context);
     }
 
     public async Task<IActionResult> Index()
@@ -60,7 +76,7 @@ public class ProdutosController : Controller
         try
         {
             var produto = _mapper.Map<Models.Produtos>(viewModel);
-            await _produtosService.CriarProduto(produto);
+            await _produtosService.CriarProduto(produto, viewModel.ImagemUpload);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception ex)
@@ -95,14 +111,10 @@ public class ProdutosController : Controller
 
         try
         {
-            var produtoAtual = await _produtosService.ObterProdutoPorId(viewModel.Codigo);
-            if (produtoAtual == null) return NotFound();
-
-            if (!Request.HasFormContentType || !Request.Form.ContainsKey(nameof(viewModel.Status)))
-                viewModel.Status = produtoAtual.Status;
-
+            bool hasStatusUpdate = Request.HasFormContentType && Request.Form.ContainsKey(nameof(viewModel.Status));
             var produto = _mapper.Map<Models.Produtos>(viewModel);
-            await _produtosService.AtualizarProduto(produto);
+            
+            await _produtosService.AtualizarProduto(produto, viewModel.ImagemUpload, hasStatusUpdate);
             return RedirectToAction(nameof(Index));
         }
         catch (Exception ex)
