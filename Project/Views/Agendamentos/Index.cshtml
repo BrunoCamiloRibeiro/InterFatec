@@ -1,24 +1,30 @@
+@* 
+   Esta view recebe uma lista (IEnumerable) de objetos AgendamentoListagemViewModel.
+   Ela será responsável por listar todos os agendamentos registrados no sistema.
+*@
 @model IEnumerable<AgendamentoListagemViewModel>
 
 @{
 	ViewData["Title"] = "Agendamentos";
 }
 
+<!-- Cabeçalho da página com título e descrição flexíveis -->
 <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
 	<div>
 		<p class="text-uppercase small fw-semibold text-danger-emphasis mb-1">Agenda</p>
 		<h1 class="display-6 fw-bold mb-1">Agendamentos</h1>
 		<p class="text-body-secondary mb-0">Acompanhe clientes, serviços, produtos e total de cada atendimento.</p>
 	</div>
-
-
 </div>
 
+@* Verifica se a lista de agendamentos não está vazia ou nula *@
 @if (Model?.Any() == true)
 {
 	<div class="card border-danger-subtle shadow-sm">
+		<!-- Contêiner que torna a tabela rolante horizontalmente em telas pequenas -->
 		<div class="table-responsive">
 			<table class="table table-hover align-middle mb-0">
+				<!-- Cabeçalho da tabela estlizado -->
 				<thead class="table-danger">
 					<tr>
 						<th>Número</th>
@@ -32,6 +38,7 @@
 					</tr>
 				</thead>
 				<tbody>
+				@* Laço de repetição (loop) em C# para iterar sobre cada agendamento recebido no Model *@
 				@foreach (var item in Model)
 				{
 					<tr>
@@ -43,15 +50,22 @@
 						<td>@item.QuantidadeServicos</td>
 						<td>@item.QuantidadeProdutos</td>
 						<td>
+							<!-- Grupo flex de botões de ações para cada linha -->
 							<div class="d-flex flex-wrap justify-content-end gap-2">
+								@* Tag Helpers que geram os links usando o ID do item da linha atual na rota (asp-route-id) *@
 								<a class="btn btn-sm btn-outline-secondary" asp-action="Detalhes" asp-route-id="@item.Nr">Detalhes</a>
 								<a class="btn btn-sm btn-outline-danger" asp-action="Editar" asp-route-id="@item.Nr">Editar</a>
+								
+								@* Formulário independente para a ação de Cancelar (via POST) *@
 								<form asp-action="Cancelar" asp-route-id="@item.Nr" method="post" class="d-inline">
 									<button class="btn btn-sm btn-outline-danger" type="submit">Cancelar</button>
 								</form>
+								
+								@* Formulário independente para a ação de Finalizar (via POST) *@
 								<form asp-action="Finalizar" asp-route-id="@item.Nr" method="post" class="d-inline">
 									<button class="btn btn-sm btn-outline-success" type="submit">Finalizar</button>
 								</form>
+								
 								<a class="btn btn-sm btn-danger" asp-action="Excluir" asp-route-id="@item.Nr">Excluir</a>
 							</div>
 						</td>
@@ -64,6 +78,7 @@
 }
 else
 {
+	<!-- Mensagem exibida caso a lista de agendamentos esteja vazia -->
 	<div class="alert alert-light border border-danger-subtle mb-0">
 		Nenhum agendamento cadastrado.
 	</div>
