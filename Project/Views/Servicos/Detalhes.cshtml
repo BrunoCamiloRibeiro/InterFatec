@@ -4,24 +4,30 @@
     ViewData["Title"] = "Detalhes do serviço";
 }
 
+<!-- Utilização do grid do Bootstrap para alinhar e centralizar o card -->
 <div class="row justify-content-center">
     <div class="col-xl-8">
+        <!-- Card que apresenta as informações detalhadas do serviço -->
         <div class="card border-danger-subtle shadow-sm">
+            <!-- Cabeçalho flexível: agrupa título, subtítulo e o ID do serviço em um crachá (badge) -->
             <div class="card-header bg-danger-subtle border-danger-subtle d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
                 <div>
                     <h1 class="h3 mb-1 text-danger-emphasis">Detalhes do serviço</h1>
                     <p class="mb-0 text-body-secondary">Informações gerais sobre o serviço cadastrado.</p>
                 </div>
 
+                <!-- O uso do @Model.Id permite exibir o ID associado ao modelo passado para esta view -->
                 <span class="badge rounded-pill bg-danger-subtle text-danger-emphasis">#@Model.Id</span>
             </div>
 
             <div class="card-body p-4">
+                <!-- Lista de descrição (dl/dt/dd) formatada como grid ('row') -->
                 <dl class="row mb-0">
                     <dt class="col-sm-4 text-body-secondary">Descrição</dt>
                     <dd class="col-sm-8">@Model.Descricao</dd>
 
                     <dt class="col-sm-4 text-body-secondary">Preço</dt>
+                    <!-- Exibe a propriedade já formatada que o ViewModel fornece -->
                     <dd class="col-sm-8">@Model.PrecoFormatado</dd>
 
                     <dt class="col-sm-4 text-body-secondary">Tempo</dt>
@@ -31,7 +37,9 @@
                     <dd class="col-sm-8 mb-0">@Model.Status</dd>
                 </dl>
 
+                <!-- Grupo de botões de ação: Editar e Voltar -->
                 <div class="d-flex flex-wrap justify-content-end gap-2 mt-4">
+                    <!-- O TagHelper 'asp-route-id' anexa o ID do serviço na URL enviada para a ação 'Editar' -->
                     <a class="btn btn-outline-danger" asp-action="Editar" asp-route-id="@Model.Id">Editar</a>
                     <a class="btn btn-outline-secondary" asp-action="Index">Voltar</a>
                 </div>
