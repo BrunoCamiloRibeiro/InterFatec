@@ -1,3 +1,4 @@
+@* View de confirmação de exclusão usando o modelo ClienteDetalhesViewModel para mostrar os dados atuais *@
 @model ClienteDetalhesViewModel
 
 @{
@@ -12,6 +13,7 @@
             </div>
 
             <div class="card-body p-4">
+                <!-- Alerta visual reforçando que a ação é destrutiva -->
                 <div class="alert alert-danger mb-4" role="alert">
                     Tem certeza que deseja excluir este cliente? Esta ação não pode ser desfeita.
                 </div>
@@ -30,7 +32,9 @@
                     <dd class="col-sm-8">@Model.Status</dd>
                 </dl>
 
+                <!-- Formulário para confirmar a exclusão via POST. Apenas o ID é enviado. -->
                 <form asp-action="Excluir" method="post" class="d-flex flex-wrap justify-content-end gap-2 mt-4">
+                    <!-- O Id é necessário para que o Controller saiba qual registro deletar do banco de dados -->
                     <input type="hidden" asp-for="Id" />
                     <a class="btn btn-outline-secondary" asp-action="Index">Cancelar</a>
                     <button type="submit" class="btn btn-danger">Confirmar exclusão</button>
