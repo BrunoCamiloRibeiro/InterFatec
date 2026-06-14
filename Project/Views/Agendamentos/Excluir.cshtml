@@ -1,21 +1,30 @@
+@* 
+   Esta view é fortemente tipada com o modelo AgendamentoDetalhesViewModel.
+   Isto significa que a propriedade Model conterá os dados deste tipo passados pela Controller.
+*@
 @model AgendamentoDetalhesViewModel
 
 @{
     ViewData["Title"] = "Excluir agendamento";
 }
 
+<!-- Sistema de grid do Bootstrap (row) centralizando o conteúdo horizontalmente -->
 <div class="row justify-content-center">
+    <!-- Define a largura da coluna no tamanho extra grande (xl) -->
     <div class="col-xl-8">
+        <!-- Componente Card do Bootstrap -->
         <div class="card border-danger-subtle shadow-sm">
             <div class="card-header bg-danger-subtle border-danger-subtle">
                 <h1 class="h3 mb-0 text-danger-emphasis">Excluir agendamento</h1>
             </div>
 
             <div class="card-body p-4">
+                <!-- Alerta visual destacando a gravidade da ação -->
                 <div class="alert alert-danger mb-4" role="alert">
                     Tem certeza que deseja excluir este agendamento? Esta ação não pode ser desfeita.
                 </div>
 
+                <!-- Lista de descrição (dl/dt/dd) formatada como grid (row) para os detalhes do agendamento -->
                 <dl class="row mb-0">
                     <dt class="col-sm-4 text-body-secondary">Número</dt>
                     <dd class="col-sm-8">@Model.Nr</dd>
@@ -24,18 +33,32 @@
                     <dd class="col-sm-8">@Model.ClienteNome</dd>
 
                     <dt class="col-sm-4 text-body-secondary">Data e hora</dt>
+                    @* Exibe a data formatada como "Dia/Mês/Ano Hora:Minuto" *@
                     <dd class="col-sm-8">@Model.DataHora.ToString("dd/MM/yyyy HH:mm")</dd>
 
                     <dt class="col-sm-4 text-body-secondary">Status</dt>
                     <dd class="col-sm-8">@Model.Status</dd>
 
                     <dt class="col-sm-4 text-body-secondary">Total</dt>
+                    @* Exibe o total formatado como Moeda (Currency), representado pelo "C" *@
                     <dd class="col-sm-8">@Model.Total.ToString("C")</dd>
                 </dl>
 
+                @* 
+                   O formulário faz um POST para a Action "Excluir" (mesmo nome da View).
+                   Isso confirmará a remoção do agendamento no banco de dados.
+                *@
                 <form asp-action="Excluir" method="post" class="d-flex flex-wrap justify-content-end gap-2 mt-4">
+                    @* 
+                       Tag Helper asp-for="Nr" gera um <input type="hidden" id="Nr" name="Nr" value="..." />.
+                       Isso é vital para enviar o ID (número) do agendamento que será excluído para a Controller.
+                    *@
                     <input type="hidden" asp-for="Nr" />
+                    
+                    <!-- Botão para voltar à listagem, sem realizar a exclusão -->
                     <a class="btn btn-outline-secondary" asp-action="Index">Cancelar</a>
+                    
+                    <!-- Botão de submit que envia o formulário acima -->
                     <button type="submit" class="btn btn-danger">Confirmar exclusão</button>
                 </form>
             </div>
