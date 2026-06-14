@@ -1,0 +1,28 @@
+@model EspecialidadeViewModel
+
+@{
+    ViewData["Title"] = "Excluir Especialidade";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-xl-7">
+        <div class="card border-danger-subtle shadow-sm">
+            <div class="card-header bg-danger-subtle border-danger-subtle">
+                <h1 class="h3 mb-0 text-danger-emphasis">Excluir especialidade</h1>
+            </div>
+            <div class="card-body p-4 text-center">
+                <i class="bi bi-exclamation-triangle-fill text-danger display-1 mb-3"></i>
+                <h2 class="h4 mb-3">Tem certeza que deseja excluir esta especialidade?</h2>
+                <p class="text-body-secondary mb-4">
+                    A especialidade <strong>@Model.Descricao</strong> será excluída permanentemente ou desativada, dependendo da regra de negócio.
+                </p>
+
+                <form asp-action="Excluir" method="post" class="d-flex justify-content-center gap-3">
+                    <input type="hidden" asp-for="Id" />
+                    <a class="btn btn-outline-secondary" asp-action="Index">Cancelar</a>
+                    <button type="submit" class="btn btn-danger">Sim, excluir especialidade</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
