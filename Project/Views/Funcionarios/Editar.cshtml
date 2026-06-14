@@ -1,9 +1,12 @@
+@* Define o tipo de modelo que será recebido para o formulário de edição *@
 @model FuncionarioEditarViewModel
 
 @{
+    @* Define o título que será exibido no Layout principal *@
     ViewData["Title"] = "Editar funcionário";
 }
 
+<!-- Centralização do layout utilizando as classes do Bootstrap -->
 <div class="row justify-content-center">
     <div class="col-xl-8">
         <div class="card border-danger-subtle shadow-sm">
@@ -11,14 +14,24 @@
                 <h1 class="h3 mb-0 text-danger-emphasis">Editar funcionário</h1>
             </div>
             <div class="card-body p-4">
+                @* 
+                    Início do formulário de edição. 
+                    asp-action define a action correspondente no controlador para submeter os dados.
+                *@
                 <form asp-action="Editar" method="post" class="vstack gap-3">
+                    @* Campo oculto essencial para enviar o ID do registro na atualização *@
                     <input type="hidden" asp-for="Id" />
+                    
+                    @* Resumo para exibição de erros de validação no modelo todo *@
                     <div asp-validation-summary="All" class="alert alert-danger mb-0" role="alert"></div>
 
+                    <!-- Divisão em colunas para os campos -->
                     <div class="row g-3">
                         <div class="col-md-6">
+                            @* asp-for vincula automaticamente a label e o input ao campo 'Nome' *@
                             <label asp-for="Nome" class="form-label"></label>
                             <input asp-for="Nome" class="form-control" />
+                            @* Span destinado a exibir os erros de validação referentes a este campo *@
                             <span asp-validation-for="Nome" class="text-danger small"></span>
                         </div>
 
@@ -30,6 +43,7 @@
 
                         <div class="col-md-4">
                             <label asp-for="Status" class="form-label"></label>
+                            @* Cria as opções do select com base no enum PessoaStatus *@
                             <select asp-for="Status" asp-items="Html.GetEnumSelectList<PessoaStatus>()" class="form-select"></select>
                             <span asp-validation-for="Status" class="text-danger small"></span>
                         </div>
@@ -42,6 +56,7 @@
 
                         <div class="col-md-4">
                             <label asp-for="EspecialidadeId" class="form-label"></label>
+                            @* Popula o dropdown utilizando uma lista de itens pré-carregada no Model *@
                             <select asp-for="EspecialidadeId" asp-items="Model.EspecialidadesList" class="form-select">
                                 <option value="">Selecione</option>
                             </select>
@@ -49,7 +64,9 @@
                         </div>
                     </div>
 
+                    <!-- Rodapé do formulário com botões de voltar e salvar -->
                     <div class="d-flex justify-content-between align-items-center pt-2">
+                        @* O TagHelper asp-action="Index" garante a navegação segura para a listagem *@
                         <a class="btn btn-outline-secondary" asp-action="Index">Voltar</a>
                         <button type="submit" class="btn btn-danger">Salvar alterações</button>
                     </div>
