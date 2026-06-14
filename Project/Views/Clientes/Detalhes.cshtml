@@ -1,9 +1,12 @@
+@* O modelo ClienteDetalhesViewModel fornece os dados para visualização nesta tela *@
 @model ClienteDetalhesViewModel
 
 @{
+    @* Definindo o título da página *@
     ViewData["Title"] = "Detalhes do cliente";
 }
 
+<!-- Layout em grid para centralizar e formatar o painel de detalhes -->
 <div class="row justify-content-center">
     <div class="col-xl-8">
         <div class="card border-danger-subtle shadow-sm">
@@ -13,10 +16,12 @@
                     <p class="mb-0 text-body-secondary">Resumo com dados cadastrais e histórico dos agendamentos.</p>
                 </div>
 
+                <!-- Exibe o ID do cliente usando o prefixo '@@' para acessar a propriedade do Model -->
                 <span class="badge rounded-pill bg-danger-subtle text-danger-emphasis">#@Model.Id</span>
             </div>
 
             <div class="card-body p-4">
+                <!-- A tag <dl> (description list) é usada para criar uma lista de termos (<dt>) e descrições (<dd>) -->
                 <dl class="row mb-0">
                     <dt class="col-sm-4 text-body-secondary">Nome</dt>
                     <dd class="col-sm-8">@Model.Nome</dd>
@@ -31,11 +36,14 @@
                     <dd class="col-sm-8">@Model.TotalAgendamentos</dd>
 
                     <dt class="col-sm-4 text-body-secondary">Último agendamento</dt>
+                    @* Formata a data se existir; se for nula, exibe "-" usando o operador de coalescência nula (??) *@
                     <dd class="col-sm-8 mb-0">@(Model.DataUltimoAgendamento?.ToString("dd/MM/yyyy HH:mm") ?? "-")</dd>
                 </dl>
 
                 <div class="d-flex flex-wrap justify-content-end gap-2 mt-4">
+                    <!-- Link para a tela de edição, passando o ID do cliente como rota usando asp-route-id -->
                     <a class="btn btn-outline-danger" asp-action="Editar" asp-route-id="@Model.Id">Editar</a>
+                    <!-- Link para voltar à listagem de clientes -->
                     <a class="btn btn-outline-secondary" asp-action="Index">Voltar</a>
                 </div>
             </div>
