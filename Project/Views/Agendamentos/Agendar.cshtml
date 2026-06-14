@@ -1,3 +1,4 @@
+@* Define a ViewModel para a página de Agendamento do lado do cliente *@
 @model AgendamentoClienteViewModel
 
 @{
@@ -10,14 +11,21 @@
             <h1 class="h3 mb-1 text-danger-emphasis">Agendar atendimento</h1>
             <p class="mb-0 text-body-secondary">Monte seu agendamento escolhendo serviços, horários e produtos.</p>
         </div>
+        <!-- Indicador de qual etapa do wizard (passo-a-passo) o usuário está -->
         <span class="badge text-bg-danger align-self-start align-self-lg-center" id="wizard-step-indicator">Etapa 1 de 2</span>
     </div>
 
     <div class="card-body p-4">
+        @* 
+           Formulário para criar o agendamento.
+           A Tag Helper asp-action="Agendar" direciona o POST para a action correspondente na Controller. 
+        *@
         <form asp-action="Agendar" method="post" id="client-wizard-form" class="vstack gap-4">
 
+            @* Sumário de validação. Caso o ModelState possua erros, eles serão exibidos aqui. *@
             <div asp-validation-summary="All" class="alert alert-danger mb-0" role="alert"></div>
 
+            <!-- Botões que atuam como as "abas" de navegação do wizard -->
             <div class="d-flex flex-wrap gap-2" id="wizard-step-buttons">
                 <button type="button" class="btn btn-danger" data-step-button="0">1. Serviços</button>
                 <button type="button" class="btn btn-outline-danger" data-step-button="1">2. Revisão</button>
@@ -30,11 +38,16 @@
                         <h2 class="h4 mb-1">Serviços</h2>
                         <p class="text-body-secondary mb-0">Adicione os serviços desejados. Em cada serviço, escolha quem irá atender, a data, o horário e os produtos.</p>
                     </div>
+                    <!-- Botão que aciona a criação dinâmica de mais blocos de serviços via JS -->
                     <button type="button" class="btn btn-outline-danger" id="add-service-client">Adicionar serviço</button>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Data do atendimento</label>
+                    @* 
+                       Tag Helper asp-for vincula o input à propriedade "Data" do ViewModel.
+                       É usado HTML5 nativo (type="date") com os limites de min e max de data.
+                    *@
                     <input asp-for="Data" type="date" id="client-data"
                         min="@DateTime.Now.ToString("yyyy-MM-dd")"
                         max="@DateTime.Now.AddDays(30).ToString("yyyy-MM-dd")"
@@ -43,8 +56,10 @@
                     <span asp-validation-for="Data" class="text-danger small"></span>
                 </div>
 
+                <!-- Container onde as linhas de serviço serão injetadas (ou renderizadas no início) -->
                 <div id="service-client-rows" class="vstack gap-4">
                     @{
+                        // Inicializa a lista de serviços para mostrar no mínimo 1 bloco na interface
                         var svcItems = Model.Servicos.Count > 0
                             ? Model.Servicos
                             : new List<ServicoClienteItemViewModel> { new ServicoClienteItemViewModel() };
@@ -52,8 +67,10 @@
                     @for (var i = 0; i < svcItems.Count; i++)
                     {
                         var item = svcItems[i];
+                        // O prefixo é essencial para fazer o "Model Binding" de coleções na Controller
                         var prefix = $"Servicos[{i}]";
 
+                        // Prepara as opções da lista de Serviços e Funcionários
                         var servicosOptions = (Model.ServicosList ?? Enumerable.Empty<SelectListItem>())
                             .Select(o => new SelectListItem { Text = o.Text, Value = o.Value, Selected = o.Value == item.ServicoId.ToString() })
                             .ToList();
@@ -64,12 +81,14 @@
                         <div class="js-svc-client-row card border-danger-subtle">
                             <div class="card-header bg-danger-subtle border-danger-subtle d-flex justify-content-between align-items-center">
                                 <span class="fw-semibold text-danger-emphasis js-svc-title">Serviço #@(i + 1)</span>
+                                <!-- Botão de remover o serviço desta linha -->
                                 <button type="button" class="btn btn-sm btn-outline-danger js-remove-svc">Remover</button>
                             </div>
                             <div class="card-body">
                                 <div class="row g-3">
                                     <div class="col-lg-6">
                                         <label class="form-label">Serviço</label>
+                                        @* Select usando Tag Helper asp-items para popular o dropdown de serviços *@
                                         <select data-field="ServicoId" name="@($"{prefix}.ServicoId")" asp-items="servicosOptions" class="form-select">
                                             <option value="">Selecione o serviço</option>
                                         </select>
@@ -82,6 +101,7 @@
                                     </div>
                                     <div class="col-lg-4">
                                         <label class="form-label">Horário disponível</label>
+                                        <!-- O campo Horário será populado via AJAX com base no profissional e data -->
                                         <select data-field="Horario" name="@($"{prefix}.Horario")" class="form-select js-horario-select">
                                             <option value="">Selecione profissional e data</option>
                                         </select>
@@ -96,9 +116,11 @@
 
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <span class="fw-semibold text-body-secondary">Produtos (opcional)</span>
+                                    <!-- Botão que aciona a injeção de mais um produto neste serviço em específico -->
                                     <button type="button" class="btn btn-sm btn-outline-secondary js-add-product-btn">Adicionar produto</button>
                                 </div>
                                 <div class="js-product-list vstack gap-2">
+                                    @* Lista de Produtos previamente selecionados (útil no caso de erros de validação no Postback) *@
                                     @if (item.ProdutosCodigos != null)
                                     {
                                         for (var j = 0; j < item.ProdutosCodigos.Count; j++)
@@ -113,6 +135,7 @@
                                                         <select data-field-product="ProdutosCodigos" name="@($"{prefix}.ProdutosCodigos[{j}]")" asp-items="prodOptions" class="form-select form-select-sm js-product-select">
                                                             <option value="">Selecione o produto</option>
                                                         </select>
+                                                        <!-- Espaço onde a foto do produto será colocada via JavaScript -->
                                                         <div class="js-product-img-container" style="width: 40px; height: 40px;"></div>
                                                     </div>
                                                 </div>
@@ -145,6 +168,7 @@
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                                         <span class="text-body-secondary">Cliente</span>
+                                        @* Obtém o nome do cliente guardado na Session HTTP *@
                                         <strong>@Context.Session.GetString("ClienteNome")</strong>
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between align-items-center px-0">
@@ -169,6 +193,7 @@
                                     </li>
                                 </ul>
 
+                                <!-- Detalhamento gerado dinamicamente com os serviços e produtos pelo JS -->
                                 <div class="mt-3" id="summary-services-detail"></div>
                             </div>
                         </div>
@@ -191,6 +216,7 @@
 
                 <div class="d-flex justify-content-between mt-4">
                     <button type="button" class="btn btn-outline-danger" data-wizard-prev>Anterior</button>
+                    <!-- Botão tipo "submit" envia o formulário inteiro para o backend -->
                     <button type="submit" class="btn btn-danger btn-lg">Confirmar agendamento</button>
                 </div>
             </section>
@@ -199,6 +225,7 @@
 </div>
 
 @* ============================== TEMPLATE — SERVIÇO ============================== *@
+@* A tag <template> é um mecanismo do HTML5 para guardar fragmentos de HTML que não são exibidos na tela, mas podem ser instanciados via JavaScript *@
 <template id="svc-client-template">
     <div class="js-svc-client-row card border-danger-subtle">
         <div class="card-header bg-danger-subtle border-danger-subtle d-flex justify-content-between align-items-center">
@@ -237,6 +264,7 @@
                 <span class="fw-semibold text-body-secondary">Produtos (opcional)</span>
                 <button type="button" class="btn btn-sm btn-outline-secondary js-add-product-btn">Adicionar produto</button>
             </div>
+            <!-- Div vazia que servirá de contêiner para os produtos dinâmicos gerados dentro do serviço -->
             <div class="js-product-list vstack gap-2"></div>
         </div>
     </div>
@@ -257,6 +285,10 @@
     </div>
 </template>
 
+@* 
+   Script client-side responsável pela manipulação do DOM e navegação no formulário estilo "wizard".
+   Nele ocorre o "databinding" manual para re-enumerar os índices dos arrays do modelo para enviar ao backend com nomes corretos.
+*@
 <script>
 (function () {
     // ==========================================
@@ -268,6 +300,8 @@
     var prodTemplate = document.getElementById('product-client-template');
     var dateInput = document.getElementById('client-data');
 
+    // Deserialização segura dos dados do ViewBag usando @@Html.Raw 
+    // É injetado o Json serializado no Controller para a exibição de Imagens e Cálculos Locais
     var produtosJson = @Html.Raw(ViewBag.ProdutosJson ?? "[]");
     var servicosJson = @Html.Raw(ViewBag.ServicosJson ?? "[]");
 
@@ -279,6 +313,7 @@
     // ==========================================
     // WIZARD NAVIGATION
     // ==========================================
+    // Alterna a exibição dos containers (sections) baseada no passo atual
     function setStep(step) {
         currentStep = Math.max(0, Math.min(step, steps.length - 1));
         steps.forEach(function (pane, idx) {
@@ -308,6 +343,8 @@
     // ==========================================
     // RENUMBER ALL FIELDS
     // ==========================================
+    // O Model Binding do ASP.NET Core requer que arrays venham no formato Propriedade[0].Campo, Propriedade[1].Campo
+    // Esse método reescreve os names (atributos "name") dinamicamente quando itens são adicionados ou removidos.
     function renumberAll() {
         var rows = svcContainer.querySelectorAll('.js-svc-client-row');
         rows.forEach(function (row, svcIdx) {
@@ -377,6 +414,7 @@
     // ==========================================
     // EXIBIÇÃO DE IMAGEM DO PRODUTO
     // ==========================================
+    // Quando o usuário seleciona um produto no select, busca o JSON e renderiza a imagem base64/URL
     svcContainer.addEventListener('change', function (e) {
         if (e.target.classList.contains('js-product-select')) {
             var val = e.target.value;
@@ -396,6 +434,8 @@
     // ==========================================
     // HORÁRIOS DISPONÍVEIS (AJAX)
     // ==========================================
+    // Realiza um fetch na Controller (via HTTP GET) enviando os parâmetros para consultar
+    // a disponibilidade de horário do profissional selecionado.
     function loadHorarios(svcRow) {
         var funcSelect = svcRow.querySelector('.js-func-select');
         var horarioSelect = svcRow.querySelector('.js-horario-select');
@@ -431,6 +471,7 @@
             });
     }
 
+    // Associa eventos de "change" aos selects de funcionário
     function hookHorarioListeners() {
         svcContainer.querySelectorAll('.js-func-select').forEach(function (sel) {
             if (sel.dataset.hooked) return;
@@ -458,6 +499,7 @@
         return opt && opt.value ? opt.textContent.trim() : '-';
     }
 
+    // Monta o quadro de Resumo lendo os valores que o usuário imputou nos passos anteriores.
     function updateSummary() {
         var summaryDate = document.getElementById('summary-date');
         var summaryServiceCount = document.getElementById('summary-svc-count');
@@ -510,7 +552,6 @@
             detailHtml += '</div>';
         });
         if (summaryProductCount) summaryProductCount.textContent = totalProducts;
-        if (summaryDetail) summaryDetail.innerHTML = detailHtml;
         if (summaryTotal) {
             summaryTotal.textContent = totalPrice.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
@@ -519,6 +560,7 @@
     // ==========================================
     // INIT
     // ==========================================
+    // É executado assim que a estrutura do DOM da página for totalmente carregada
     document.addEventListener('DOMContentLoaded', function () {
         renumberAll();
         hookHorarioListeners();
