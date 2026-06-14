@@ -1,9 +1,11 @@
+@* O Model define o tipo de dados esperado pela view (AgendamentoDetalhesViewModel) *@
 @model AgendamentoDetalhesViewModel
 
 @{
     ViewData["Title"] = "Detalhes do agendamento";
 }
 
+<!-- Cabeçalho superior com título e botões de ação -->
 <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
     <div>
         <p class="text-uppercase small fw-semibold text-danger-emphasis mb-1">Agenda</p>
@@ -11,13 +13,16 @@
         <p class="text-body-secondary mb-0">Resumo completo com serviços e produtos vinculados ao atendimento.</p>
     </div>
 
+    <!-- Container flex para alinhar os botões lado a lado -->
     <div class="d-flex flex-wrap gap-2">
+        @* Link de edição gerado via Tag Helper para a rota do item específico (asp-route-id) *@
         <a class="btn btn-outline-danger" asp-action="Editar" asp-route-id="@Model.Nr">Editar</a>
         <a class="btn btn-outline-secondary" asp-action="Index">Voltar</a>
     </div>
 </div>
 
 <div class="row g-4">
+    <!-- Coluna lateral com os dados principais do agendamento -->
     <div class="col-xl-5">
         <div class="card border-danger-subtle shadow-sm h-100">
             <div class="card-header bg-danger-subtle border-danger-subtle d-flex justify-content-between align-items-center">
@@ -25,6 +30,7 @@
                 <span class="badge rounded-pill bg-danger-subtle text-danger-emphasis">#@Model.Nr</span>
             </div>
             <div class="card-body p-4">
+                <!-- Lista de descrição para chave/valor alinhada num grid -->
                 <dl class="row mb-0">
                     <dt class="col-sm-5 text-body-secondary">Cliente</dt>
                     <dd class="col-sm-7">@Model.ClienteNome</dd>
@@ -42,12 +48,16 @@
         </div>
     </div>
 
+    <!-- Coluna central contendo as tabelas de serviços e produtos -->
     <div class="col-xl-7">
+        
+        <!-- Bloco para exibir os Serviços vinculados -->
         <div class="card border-danger-subtle shadow-sm mb-4">
             <div class="card-header bg-danger-subtle border-danger-subtle">
                 <h2 class="h5 mb-0">Serviços</h2>
             </div>
             <div class="card-body p-0">
+                @* Renderiza a tabela somente se existirem serviços cadastrados neste agendamento *@
                 @if (Model.ServicosAgendados.Count > 0)
                 {
                     <div class="table-responsive">
@@ -62,11 +72,13 @@
                                 </tr>
                             </thead>
                             <tbody>
+                            @* Loop percorrendo todos os serviços vinculados na lista "ServicosAgendados" *@
                             @foreach (var item in Model.ServicosAgendados)
                             {
                                 <tr>
                                     <td>@item.ServicoNome</td>
                                     <td>@item.FuncionarioNome</td>
+                                    @* Formata o horário se for TimeSpan ou mostra como string diretamente *@
                                     <td>@(TimeSpan.TryParse(item.Horario, out var ts) ? ts.ToString(@"hh\:mm") : item.Horario)</td>
                                     <td>@item.Obs</td>
                                     <td>@item.Valor.ToString("C")</td>
@@ -78,16 +90,19 @@
                 }
                 else
                 {
+                    <!-- Fallback exibido caso não exista serviço vinculado -->
                     <div class="p-4 text-body-secondary">Sem serviços.</div>
                 }
             </div>
         </div>
 
+        <!-- Bloco para exibir os Produtos vinculados -->
         <div class="card border-danger-subtle shadow-sm">
             <div class="card-header bg-danger-subtle border-danger-subtle">
                 <h2 class="h5 mb-0">Produtos</h2>
             </div>
             <div class="card-body p-0">
+                @* Renderiza a tabela somente se existirem produtos consumidos neste agendamento *@
                 @if (Model.ProdutosAgendados.Count > 0)
                 {
                     <div class="table-responsive">
@@ -100,6 +115,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+                            @* Loop percorrendo todos os produtos vinculados na lista "ProdutosAgendados" *@
                             @foreach (var item in Model.ProdutosAgendados)
                             {
                                 <tr>
@@ -114,6 +130,7 @@
                 }
                 else
                 {
+                    <!-- Fallback exibido caso não exista produto vinculado -->
                     <div class="p-4 text-body-secondary">Sem produtos.</div>
                 }
             </div>
