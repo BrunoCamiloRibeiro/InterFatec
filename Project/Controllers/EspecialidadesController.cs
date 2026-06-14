@@ -51,4 +51,42 @@ public class EspecialidadesController : Controller
         await _especialidadeService.CriarEspecialidade(especialidade);
         return RedirectToAction(nameof(Index));
     }
+
+    [HttpGet]
+    public async Task<IActionResult> Editar(int id)
+    {
+        var especialidade = await _especialidadeService.ObterEspecialidadePorId(id);
+        if (especialidade == null) return NotFound();
+
+        var viewModel = _mapper.Map<EspecialidadeViewModel>(especialidade);
+        return View(viewModel);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Editar(int id, EspecialidadeViewModel viewModel)
+    {
+        if (id != viewModel.Id) return BadRequest();
+        if (!ModelState.IsValid) return View(viewModel);
+
+        var especialidade = _mapper.Map<Models.Especialidades>(viewModel);
+        await _especialidadeService.AtualizarEspecialidade(especialidade);
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Excluir(int id)
+    {
+        var especialidade = await _especialidadeService.ObterEspecialidadePorId(id);
+        if (especialidade == null) return NotFound();
+
+        var viewModel = _mapper.Map<EspecialidadeViewModel>(especialidade);
+        return View(viewModel);
+    }
+
+    [HttpPost, ActionName("Excluir")]
+    public async Task<IActionResult> ExcluirConfirmado(int id)
+    {
+        await _especialidadeService.ExcluirEspecialidade(id);
+        return RedirectToAction(nameof(Index));
+    }
 }
