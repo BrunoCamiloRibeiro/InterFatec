@@ -59,6 +59,7 @@
                                    name="CadastroSenha"
                                    placeholder="••••••••"
                                    value="@Model.CadastroSenha"
+                                   minlength="6"
                                    required>
                         </div>
 
@@ -70,6 +71,7 @@
                                    name="CadastroConfirmacaoSenha"
                                    placeholder="••••••••"
                                    value="@Model.CadastroConfirmacaoSenha"
+                                   minlength="6"
                                    required>
                         </div>
 
@@ -93,3 +95,29 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Máscara de telefone
+            const telInputs = document.querySelectorAll('input[type="tel"]');
+            telInputs.forEach(input => {
+                input.addEventListener('input', function(e) {
+                    let val = e.target.value.replace(/\D/g, '');
+                    if (val.length > 11) val = val.slice(0, 11);
+                    
+                    if (val.length > 10) {
+                        val = val.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
+                    } else if (val.length > 6) {
+                        val = val.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+                    } else if (val.length > 2) {
+                        val = val.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+                    } else if (val.length > 0) {
+                        val = val.replace(/^(\d*)/, '($1');
+                    }
+                    e.target.value = val;
+                });
+            });
+        });
+    </script>
+}
