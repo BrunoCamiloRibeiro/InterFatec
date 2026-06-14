@@ -150,8 +150,12 @@ public class FuncionariosController : Controller
 
     private async Task PrepararEspecialidadesAsync(FuncionarioRegistroViewModel viewModel)
     {
+        var ativas = (await _especialidadeService.ObterTodasEspecialidades())
+            .Where(e => e.Status == FabysUnha.Enums.EspecialidadeStatus.Ativo)
+            .ToList();
+
         viewModel.EspecialidadesList = new SelectList(
-            await _especialidadeService.ObterTodasEspecialidades(),
+            ativas,
             nameof(Models.Especialidades.Id),
             nameof(Models.Especialidades.Descricao),
             viewModel.EspecialidadeId);
@@ -159,8 +163,12 @@ public class FuncionariosController : Controller
 
     private async Task PrepararEspecialidadesAsync(FuncionarioEditarViewModel viewModel)
     {
+        var ativasEAtual = (await _especialidadeService.ObterTodasEspecialidades())
+            .Where(e => e.Status == FabysUnha.Enums.EspecialidadeStatus.Ativo || e.Id == viewModel.EspecialidadeId)
+            .ToList();
+
         viewModel.EspecialidadesList = new SelectList(
-            await _especialidadeService.ObterTodasEspecialidades(),
+            ativasEAtual,
             nameof(Models.Especialidades.Id),
             nameof(Models.Especialidades.Descricao),
             viewModel.EspecialidadeId);
