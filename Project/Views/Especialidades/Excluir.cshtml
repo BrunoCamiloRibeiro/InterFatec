@@ -1,3 +1,4 @@
+@* O modelo EspecialidadeViewModel é usado apenas para exibir qual registro será apagado *@
 @model EspecialidadeViewModel
 
 @{
@@ -14,12 +15,17 @@
                 <i class="bi bi-exclamation-triangle-fill text-danger display-1 mb-3"></i>
                 <h2 class="h4 mb-3">Tem certeza que deseja excluir esta especialidade?</h2>
                 <p class="text-body-secondary mb-4">
+                    <!-- Acesso à propriedade Descricao do Model para confirmar ao usuário o que está sendo excluído -->
                     A especialidade <strong>@Model.Descricao</strong> será excluída permanentemente ou desativada, dependendo da regra de negócio.
                 </p>
 
+                <!-- Formulário de confirmação de exclusão -->
                 <form asp-action="Excluir" method="post" class="d-flex justify-content-center gap-3">
+                    <!-- Campo oculto obrigatório para identificar qual registro será excluído no banco de dados -->
                     <input type="hidden" asp-for="Id" />
+                    <!-- Opção de cancelamento retorna à tela de listagem -->
                     <a class="btn btn-outline-secondary" asp-action="Index">Cancelar</a>
+                    <!-- Botão de submit executa a exclusão -->
                     <button type="submit" class="btn btn-danger">Sim, excluir especialidade</button>
                 </form>
             </div>
