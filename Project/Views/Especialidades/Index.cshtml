@@ -24,6 +24,7 @@
 						<th>Id</th>
 						<th>Nome</th>
 						<th>Status</th>
+						<th class="text-end">Ações</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -33,6 +34,16 @@
 						<td>@item.Id</td>
 						<td class="fw-semibold">@item.Descricao</td>
 						<td>@item.Status</td>
+						<td class="text-end">
+							<div class="btn-group btn-group-sm" role="group">
+								<a asp-action="Editar" asp-route-id="@item.Id" class="btn btn-outline-primary" title="Editar">
+									Editar
+								</a>
+								<a asp-action="Excluir" asp-route-id="@item.Id" class="btn btn-outline-danger" title="Excluir">
+									Excluir
+								</a>
+							</div>
+						</td>
 					</tr>
 				}
 				</tbody>
