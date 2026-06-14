@@ -38,7 +38,8 @@ public class EspecialidadesRepository : IEspecialidadeRepository
 
     public async Task ExcluirEspecialidade(Especialidades especialidade)
     {
-        _context.Especialidades.Remove(especialidade);
-        await _context.SaveChangesAsync();
+        especialidade.Status = EspecialidadeStatus.Inativo;
+        await _context.Database.ExecuteSqlInterpolatedAsync(
+            $"EXEC sp_UpdateEspecialidade {especialidade.Id}, {especialidade.Descricao}, {(int)especialidade.Status}");
     }
 }
