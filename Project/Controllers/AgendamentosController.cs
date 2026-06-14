@@ -54,6 +54,10 @@ public class AgendamentosController : Controller
         {
             context.Result = new RedirectToActionResult("MeusAgendamentos", "Agendamentos", null);
         }
+        else if (tipoUsuario == "Funcionario" && (actionName == "Agendar" || actionName == "AgendamentoConfirmado" || actionName == "MeusAgendamentos"))
+        {
+            context.Result = new RedirectToActionResult("Index", "Agendamentos", null);
+        }
 
         base.OnActionExecuting(context);
     }
@@ -76,40 +80,7 @@ public class AgendamentosController : Controller
         return View(viewModel);
     }
 
-    [HttpGet]
-    public async Task<IActionResult> Criar()
-    {
-        var viewModel = new AgendamentoRegistroViewModel
-        {
-            Status = AgendamentoStatus.Pendente
-        };
 
-        await PrepararListasAsync(viewModel);
-        return View(viewModel);
-    }
-
-    [HttpPost]
-
-    public async Task<IActionResult> Criar(AgendamentoRegistroViewModel viewModel)
-    {
-        if (!ModelState.IsValid)
-        {
-            await PrepararListasAsync(viewModel);
-            return View(viewModel);
-        }
-
-        try
-        {
-            await _agendamentosService.CriarAgendamento(viewModel);
-            return RedirectToAction(nameof(Index));
-        }
-        catch (Exception ex)
-        {
-            ModelState.AddModelError(string.Empty, $"Erro ao criar agendamento: {ex.Message}");
-            await PrepararListasAsync(viewModel);
-            return View(viewModel);
-        }
-    }
 
     [HttpGet]
     public async Task<IActionResult> Editar(int id)
@@ -194,10 +165,19 @@ public class AgendamentosController : Controller
         var servicos = await _servicosService.ObterTodosServicos();
         var produtos = await _produtosService.ObterTodosProdutos();
 
-        viewModel.ClientesList = new SelectList(clientes, nameof(Clientes.Id), nameof(Clientes.Nome), viewModel.ClienteId);
-        viewModel.FuncionariosList = new SelectList(funcionarios, nameof(Funcionarios.Id), nameof(Funcionarios.Nome));
-        viewModel.ServicosList = new SelectList(servicos, nameof(Servicos.Id), nameof(Servicos.Descricao));
-        viewModel.ProdutosList = new SelectList(produtos, nameof(Produtos.Codigo), nameof(Produtos.Nome));
+        var funcionariosSelecionados = viewModel.ServicosSelecionados?.Select(s => s.FuncionarioId).ToList() ?? new List<int>();
+        var servicosSelecionados = viewModel.ServicosSelecionados?.Select(s => s.ServicoId).ToList() ?? new List<int>();
+        var produtosSelecionados = viewModel.ProdutosSelecionados?.Select(p => p.ProdutoCodigo).ToList() ?? new List<int>();
+
+        var clientesAtivos = clientes.Where(c => c.Status == PessoaStatus.Ativo || c.Id == viewModel.ClienteId).ToList();
+        var funcionariosAtivos = funcionarios.Where(f => f.Status == PessoaStatus.Ativo || funcionariosSelecionados.Contains(f.Id)).ToList();
+        var servicosAtivos = servicos.Where(s => s.Status == ServicoStatus.Ativo || servicosSelecionados.Contains(s.Id)).ToList();
+        var produtosAtivos = produtos.Where(p => p.Status == ProdutoStatus.Ativo || produtosSelecionados.Contains(p.Codigo)).ToList();
+
+        viewModel.ClientesList = new SelectList(clientesAtivos, nameof(Clientes.Id), nameof(Clientes.Nome), viewModel.ClienteId);
+        viewModel.FuncionariosList = new SelectList(funcionariosAtivos, nameof(Funcionarios.Id), nameof(Funcionarios.Nome));
+        viewModel.ServicosList = new SelectList(servicosAtivos, nameof(Servicos.Id), nameof(Servicos.Descricao));
+        viewModel.ProdutosList = new SelectList(produtosAtivos, nameof(Produtos.Codigo), nameof(Produtos.Nome));
     }
 
     // ==========================================
@@ -272,9 +252,16 @@ public class AgendamentosController : Controller
         var servicos = await _servicosService.ObterTodosServicos();
         var produtos = await _produtosService.ObterTodosProdutos();
 
-        viewModel.FuncionariosList = new SelectList(funcionarios, nameof(Funcionarios.Id), nameof(Funcionarios.Nome));
+        var funcionariosSelecionados = viewModel.Servicos?.Select(s => s.FuncionarioId).ToList() ?? new List<int>();
+        var servicosSelecionados = viewModel.Servicos?.Select(s => s.ServicoId).ToList() ?? new List<int>();
         
-        var servicosItens = servicos.Select(s => new {
+        var funcionariosAtivos = funcionarios.Where(f => f.Status == PessoaStatus.Ativo || funcionariosSelecionados.Contains(f.Id)).ToList();
+        var servicosAtivos = servicos.Where(s => s.Status == ServicoStatus.Ativo || servicosSelecionados.Contains(s.Id)).ToList();
+        var produtosAtivos = produtos.Where(p => p.Status == ProdutoStatus.Ativo).ToList();
+
+        viewModel.FuncionariosList = new SelectList(funcionariosAtivos, nameof(Funcionarios.Id), nameof(Funcionarios.Nome));
+        
+        var servicosItens = servicosAtivos.Select(s => new {
             Id = s.Id,
             Descricao = s.Descricao,
             Preco = s.Preco,
@@ -282,7 +269,7 @@ public class AgendamentosController : Controller
         }).ToList();
         viewModel.ServicosList = new SelectList(servicosItens, "Id", "TextoFormatado");
 
-        var produtosItens = produtos.Select(p => new {
+        var produtosItens = produtosAtivos.Select(p => new {
             Codigo = p.Codigo,
             Nome = p.Nome,
             Preco = p.Preco,
