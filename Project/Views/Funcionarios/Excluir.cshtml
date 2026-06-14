@@ -1,21 +1,27 @@
+@* View baseada no modelo de detalhes para confirmar exclusão do registro *@
 @model FuncionarioDetalhesViewModel
 
 @{
+    @* Variável do dicionário ViewData com o título da página *@
     ViewData["Title"] = "Excluir funcionário";
 }
 
+<!-- Centraliza o conteúdo com o Bootstrap -->
 <div class="row justify-content-center">
     <div class="col-xl-8">
+        <!-- Estrutura do card que contém os dados e o formulário de exclusão -->
         <div class="card border-danger-subtle shadow-sm">
             <div class="card-header bg-danger-subtle border-danger-subtle">
                 <h1 class="h3 mb-0 text-danger-emphasis">Excluir funcionário</h1>
             </div>
 
             <div class="card-body p-4">
+                <!-- Alerta visual destacando a importância desta ação -->
                 <div class="alert alert-danger mb-4" role="alert">
                     Tem certeza que deseja excluir este funcionário? Esta ação não pode ser desfeita.
                 </div>
 
+                <!-- Lista de dados formatada para revisão antes de excluir -->
                 <dl class="row mb-0">
                     <dt class="col-sm-4 text-body-secondary">Id</dt>
                     <dd class="col-sm-8">@Model.Id</dd>
@@ -30,13 +36,19 @@
                     <dd class="col-sm-8">@Model.Status</dd>
 
                     <dt class="col-sm-4 text-body-secondary">Salário</dt>
+                    @* Exibe o salário como moeda *@
                     <dd class="col-sm-8">@Model.Salario.ToString("C")</dd>
 
                     <dt class="col-sm-4 text-body-secondary">Especialidade</dt>
                     <dd class="col-sm-8">@Model.EspecialidadeNome</dd>
                 </dl>
 
+                @* 
+                    Formulário de submissão da exclusão.
+                    Método POST para realizar a alteração de estado no banco de dados.
+                *@
                 <form asp-action="Excluir" method="post" class="d-flex flex-wrap justify-content-end gap-2 mt-4">
+                    @* Passa o Id do funcionário como campo oculto (hidden) para o controller *@
                     <input type="hidden" asp-for="Id" />
                     <a class="btn btn-outline-secondary" asp-action="Index">Cancelar</a>
                     <button type="submit" class="btn btn-danger">Confirmar exclusão</button>
