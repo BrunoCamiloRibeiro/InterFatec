@@ -1,5 +1,10 @@
+@* Define que o modelo de dados tipado desta View é o AgendamentoEditarViewModel *@
 @model AgendamentoEditarViewModel
 
+@* 
+   Bloco Razor para configurar variáveis no ViewData, que serão consumidas pela Partial View "_WizardForm".
+   Isso permite reaproveitar o formulário (wizard) para as operações de "Criar" e "Editar".
+*@
 @{
     ViewData["Title"] = "Editar agendamento";
     ViewData["WizardAction"] = "Editar";
@@ -7,4 +12,8 @@
     ViewData["WizardTitle"] = "Editar agendamento";
 }
 
+@* 
+   A Tag Helper <partial> renderiza o arquivo _WizardForm.cshtml, passando o "Model" atual 
+   e o dicionário "ViewData" configurado acima.
+*@
 <partial name="_WizardForm" model="Model" view-data="ViewData" />
