@@ -198,23 +198,18 @@
                         <div class="js-product-row card border-danger-subtle bg-body-tertiary">
                             <div class="card-body">
                                 <div class="row g-3 align-items-end">
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-5">
                                         <label class="form-label">Produto</label>
                                         <select data-field="ProdutoCodigo" name="@($"{productPrefix}.ProdutoCodigo")" asp-items="produtosOptions" class="form-select">
                                             <option value="">Selecione</option>
                                         </select>
                                     </div>
 
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-6">
                                         <label class="form-label">Serviço</label>
                                         <select data-field="ServicoId" name="@($"{productPrefix}.ServicoId")" asp-items="produtoServicoOptions" class="form-select">
                                             <option value="">Selecione</option>
                                         </select>
-                                    </div>
-
-                                    <div class="col-lg-3">
-                                        <label class="form-label">Preço</label>
-                                        <input data-field="Preco" type="number" step="0.01" name="@($"{productPrefix}.Preco")" value="@(item.Preco == 0 ? string.Empty : item.Preco.ToString(System.Globalization.CultureInfo.InvariantCulture))" class="form-control" />
                                     </div>
 
                                     <div class="col-lg-1 d-grid">
@@ -230,23 +225,18 @@
                     <div class="js-product-row card border-danger-subtle bg-body-tertiary">
                         <div class="card-body">
                             <div class="row g-3 align-items-end">
-                                <div class="col-lg-4">
+                                <div class="col-lg-5">
                                     <label class="form-label">Produto</label>
                                     <select data-field="ProdutoCodigo" asp-items="Model.ProdutosList" class="form-select">
                                         <option value="">Selecione</option>
                                     </select>
                                 </div>
 
-                                <div class="col-lg-4">
+                                <div class="col-lg-6">
                                     <label class="form-label">Serviço</label>
                                     <select data-field="ServicoId" asp-items="Model.ServicosList" class="form-select">
                                         <option value="">Selecione</option>
                                     </select>
-                                </div>
-
-                                <div class="col-lg-3">
-                                    <label class="form-label">Preço</label>
-                                    <input data-field="Preco" type="number" step="0.01" class="form-control" />
                                 </div>
 
                                 <div class="col-lg-1 d-grid">
