@@ -1,3 +1,4 @@
+@* O modelo EspecialidadeViewModel carrega os dados atuais para serem alterados *@
 @model EspecialidadeViewModel
 
 @{
@@ -11,7 +12,9 @@
                 <h1 class="h3 mb-0 text-danger-emphasis">Editar especialidade</h1>
             </div>
             <div class="card-body p-4">
+                <!-- Formulário com método POST disparando a Action Editar do EspecialidadesController -->
                 <form asp-action="Editar" method="post" class="vstack gap-3">
+                    <!-- O ID não deve ser alterado pelo usuário, mas precisa ser enviado ao controller, por isso fica oculto -->
                     <input type="hidden" asp-for="Id" />
                     <div asp-validation-summary="All" class="alert alert-danger mb-0" role="alert"></div>
 
@@ -28,6 +31,7 @@
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center pt-2">
+                        <!-- O atributo asp-action="Index" gera o href apontando para a listagem -->
                         <a class="btn btn-outline-secondary" asp-action="Index">Voltar</a>
                         <button type="submit" class="btn btn-danger">Salvar Alterações</button>
                     </div>
