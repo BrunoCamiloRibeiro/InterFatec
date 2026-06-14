@@ -52,6 +52,7 @@ public class FuncionariosRepository : IFuncionariosRepository
             Telefone = funcionarioView.Telefone ?? string.Empty,
             Status = (PessoaStatus)funcionarioView.StatusId,
             Salario = funcionarioView.Salario,
+            Senha = funcionarioView.Senha ?? string.Empty,
             Especialidade = !string.IsNullOrEmpty(funcionarioView.Especialidade)
                 ? new Especialidades { Descricao = funcionarioView.Especialidade }
                 : null
@@ -86,7 +87,8 @@ public class FuncionariosRepository : IFuncionariosRepository
 
     public async Task ExcluirFuncionario(Funcionarios funcionario)
     {
-        _db.Funcionarios.Remove(funcionario);
-        await _db.SaveChangesAsync();
+        funcionario.Status = PessoaStatus.Inativo;
+        await _db.Database.ExecuteSqlInterpolatedAsync(
+            $"EXEC sp_UpdateFuncionario {funcionario.Id}, {funcionario.Nome}, {funcionario.Telefone}, {(int)funcionario.Status}, {funcionario.Salario}, {funcionario.EspecialidadeId}, {funcionario.Senha}");
     }
 }
