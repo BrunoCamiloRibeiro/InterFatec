@@ -1,32 +1,62 @@
 @model MarcasViewModel
+@*
+    A diretiva @model define que esta view trabalhará com a classe MarcasViewModel,
+    responsável por transportar os dados da Marca que será editada (Id, Nome, Status).
+*@
 
 @{
+    // Define o título da página na aba do navegador, armazenando-o no ViewData.
     ViewData["Title"] = "Editar marca";
 }
 
+<!-- Grid Bootstrap para centralizar o conteúdo em diferentes tamanhos de tela -->
 <div class="row justify-content-center">
     <div class="col-lg-7 col-xl-6">
+        <!-- O componente 'card' para agrupar visualmente o formulário de edição -->
         <div class="card border-danger-subtle shadow-sm">
             <div class="card-header bg-danger-subtle border-danger-subtle">
                 <h1 class="h3 mb-0 text-danger-emphasis">Editar marca</h1>
             </div>
+            
             <div class="card-body p-4">
+                <!-- 
+                    A tag <form> usa a TagHelper asp-action="Editar". 
+                    Ela vai gerar a URL correspondente à action Editar no controller Marcas.
+                    Como o método é "post", os dados preenchidos serão enviados de forma segura ao servidor.
+                -->
                 <form asp-action="Editar" method="post" class="vstack gap-3">
+                    
+                    <!-- 
+                        Campo oculto para armazenar o Id da Marca. 
+                        Isso é crucial na edição, para que o servidor saiba qual registro atualizar no banco de dados,
+                        sem que o Id fique visível para o usuário alterar.
+                    -->
                     <input type="hidden" asp-for="Id" />
 
+                    <!-- Campo Nome da marca -->
                     <div>
+                        <!-- asp-for vincula este label à propriedade 'Nome' do ViewModel -->
                         <label asp-for="Nome" class="form-label">Nome da marca</label>
+                        <!-- asp-for cria o campo de texto preenchido com o valor atual de 'Nome' -->
                         <input asp-for="Nome" class="form-control" />
+                        <!-- Mostra erros de validação caso as regras do ViewModel (ex: tamanho máximo) não sejam cumpridas -->
                         <span asp-validation-for="Nome" class="text-danger small"></span>
                     </div>
 
+                    <!-- Campo Status (Ativo/Inativo) -->
                     <div>
                         <label asp-for="Status" class="form-label"></label>
+                        <!-- 
+                            Cria um dropdown (<select>). 
+                            asp-items carrega as opções diretamente do Enum MarcaStatus.
+                        -->
                         <select asp-for="Status" asp-items="Html.GetEnumSelectList<MarcaStatus>()" class="form-select"></select>
                         <span asp-validation-for="Status" class="text-danger small"></span>
                     </div>
 
+                    <!-- Botões de ação do formulário -->
                     <div class="d-flex justify-content-between align-items-center pt-2">
+                        <!-- Link para voltar à lista, gerado pela TagHelper asp-action -->
                         <a class="btn btn-outline-secondary" asp-action="Index">Voltar</a>
                         <button type="submit" class="btn btn-danger">Salvar alterações</button>
                     </div>
