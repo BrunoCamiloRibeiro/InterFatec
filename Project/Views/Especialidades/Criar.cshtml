@@ -1,3 +1,4 @@
+@* Modelo da View utilizado para mapear os dados da criação de uma especialidade *@
 @model EspecialidadeViewModel
 
 @{
@@ -11,23 +12,29 @@
                 <h1 class="h3 mb-0 text-danger-emphasis">Criar especialidade</h1>
             </div>
             <div class="card-body p-4">
+                <!-- Formulário enviando um POST para a action Criar no controller atual -->
                 <form asp-action="Criar" method="post" class="vstack gap-3">
                     <div asp-validation-summary="All" class="alert alert-danger mb-0" role="alert"></div>
 
                     <div>
+                        <!-- asp-for gera label, input, id e name baseado na propriedade Descricao do ViewModel -->
                         <label asp-for="Descricao" class="form-label"></label>
                         <input asp-for="Descricao" class="form-control" />
+                        <!-- Mostra erro de validação específico do campo -->
                         <span asp-validation-for="Descricao" class="text-danger small"></span>
                     </div>
 
                     <div>
                         <label asp-for="Status" class="form-label"></label>
+                        <!-- asp-items preenche as options do <select> usando o Enum EspecialidadeStatus -->
                         <select asp-for="Status" asp-items="Html.GetEnumSelectList<EspecialidadeStatus>()" class="form-select"></select>
                         <span asp-validation-for="Status" class="text-danger small"></span>
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center pt-2">
+                        <!-- Redireciona para a Action Index, cancelando a operação -->
                         <a class="btn btn-outline-secondary" asp-action="Index">Voltar</a>
+                        <!-- Botão que submete o formulário -->
                         <button type="submit" class="btn btn-danger">Salvar</button>
                     </div>
                 </form>
