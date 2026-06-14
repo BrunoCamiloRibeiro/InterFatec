@@ -4,6 +4,16 @@ GO
 -- ==========================================
 -- 1. PESSOAS / FUNCIONÁRIOS / CLIENTES
 -- ==========================================
+
+/* 
+ * VIEW: vw_ListaFuncionarios
+ * Propósito: Fornece uma listagem detalhada de funcionários, trazendo inclusive a senha para autenticação de acesso e os dados de sua especialidade.
+ *
+ * SELECT: Busca informações de identificação, contato (da tabela Pessoas), especialidade, salário (Funcionários) e credenciais (senha).
+ * JOINs: 
+ *   - INNER JOIN Funcionarios f: Exige que a pessoa registrada na base seja efetivamente um funcionário.
+ *   - LEFT JOIN Especialidades e: Traz a descrição da especialidade. O uso de LEFT JOIN garante que, se o funcionário ainda não tiver uma especialidade definida, ele não seja omitido da lista, preenchendo a coluna Especialidade com NULL.
+ */
 CREATE OR ALTER VIEW vw_ListaFuncionarios AS
 SELECT 
     p.id, 
@@ -23,6 +33,14 @@ INNER JOIN Funcionarios f ON p.id = f.pessoa_id
 LEFT JOIN Especialidades e ON e.id = f.especialidade_id
 GO
 
+/* 
+ * VIEW: vw_ListaClientes
+ * Propósito: Exibe a lista de todos os clientes do sistema e seus dados de contato, convertendo o status para texto.
+ *
+ * SELECT: Retorna apenas os campos principais da tabela Pessoas para os registros identificados como clientes.
+ * JOINs:
+ *   - Produto cartesiano filtrado (WHERE p.id = c.pessoa_id), o que atua como um INNER JOIN entre Pessoas e Clientes.
+ */
 CREATE OR ALTER VIEW vw_ListaClientes AS
 SELECT 
     p.id, 
@@ -41,7 +59,13 @@ GO
 -- ==========================================
 -- 2. CATÁLOGOS BÁSICOS
 -- ==========================================
--- Marcas
+
+/* 
+ * VIEW: vw_ListaMarcas
+ * Propósito: Simplifica a consulta da tabela de Marcas, exibindo os registros com o texto de status amigável ('Ativo', 'Inativo').
+ *
+ * SELECT: Extrai campos diretos da tabela Marcas, sem necessidade de relacionamentos.
+ */
 CREATE OR ALTER VIEW vw_ListaMarcas AS  
 SELECT
     id,
@@ -55,7 +79,12 @@ SELECT
 FROM Marcas m
 GO
 
--- Serviços
+/* 
+ * VIEW: vw_ListaServicos
+ * Propósito: Mostrar o portfólio de serviços do estabelecimento, agregando um campo descritivo de status para uso na interface.
+ *
+ * SELECT: Traz id, descrição, preço, tempo estimado e o mapeamento do código de status. Nenhuma outra tabela é cruzada.
+ */
 CREATE OR ALTER VIEW vw_ListaServicos AS
 SELECT 
     id,
@@ -71,7 +100,14 @@ SELECT
 FROM Servicos
 GO
 
--- Produtos com Marca (join)
+/* 
+ * VIEW: vw_ListarProdutos
+ * Propósito: Listar o catálogo de produtos integrando o nome da marca ao invés de exibir apenas o código da marca.
+ *
+ * SELECT: Retorna dados do produto, incluindo preço, imagem e nome da marca.
+ * JOINs:
+ *   - Conecta Produtos (p) com Marcas (m) pela condição WHERE p.marca_id = m.id, permitindo visualizar a que marca o produto pertence de forma transparente.
+ */
 CREATE OR ALTER VIEW vw_ListarProdutos AS
 SELECT 
     p.codigo,
@@ -89,7 +125,15 @@ FROM Produtos p, Marcas m
 WHERE p.marca_id = m.id
 GO
 
--- Especialidades
+/* 
+ * VIEW: vw_ListarEspecialidades
+ * Propósito: Relatório sumarizado de todas as especialidades e o número de profissionais associados a cada uma delas.
+ *
+ * SELECT: Nome da especialidade e a contagem total de funcionários.
+ * JOINs e GROUP BY:
+ *   - Vincula Funcionarios e Especialidades usando f.especialidade_id = e.id.
+ *   - Agrupa pelo nome (GROUP BY e.descricao), somando via COUNT(*) quantos registros existem no grupo.
+ */
 CREATE OR ALTER VIEW vw_ListarEspecialidades AS
 SELECT
     e.descricao AS Especialidade,
@@ -102,7 +146,16 @@ GO
 -- ==========================================
 -- 3. AGENDAMENTOS
 -- ==========================================
--- Agendamentos Básico
+
+/* 
+ * VIEW: vw_ListaAgendamento
+ * Propósito: Resumo dos agendamentos, mostrando os detalhes principais (data, total, status legível) e identificando de forma amigável quem é o cliente.
+ *
+ * SELECT: Extrai os dados centrais do agendamento, além do nome completo do cliente.
+ * JOINs:
+ *   - Utiliza a tabela intermediária Clientes (c) para conectar Agendamentos (a) e Pessoas (p).
+ *   - c.pessoa_id = a.cliente_id e p.id = c.pessoa_id.
+ */
 CREATE OR ALTER VIEW vw_ListaAgendamento AS
 SELECT
     a.nr AS NumeroAgendamento,
@@ -121,7 +174,15 @@ WHERE p.id = c.pessoa_id
   AND c.pessoa_id = a.cliente_id
 GO
 
--- Serviços do Agendamento
+/* 
+ * VIEW: vw_ListaServicoAgendamento
+ * Propósito: Detalhar o que foi feito dentro de um agendamento específico (qual serviço, por quem e a que horas).
+ *
+ * SELECT: Mostra o número do agendamento raiz, o serviço prestado, observações, horário e o nome do funcionário responsável.
+ * JOINs:
+ *   - Exige o relacionamento de 5 tabelas simultâneas: Servicos_Agendados, Agendamentos, Servicos, Funcionarios e Pessoas.
+ *   - Onde o núcleo da junção resolve os IDs do serviço e do funcionário com as suas respectivas tabelas descritivas.
+ */
 CREATE OR ALTER VIEW vw_ListaServicoAgendamento AS
 SELECT
     sa.agendamento_nr AS NumeroAgendamento,
@@ -137,7 +198,15 @@ WHERE p.id = f.pessoa_id
   AND sa.agendamento_nr = a.nr
 GO
 
--- Produtos do Agendamento
+/* 
+ * VIEW: vw_ListaProdutoAgendamento
+ * Propósito: Listar os produtos consumidos vinculados a um serviço específico que fez parte de um agendamento.
+ *
+ * SELECT: Dados do produto (nome e marca), valor e o serviço/agendamento atrelado.
+ * JOINs:
+ *   - Usa a tabela Produtos_Agendados (pa) cruzada com Servicos_Agendados (sa).
+ *   - Além disso, vai até as tabelas base Produtos (p), Marcas (m) e Servicos (s) para obter descrições amigáveis no lugar dos IDs numéricos.
+ */
 CREATE OR ALTER VIEW vw_ListaProdutoAgendamento AS
 SELECT
     pa.agendamento_nr AS NumeroAgendamento,
@@ -157,7 +226,16 @@ GO
 -- ==========================================
 -- 4. DASHBOARDS E RELATÓRIOS
 -- ==========================================
--- Produção por Funcionário
+
+/* 
+ * VIEW: vw_FuncionarioProducao
+ * Propósito: Dashboard consolidado para verificar quantos atendimentos/serviços um dado funcionário concluiu.
+ *
+ * SELECT: Retorna nome e o total calculado.
+ * JOINs e GROUP BY:
+ *   - Filtro conectando Serviços Agendados, Funcionários e Pessoas.
+ *   - O GROUP BY p.Nome condensa todas as linhas do mesmo profissional e aplica a contagem no COUNT(*).
+ */
 CREATE OR ALTER VIEW vw_FuncionarioProducao AS 
 SELECT
     p.Nome AS Funcionario,
@@ -168,7 +246,15 @@ WHERE p.id = f.pessoa_id
 GROUP BY p.Nome
 GO
 
--- Quantidade de Produtos por Marca
+/* 
+ * VIEW: vw_ProdutosPorMarca
+ * Propósito: Dashboard que reflete o inventário ou diversidade de produtos, somando os itens disponíveis agrupados pela marca.
+ *
+ * SELECT: Traz o nome da marca e a soma de produtos (TotalProdutos).
+ * JOINs e GROUP BY:
+ *   - Conecta Produtos (p) com Marcas (m).
+ *   - O agrupamento GROUP BY m.nome é a chave que permite que COUNT(*) não seja global, mas segmentado marca a marca.
+ */
 CREATE OR ALTER VIEW vw_ProdutosPorMarca AS  
 SELECT
     m.nome AS Marca,
@@ -180,9 +266,17 @@ GO
 
 -- ==========================================
 -- 5. VALIDAÇÃO DE LOGIN
--- =================================
--- Criação de View para Login do Cliente
+-- ==========================================
 
+/* 
+ * VIEW: vw_ValidarClienteLogin
+ * Propósito: Fornece uma maneira rápida de buscar clientes junto com sua senha e informações do histórico de agendamentos. Útil para validar o login e retornar os agendamentos na mesma consulta.
+ *
+ * SELECT: Busca dados confidenciais (senha), contato e dados resumidos do agendamento (número, data, total e status).
+ * JOINs:
+ *   - Conecta Pessoas e Clientes para garantir que o alvo seja cliente.
+ *   - Relaciona com Agendamentos (a) para fornecer informações de consumo logo após a validação.
+ */
 CREATE OR ALTER VIEW vw_ValidarClienteLogin AS
 SELECT 
     p.id,
@@ -203,6 +297,7 @@ GO
 -- SELECTS PARA TESTE
 -- ==========================================
 
+/* Bloco para os testes das views após criação ou alteração */
 select * from vw_ListaClientes --join
 select * from vw_ListaFuncionarios --join
 select * from vw_ListaMarcas    
@@ -220,6 +315,7 @@ select * from vw_ListaProdutoAgendamento --join
 select * from vw_FuncionarioProducao -- join
 select * from vw_ProdutosPorMarca -- join
 select * from vw_ValidarClienteLogin
+
 
 
 
