@@ -4,59 +4,136 @@ using FabysUnha.Models.SqlViews;
 
 namespace FabysUnha.Data;
 
+/// <summary>
+/// Contexto do Banco de Dados principal da aplicação. Herda de DbContext,
+/// que é a classe central do Entity Framework Core para interagir com os dados.
+/// </summary>
 public class AppDbContext : DbContext
 {
+    /// <summary>
+    /// Construtor padrão do DbContext, repassando as opções de configuração 
+    /// (como qual banco usar, string de conexão) para a classe base do EF Core.
+    /// </summary>
+    /// <param name="options">As opções de configuração do contexto.</param>
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
+        // Nenhuma configuração adicional no construtor.
     }    
 
+    /// <summary>
+    /// Tabela de Pessoas. Utilizada como base para dados comuns de Clientes e Funcionários.
+    /// </summary>
     public DbSet<Pessoas> Pessoas { get; set; }
+
+    /// <summary>
+    /// Tabela de Clientes, que logicamente estende de Pessoas.
+    /// </summary>
     public DbSet<Clientes> Clientes { get; set; }
+
+    /// <summary>
+    /// Tabela de Funcionários, contendo detalhes como salário e especialidade.
+    /// </summary>
     public DbSet<Funcionarios> Funcionarios { get; set; }
 
     
+    /// <summary>
+    /// Tabela de Marcas, para agrupar e categorizar produtos.
+    /// </summary>
     public DbSet<Marcas> Marcas { get; set; }
 
+    /// <summary>
+    /// Tabela de Especialidades, que define os cargos e habilidades dos funcionários.
+    /// </summary>
     public DbSet<Especialidades> Especialidades { get; set; }
+
+    /// <summary>
+    /// Tabela de Produtos cadastrados para venda ou uso no estabelecimento.
+    /// </summary>
     public DbSet<Produtos> Produtos { get; set; }
+
+    /// <summary>
+    /// Tabela de Serviços que o estabelecimento oferece.
+    /// </summary>
     public DbSet<Servicos> Servicos { get; set; }
+
+    /// <summary>
+    /// Tabela de Agendamentos. Registra um encontro marcado por um cliente.
+    /// </summary>
     public DbSet<Agendamentos> Agendamentos { get; set; }
+
+    /// <summary>
+    /// Tabela associativa que vincula um Serviço agendado a um Agendamento principal e ao Funcionário responsável.
+    /// </summary>
     public DbSet<Servicos_Agendados> Servicos_Agendados { get; set; }
+
+    /// <summary>
+    /// Tabela associativa que vincula os Produtos que possivelmente foram gastos ou comprados durante um serviço.
+    /// </summary>
     public DbSet<Produtos_Agendados> Produtos_Agendados { get; set; }
 
+    /// <summary>
+    /// Método chamado pelo Entity Framework Core durante a inicialização do contexto
+    /// para configurar o esquema do banco de dados, mapeamentos de tabelas, chaves e relacionamentos (Fluent API).
+    /// </summary>
+    /// <param name="modelBuilder">Construtor de modelos usado para configurar as entidades.</param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Chama a implementação base para garantir configurações nativas
         base.OnModelCreating(modelBuilder);
+        
+        // =========================================================
+        // CONFIGURAÇÃO DAS ENTIDADES (TABELAS) E SEUS RELACIONAMENTOS
+        // =========================================================
 
+        // Configuração da entidade Pessoas usando Fluent API.
         modelBuilder.Entity<Pessoas>(entity =>
         {
+            // Define explicitamente o nome da tabela no banco de dados.
             entity.ToTable("Pessoas");
+            
+            // Mapeia as propriedades da classe para as colunas na tabela.
             entity.Property(p => p.Id).HasColumnName("id");
             entity.Property(p => p.Nome).HasColumnName("Nome");
             entity.Property(p => p.Telefone).HasColumnName("Telefone");
             entity.Property(p => p.Status).HasColumnName("status");
             entity.Property(p => p.Senha).HasColumnName("senha");
+            
+            // Define a chave primária da tabela.
             entity.HasKey(p => p.Id);
         });
 
+        // Configuração da entidade Clientes.
         modelBuilder.Entity<Clientes>(entity =>
         {
             entity.ToTable("Clientes");
+            
+            // Define que o ID do Cliente corresponde à coluna 'pessoa_id' no banco, 
+            // indicando uma relação de herança ou 1:1 com a tabela Pessoas.
             entity.Property(c => c.Id).HasColumnName("pessoa_id");
+            
+            // Configura um relacionamento Um-para-Muitos (1:N):
+            // Um Cliente pode ter Muitos Agendamentos.
             entity.HasMany(c => c.Agendamentos)
-                .WithOne(a => a.Cliente)
-                .HasForeignKey(a => a.ClienteId);
+                .WithOne(a => a.Cliente) // Cada Agendamento tem Um Cliente
+                .HasForeignKey(a => a.ClienteId); // A chave estrangeira fica em Agendamento
         });
 
+        // Configuração da entidade Funcionarios.
         modelBuilder.Entity<Funcionarios>(entity =>
         {
             entity.ToTable("Funcionarios");
             entity.Property(f => f.Id).HasColumnName("pessoa_id");
+            
+            // Define a precisão do campo decimal (10 dígitos totais, 2 casas decimais) para evitar erros de arredondamento com dinheiro.
             entity.Property(f => f.Salario).HasColumnName("salario").HasPrecision(10, 2);
             entity.Property(f => f.EspecialidadeId).HasColumnName("especialidade_id");
+            
+            // Relacionamento N:1 - Muitos Funcionários possuem Uma Especialidade.
             entity.HasOne(f => f.Especialidade)
                 .WithMany(e => e.Funcionarios)
                 .HasForeignKey(f => f.EspecialidadeId);
+                
+            // Relacionamento 1:N - Um Funcionário pode estar associado a Muitos Serviços Agendados.
             entity.HasMany(f => f.Servicos_Agendados)
                 .WithOne(sa => sa.Funcionario)
                 .HasForeignKey(sa => sa.FuncionarioId);
@@ -179,10 +256,15 @@ public class AppDbContext : DbContext
                 .HasForeignKey(pa => pa.ProdutoCodigo);
         });
 
+        // =========================================================
+        // CONFIGURAÇÃO DE VIEWS DO BANCO DE DADOS
+        // =========================================================
+        // Entidades que representam Views não possuem chave primária (HasNoKey)
+        // e são mapeadas para objetos de visualização usando ToView.
         modelBuilder.Entity<ListaFuncionariosView>(entity =>
         {
-            entity.HasNoKey();
-            entity.ToView("vw_ListaFuncionarios");
+            entity.HasNoKey(); // Indica ao EF Core que não há chave primária
+            entity.ToView("vw_ListaFuncionarios"); // Mapeia para uma View existente no banco
             entity.Property(e => e.Salario).HasPrecision(10, 2);
             entity.Property(e => e.StatusId).HasColumnName("Status_Id");
             entity.Property(e => e.StatusDescricao).HasColumnName("Status_Descricao");
