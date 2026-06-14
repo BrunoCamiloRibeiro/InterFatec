@@ -1,31 +1,76 @@
 @model MarcasViewModel
+@*
+    A diretiva @model define o tipo de dados que esta view espera receber.
+    Neste caso, ela espera um objeto do tipo MarcasViewModel, que contém as propriedades necessárias para criar uma marca (Nome e Status).
+*@
 
 @{
+    // Este bloco Razor é executado no servidor antes de renderizar a página.
+    // Aqui definimos o título da página usando o dicionário ViewData, que será acessado no _Layout.cshtml.
     ViewData["Title"] = "Criar marca";
 }
 
+<!-- O sistema de grid do Bootstrap é usado para centralizar o formulário na tela -->
 <div class="row justify-content-center">
     <div class="col-lg-7 col-xl-6">
+        <!-- O componente 'card' do Bootstrap cria uma caixa estilizada para envolver o formulário -->
         <div class="card border-danger-subtle shadow-sm">
+            <!-- Cabeçalho do card onde fica o título da página -->
             <div class="card-header bg-danger-subtle border-danger-subtle">
                 <h1 class="h3 mb-0 text-danger-emphasis">Criar marca</h1>
             </div>
+            
+            <!-- Corpo do card onde o formulário é colocado -->
             <div class="card-body p-4">
+                <!-- 
+                    A TagHelper asp-action="Criar" do ASP.NET Core gera o atributo action do HTML 
+                    apontando para a action 'Criar' do controller atual (Marcas).
+                    O atributo method="post" indica que os dados serão enviados via HTTP POST.
+                -->
                 <form asp-action="Criar" method="post" class="vstack gap-3">
+                    
+                    <!-- Agrupamento do campo 'Nome da marca' -->
                     <div>
+                        <!-- 
+                            asp-for="Nome" liga o label à propriedade Nome do MarcasViewModel.
+                            A TagHelper gera o texto do label (se configurado com [Display]) e o atributo 'for'.
+                        -->
                         <label asp-for="Nome" class="form-label">Nome da marca</label>
+                        
+                        <!-- 
+                            asp-for="Nome" cria um input para a propriedade Nome.
+                            Gera automaticamente os atributos id, name e type corretos.
+                        -->
                         <input asp-for="Nome" class="form-control" />
+                        
+                        <!-- 
+                            asp-validation-for="Nome" exibe as mensagens de erro de validação
+                            associadas à propriedade Nome (como [Required], [StringLength], etc).
+                        -->
                         <span asp-validation-for="Nome" class="text-danger small"></span>
                     </div>
 
+                    <!-- Agrupamento do campo 'Status' -->
                     <div>
                         <label asp-for="Status" class="form-label"></label>
+                        <!-- 
+                            asp-for liga o select à propriedade Status.
+                            asp-items preenche as opções (tags <option>) do <select>. 
+                            Aqui usamos Html.GetEnumSelectList<MarcaStatus>() para criar opções a partir de um Enum do C#.
+                        -->
                         <select asp-for="Status" asp-items="Html.GetEnumSelectList<MarcaStatus>()" class="form-select"></select>
                         <span asp-validation-for="Status" class="text-danger small"></span>
                     </div>
 
+                    <!-- Rodapé do formulário com os botões de ação -->
                     <div class="d-flex justify-content-between align-items-center pt-2">
+                        <!-- 
+                            asp-action="Index" cria um link (tag <a>) para a action Index, 
+                            permitindo que o usuário volte à lista de marcas.
+                        -->
                         <a class="btn btn-outline-secondary" asp-action="Index">Voltar</a>
+                        
+                        <!-- Botão de submissão do formulário. Ele enviará os dados inseridos para a action 'Criar' (POST) -->
                         <button type="submit" class="btn btn-danger">Salvar</button>
                     </div>
                 </form>
