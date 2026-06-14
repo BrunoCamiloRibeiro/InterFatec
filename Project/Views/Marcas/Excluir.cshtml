@@ -1,9 +1,14 @@
 @model MarcasViewModel
+@*
+    A diretiva @model define que esta view utilizará o MarcasViewModel 
+    para exibir as informações da marca que o usuário deseja excluir.
+*@
 
 @{
     ViewData["Title"] = "Excluir marca";
 }
 
+<!-- Centralização da tela com grid do Bootstrap -->
 <div class="row justify-content-center">
     <div class="col-lg-7 col-xl-6">
         <div class="card border-danger-subtle shadow-sm">
@@ -12,12 +17,15 @@
             </div>
 
             <div class="card-body p-4">
+                <!-- Alerta visual do Bootstrap (alert-danger) para alertar o usuário sobre a ação destrutiva -->
                 <div class="alert alert-danger mb-4" role="alert">
                     Você tem certeza que deseja excluir esta marca? Esta ação não pode ser desfeita.
                 </div>
 
+                <!-- Lista de definição (<dl>) para mostrar os detalhes do registro em pares de termos/descrições -->
                 <dl class="row mb-0">
                     <dt class="col-sm-4 text-body-secondary">Id</dt>
+                    <!-- @Model.Id exibe o valor da propriedade Id contida no ViewModel -->
                     <dd class="col-sm-8">@Model.Id</dd>
 
                     <dt class="col-sm-4 text-body-secondary">Nome</dt>
@@ -27,9 +35,18 @@
                     <dd class="col-sm-8">@Model.Status</dd>
                 </dl>
 
+                <!-- 
+                    Formulário para confirmar a exclusão. 
+                    Ele envia um POST para a action 'Excluir'.
+                -->
                 <form asp-action="Excluir" method="post" class="d-flex flex-wrap justify-content-end gap-2 mt-4">
+                    <!-- O campo oculto (hidden) envia o Id da marca de volta ao servidor, permitindo a identificação do registro a excluir -->
                     <input type="hidden" asp-for="Id" />
+                    
+                    <!-- Botão cancelar apenas redireciona para a action Index (listagem de marcas) usando uma requisição GET normal -->
                     <a class="btn btn-outline-secondary" asp-action="Index">Cancelar</a>
+                    
+                    <!-- Ao clicar neste botão, o formulário é submetido efetuando a exclusão de fato -->
                     <button type="submit" class="btn btn-danger">Confirmar exclusão</button>
                 </form>
             </div>
