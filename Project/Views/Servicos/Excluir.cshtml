@@ -4,6 +4,7 @@
     ViewData["Title"] = "Excluir serviço";
 }
 
+<!-- Centraliza o conteúdo de aviso de exclusão em uma coluna definida do grid do Bootstrap -->
 <div class="row justify-content-center">
     <div class="col-xl-8">
         <div class="card border-danger-subtle shadow-sm">
@@ -12,10 +13,12 @@
             </div>
 
             <div class="card-body p-4">
+                <!-- Alerta visual alertando o usuário de que é uma ação destrutiva -->
                 <div class="alert alert-danger mb-4" role="alert">
                     Tem certeza que deseja excluir este serviço? Esta ação não pode ser desfeita.
                 </div>
 
+                <!-- Lista de descrição para apresentar o registro atual em modo somente leitura -->
                 <dl class="row mb-0">
                     <dt class="col-sm-4 text-body-secondary">Id</dt>
                     <dd class="col-sm-8">@Model.Id</dd>
@@ -33,9 +36,16 @@
                     <dd class="col-sm-8">@Model.Status</dd>
                 </dl>
 
+                <!-- 
+                    Formulário confirmando a exclusão. 
+                    'asp-action="Excluir"' processa a submissão, enviando apenas o ID embutido de forma escondida. 
+                -->
                 <form asp-action="Excluir" method="post" class="d-flex flex-wrap justify-content-end gap-2 mt-4">
+                    <!-- O Id é necessário para que a action Excluir[HttpPost] saiba qual registro deletar -->
                     <input type="hidden" asp-for="Id" />
+                    <!-- Botão de cancelar volta à tela de listagem sem enviar nada -->
                     <a class="btn btn-outline-secondary" asp-action="Index">Cancelar</a>
+                    <!-- O submit irá iniciar o processo de exclusão no controller -->
                     <button type="submit" class="btn btn-danger">Confirmar exclusão</button>
                 </form>
             </div>
