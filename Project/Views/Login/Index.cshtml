@@ -1,25 +1,32 @@
+@* Define o tipo de modelo (ViewModel) esperado nesta View para auxiliar a autenticação *@
 @model LoginViewModel
 
 @{
+    @* Configura o título que aparece no Header/Aba da página *@
     ViewData["Title"] = "Login";
 }
 
+<!-- Estrutura principal do contêiner com margem superior (mt-5) -->
 <div class="container mt-5">
     <div class="row justify-content-center">
+        <!-- Coluna centralizada contendo a caixa de login -->
         <div class="col-md-6">
             <div class="card shadow">
+                <!-- Cabeçalho do Card com cores e bordas padronizadas usando classes Bootstrap -->
                 <div class="card-header bg-danger-subtle text-danger-emphasis border-bottom border-danger-subtle">
                     <h4 class="mb-0 fw-semibold">Faça seu Login</h4>
                 </div>
                 <div class="card-body">
+                    @* Lógica condicional em C# para exibir um alerta de sucesso caso venha do registro (usando TempData) *@
                     @if (TempData["RegistroSucesso"] != null)
                     {
                         <div class="alert alert-success" role="alert">
                             @TempData["RegistroSucesso"]
                         </div>
                     }
-                    <!-- Nav Tabs -->
+                    <!-- Nav Tabs (Sistema de Abas do Bootstrap) para dividir os tipos de login -->
                     <ul class="nav nav-tabs mb-4" id="loginTabs" role="tablist">
+                        <!-- Aba Cliente -->
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="cliente-tab" data-bs-toggle="tab" 
                                     data-bs-target="#cliente" type="button" role="tab" 
@@ -28,6 +35,7 @@
                             </button>
                         </li>
 
+                        <!-- Aba Funcionário -->
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="funcionario-tab" data-bs-toggle="tab" 
                                     data-bs-target="#funcionario" type="button" role="tab" 
@@ -37,14 +45,18 @@
                         </li>
                     </ul>
 
-                    <!-- Tab Content -->
+                    <!-- Tab Content: Conteúdo correspondente a cada aba -->
                     <div class="tab-content" id="loginTabContent">
-                        <!-- ABA 1: CLIENTE -->
+                        
+                        <!-- ABA 1: CLIENTE (Esta aba possui classe "show active", ou seja, inicia visível) -->
                         <div class="tab-pane fade show active" id="cliente" role="tabpanel" aria-labelledby="cliente-tab">
+                            @* Formulário específico para submissão dos dados de Cliente *@
                             <form method="post" action="@Url.Action("ClienteLogin", "Login")">
 
+                                @* Sumário de validações para erros do Model que sejam globais *@
                                 @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
 
+                                <!-- Campo Telefone com atributos HTML de tipagem (tel) e obrigatoriedade (required) -->
                                 <div class="mb-3">
                                     <label for="telefone" class="form-label">Telefone</label>
                                     <input type="tel" 
@@ -58,6 +70,7 @@
                                     </small>
                                 </div>
 
+                                <!-- Campo Senha (password) e obrigatoriedade de ter pelo menos 6 caracteres (minlength) -->
                                 <div class="mb-3">
                                     <label for="senhaCliente" class="form-label">Senha</label>
                                     <input type="password" 
@@ -72,12 +85,14 @@
                                     </small>
                                 </div>
 
+                                <!-- Botão Submit exclusivo para a rota de Cliente -->
                                 <button type="submit" class="btn btn-danger w-100">
                                     Acessar meus Agendamentos
                                 </button>
                             </form>
 
                             <hr>
+                            <!-- Link que utiliza Url.Action para enviar o usuário à tela de Cadastro -->
                             <p class="text-center text-muted mb-0">
                                 <small>Primeira vez? <a href="@Url.Action("Cadastro", "Login")" class="text-danger text-decoration-none">Cadastre-se aqui</a> para usar o sistema.</small>
                             </p>
@@ -85,8 +100,9 @@
 
 
 
-                        <!-- ABA 3: FUNCIONÁRIO -->
+                        <!-- ABA 2: FUNCIONÁRIO (Inicia oculta - classe "fade") -->
                         <div class="tab-pane fade" id="funcionario" role="tabpanel" aria-labelledby="funcionario-tab">
+                            @* Formulário de submissão do login direcionado para a Action "FuncionarioLogin" *@
                             <form method="post" action="@Url.Action("FuncionarioLogin", "Login")">
 
                                 @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
@@ -112,6 +128,7 @@
                                            required>
                                 </div>
 
+                                <!-- Botão Submit para acessar a área administrativa -->
                                 <button type="submit" class="btn btn-danger w-100">
                                     Entrar na Área Administrativa
                                 </button>
@@ -120,6 +137,7 @@
                     </div>
                 </div>
 
+                <!-- Rodapé informativo do sistema de Login -->
                 <div class="card-footer bg-light text-center">
                     <small class="text-muted">
                         Sistema de Agendamentos • Fabys Unha
@@ -130,27 +148,32 @@
     </div>
 </div>
 
+@* Script carregado na seção nomeada "Scripts" definida no arquivo _Layout.cshtml *@
 @section Scripts {
     <script>
+        // Função ativada quando o DOM da página inteira é carregado
         document.addEventListener('DOMContentLoaded', function() {
+            // Lógica Razor para capturar a aba ativa previamente salva via ViewBag
             const activeTab = '@(ViewBag.ActiveTab ?? string.Empty)';
             if (activeTab === 'funcionario') {
                 new bootstrap.Tab(document.getElementById('funcionario-tab')).show();
                 return;
             }
 
+            // Lê a URL buscando o parâmetro "tipo" (QueryString) para ativar a aba correta se necessário
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('tipo') === 'funcionario') {
                 new bootstrap.Tab(document.getElementById('funcionario-tab')).show();
             }
 
-            // Máscara de telefone
+            // Máscara de telefone utilizando JavaScript Vanilla
             const telInputs = document.querySelectorAll('input[type="tel"]');
             telInputs.forEach(input => {
                 input.addEventListener('input', function(e) {
-                    let val = e.target.value.replace(/\D/g, '');
+                    let val = e.target.value.replace(/\D/g, ''); // Remove tudo que não for dígito
                     if (val.length > 11) val = val.slice(0, 11);
                     
+                    // Lógica para formatar visualmente como: (XX) XXXXX-XXXX ou (XX) XXXX-XXXX
                     if (val.length > 10) {
                         val = val.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
                     } else if (val.length > 6) {
