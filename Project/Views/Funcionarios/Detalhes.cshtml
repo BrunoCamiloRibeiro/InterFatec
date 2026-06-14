@@ -1,9 +1,12 @@
+@* Declara o modelo de dados esperado por esta view para exibir os detalhes do funcionário *@
 @model FuncionarioDetalhesViewModel
 
 @{
+    @* Define o título da aba/página *@
     ViewData["Title"] = "Detalhes do funcionário";
 }
 
+<!-- Cabeçalho da página com título e botões de ação -->
 <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
     <div>
         <p class="text-uppercase small fw-semibold text-danger-emphasis mb-1">Equipe</p>
@@ -11,20 +14,26 @@
         <p class="text-body-secondary mb-0">Resumo com dados pessoais, salário e serviços já agendados.</p>
     </div>
 
+    <!-- Botões de navegação e ações usando TagHelpers -->
     <div class="d-flex flex-wrap gap-2">
+        @* Link que direciona para a action "Editar", passando o Id do modelo na rota *@
         <a class="btn btn-outline-danger" asp-action="Editar" asp-route-id="@Model.Id">Editar</a>
+        @* Link de retorno para a listagem (Index) *@
         <a class="btn btn-outline-secondary" asp-action="Index">Voltar</a>
     </div>
 </div>
 
+<!-- Estrutura de colunas para exibir resumo e serviços -->
 <div class="row g-4">
     <div class="col-xl-5">
+        <!-- Cartão contendo os dados principais do funcionário -->
         <div class="card border-danger-subtle shadow-sm h-100">
             <div class="card-header bg-danger-subtle border-danger-subtle d-flex justify-content-between align-items-center">
                 <h2 class="h5 mb-0">Resumo</h2>
                 <span class="badge rounded-pill bg-danger-subtle text-danger-emphasis">#@Model.Id</span>
             </div>
             <div class="card-body p-4">
+                <!-- Lista de descrição (dl, dt, dd) para organizar os rótulos e valores -->
                 <dl class="row mb-0">
                     <dt class="col-sm-5 text-body-secondary">Nome</dt>
                     <dd class="col-sm-7">@Model.Nome</dd>
@@ -36,6 +45,7 @@
                     <dd class="col-sm-7">@Model.Status</dd>
 
                     <dt class="col-sm-5 text-body-secondary">Salário</dt>
+                    @* Formatação de moeda ("C" - Currency) usando código C# inline *@
                     <dd class="col-sm-7">@Model.Salario.ToString("C")</dd>
 
                     <dt class="col-sm-5 text-body-secondary">Especialidade</dt>
@@ -46,14 +56,17 @@
     </div>
 
     <div class="col-xl-7">
+        <!-- Cartão exibindo a lista de serviços agendados para este funcionário -->
         <div class="card border-danger-subtle shadow-sm">
             <div class="card-header bg-danger-subtle border-danger-subtle">
                 <h2 class="h5 mb-0">Serviços agendados</h2>
             </div>
             <div class="card-body p-0">
+                @* Lógica condicional (if) do Razor para verificar se a lista contém itens *@
                 @if (Model.ServicosAgendados != null && Model.ServicosAgendados.Any())
                 {
                     <div class="table-responsive">
+                        <!-- Tabela HTML para listar os agendamentos -->
                         <table class="table table-sm table-hover align-middle mb-0">
                             <thead class="table-danger">
                                 <tr>
@@ -64,10 +77,12 @@
                                 </tr>
                             </thead>
                             <tbody>
+                            @* Laço de repetição (foreach) para iterar sobre os serviços e criar linhas na tabela *@
                             @foreach (var item in Model.ServicosAgendados)
                             {
                                 <tr>
                                     <td>@item.ServicoNome</td>
+                                    @* Formatação condicional para exibir o horário da forma correta *@
                                     <td>@(TimeSpan.TryParse(item.Horario, out var ts) ? ts.ToString(@"hh\:mm") : item.Horario)</td>
                                     <td>@item.Obs</td>
                                     <td>@item.Valor.ToString("C")</td>
@@ -79,6 +94,7 @@
                 }
                 else
                 {
+                    <!-- Mensagem exibida caso não existam agendamentos -->
                     <div class="p-4 text-body-secondary">Nenhum serviço agendado encontrado.</div>
                 }
             </div>
