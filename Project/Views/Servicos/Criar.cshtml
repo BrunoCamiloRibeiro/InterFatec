@@ -4,22 +4,38 @@
     ViewData["Title"] = "Criar serviço";
 }
 
+<!-- Estrutura principal utilizando grid do Bootstrap para centralizar o formulário -->
 <div class="row justify-content-center">
+    <!-- Define a largura da coluna no tamanho extra grande (xl) -->
     <div class="col-xl-7">
+        <!-- Card que envolve o formulário, aplicando bordas e sombra -->
         <div class="card border-danger-subtle shadow-sm">
+            <!-- Cabeçalho do card com cor de fundo destacada -->
             <div class="card-header bg-danger-subtle border-danger-subtle">
                 <h1 class="h3 mb-0 text-danger-emphasis">Criar serviço</h1>
             </div>
+            <!-- Corpo do card onde o formulário é definido -->
             <div class="card-body p-4">
+                <!-- 
+                    Formulário de criação.
+                    O TagHelper 'asp-action="Criar"' define a ação do controlador a ser chamada no envio (submit). 
+                    'method="post"' indica o envio seguro de dados ao servidor.
+                -->
                 <form asp-action="Criar" method="post" class="vstack gap-3">
+                    <!-- 'asp-validation-summary="All"' exibe todos os erros de validação retornados pelo servidor -->
                     <div asp-validation-summary="All" class="alert alert-danger mb-0" role="alert"></div>
 
+                    <!-- Grupo de entrada para a Descrição do Serviço -->
                     <div>
+                        <!-- 'asp-for' no label cria a etiqueta vinculada à propriedade Descricao do ViewModel -->
                         <label asp-for="Descricao" class="form-label"></label>
+                        <!-- 'asp-for' no input cria o campo de texto vinculado e define seus atributos de nome e id automaticamente -->
                         <input asp-for="Descricao" class="form-control" />
+                        <!-- 'asp-validation-for' exibe a mensagem de erro específica para o campo Descricao -->
                         <span asp-validation-for="Descricao" class="text-danger small"></span>
                     </div>
 
+                    <!-- Linha para agrupar campos Preço e Tempo lado a lado -->
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label asp-for="Preco" class="form-label"></label>
@@ -29,18 +45,23 @@
 
                         <div class="col-md-6">
                             <label asp-for="Tempo" class="form-label"></label>
+                            <!-- 'type="time"' força o navegador a exibir um seletor de horas/minutos -->
                             <input asp-for="Tempo" type="time" class="form-control" />
                             <span asp-validation-for="Tempo" class="text-danger small"></span>
                         </div>
                     </div>
 
+                    <!-- Grupo de entrada para selecionar o Status do Serviço -->
                     <div>
                         <label asp-for="Status" class="form-label"></label>
+                        <!-- 'asp-items' gera as opções do select com base no Enum 'ServicoStatus' -->
                         <select asp-for="Status" asp-items="Html.GetEnumSelectList<ServicoStatus>()" class="form-select"></select>
                         <span asp-validation-for="Status" class="text-danger small"></span>
                     </div>
 
+                    <!-- Botões de ação do formulário -->
                     <div class="d-flex justify-content-between align-items-center pt-2">
+                        <!-- 'asp-action="Index"' gera um link (href) de volta para a lista (Index) -->
                         <a class="btn btn-outline-secondary" asp-action="Index">Voltar</a>
                         <button type="submit" class="btn btn-danger">Salvar</button>
                     </div>
