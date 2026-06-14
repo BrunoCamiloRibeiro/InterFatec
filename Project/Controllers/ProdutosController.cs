@@ -56,9 +56,13 @@ public class ProdutosController : Controller
     [HttpGet]
     public async Task<IActionResult> Criar()
     {
+        var marcasAtivas = (await _marcasService.ObterTodasMarcas())
+            .Where(m => m.Status == FabysUnha.Enums.MarcaStatus.Ativo)
+            .ToList();
+
         var viewModel = new ProdutoRegistroViewModel
         {
-            MarcasList = new SelectList(await _marcasService.ObterTodasMarcas(), "Id", "Nome")
+            MarcasList = new SelectList(marcasAtivas, "Id", "Nome")
         };
         
         return View(viewModel);
@@ -69,7 +73,10 @@ public class ProdutosController : Controller
     {
         if (!ModelState.IsValid) 
         {
-            viewModel.MarcasList = new SelectList(await _marcasService.ObterTodasMarcas(), "Id", "Nome");
+            var marcasAtivas = (await _marcasService.ObterTodasMarcas())
+                .Where(m => m.Status == FabysUnha.Enums.MarcaStatus.Ativo)
+                .ToList();
+            viewModel.MarcasList = new SelectList(marcasAtivas, "Id", "Nome");
             return View(viewModel);
         }
 
@@ -82,7 +89,10 @@ public class ProdutosController : Controller
         catch (Exception ex)
         {
             ModelState.AddModelError(string.Empty, $"Erro ao criar produto: {ex.Message}");
-            viewModel.MarcasList = new SelectList(await _marcasService.ObterTodasMarcas(), "Id", "Nome");
+            var marcasAtivas = (await _marcasService.ObterTodasMarcas())
+                .Where(m => m.Status == FabysUnha.Enums.MarcaStatus.Ativo)
+                .ToList();
+            viewModel.MarcasList = new SelectList(marcasAtivas, "Id", "Nome");
             return View(viewModel);
         }
     }
@@ -95,7 +105,11 @@ public class ProdutosController : Controller
 
         var viewModel = _mapper.Map<ProdutoEditarViewModel>(produto);
         
-        viewModel.MarcasList = new SelectList(await _marcasService.ObterTodasMarcas(), "Id", "Nome", viewModel.MarcaId);
+        var marcasAtivasEAtual = (await _marcasService.ObterTodasMarcas())
+            .Where(m => m.Status == FabysUnha.Enums.MarcaStatus.Ativo || m.Id == viewModel.MarcaId)
+            .ToList();
+        
+        viewModel.MarcasList = new SelectList(marcasAtivasEAtual, "Id", "Nome", viewModel.MarcaId);
         
         return View(viewModel);
     }
@@ -105,7 +119,10 @@ public class ProdutosController : Controller
     {
         if (!ModelState.IsValid) 
         {
-            viewModel.MarcasList = new SelectList(await _marcasService.ObterTodasMarcas(), "Id", "Nome", viewModel.MarcaId);
+            var marcasAtivasEAtual = (await _marcasService.ObterTodasMarcas())
+                .Where(m => m.Status == FabysUnha.Enums.MarcaStatus.Ativo || m.Id == viewModel.MarcaId)
+                .ToList();
+            viewModel.MarcasList = new SelectList(marcasAtivasEAtual, "Id", "Nome", viewModel.MarcaId);
             return View(viewModel);
         }
 
@@ -120,7 +137,10 @@ public class ProdutosController : Controller
         catch (Exception ex)
         {
             ModelState.AddModelError(string.Empty, $"Erro ao atualizar produto: {ex.Message}");
-            viewModel.MarcasList = new SelectList(await _marcasService.ObterTodasMarcas(), "Id", "Nome", viewModel.MarcaId);
+            var marcasAtivasEAtual = (await _marcasService.ObterTodasMarcas())
+                .Where(m => m.Status == FabysUnha.Enums.MarcaStatus.Ativo || m.Id == viewModel.MarcaId)
+                .ToList();
+            viewModel.MarcasList = new SelectList(marcasAtivasEAtual, "Id", "Nome", viewModel.MarcaId);
             return View(viewModel);
         }
     }
