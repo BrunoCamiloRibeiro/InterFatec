@@ -1,60 +1,83 @@
 @model IEnumerable<ProdutoListagemViewModel>
+@*
+    Como é uma tela de listagem (Index), a view recebe uma coleção (IEnumerable) de ProdutoListagemViewModel,
+    que contém os dados resumidos dos produtos projetados para tabelas.
+*@
 
 @{
-	ViewData["Title"] = "Produtos";
+    ViewData["Title"] = "Produtos";
 }
 
+<!-- Cabeçalho com título, subtítulo e botão de ação para criar um novo registro -->
 <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
-	<div>
-		<p class="text-uppercase small fw-semibold text-danger-emphasis mb-1">Cadastro</p>
-		<h1 class="display-6 fw-bold mb-1">Produtos</h1>
-		<p class="text-body-secondary mb-0">Gerencie o catálogo, preços e marca de cada item.</p>
-	</div>
+    <div>
+        <p class="text-uppercase small fw-semibold text-danger-emphasis mb-1">Cadastro</p>
+        <h1 class="display-6 fw-bold mb-1">Produtos</h1>
+        <p class="text-body-secondary mb-0">Gerencie o catálogo, preços e marca de cada item.</p>
+    </div>
 
-	<a class="btn btn-danger btn-lg" asp-action="Criar">Novo produto</a>
+    <!-- Botão que direciona o usuário para a view de Criar produto (GET) -->
+    <a class="btn btn-danger btn-lg" asp-action="Criar">Novo produto</a>
 </div>
 
+@* 
+    Operador null-conditional e método Any() do LINQ. 
+    Verifica de forma segura se existem itens na lista de produtos.
+*@
 @if (Model?.Any() == true)
 {
-	<div class="card border-danger-subtle shadow-sm">
-		<div class="table-responsive">
-			<table class="table table-hover align-middle mb-0">
-				<thead class="table-danger">
-					<tr>
-						<th>Código</th>
-						<th>Nome</th>
-						<th>Marca</th>
-						<th>Preço</th>
-						<th>Status</th>
-						<th class="text-end">Ações</th>
-					</tr>
-				</thead>
-				<tbody>
-				@foreach (var item in Model)
-				{
-					<tr>
-						<td>@item.Codigo</td>
-						<td class="fw-semibold">@item.Nome</td>
-						<td>@item.NomeMarca</td>
-						<td>@item.PrecoFormatado</td>
-						<td>@item.Status</td>
-						<td>
-							<div class="d-flex flex-wrap justify-content-end gap-2">
-								<a class="btn btn-sm btn-outline-secondary" asp-action="Detalhes" asp-route-id="@item.Codigo">Detalhes</a>
-								<a class="btn btn-sm btn-outline-danger" asp-action="Editar" asp-route-id="@item.Codigo">Editar</a>
-								<a class="btn btn-sm btn-danger" asp-action="Excluir" asp-route-id="@item.Codigo">Excluir</a>
-							</div>
-						</td>
-					</tr>
-				}
-				</tbody>
-			</table>
-		</div>
-	</div>
+    <!-- Tabela estilizada com Bootstrap para apresentar os dados -->
+    <div class="card border-danger-subtle shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-danger">
+                    <tr>
+                        <th>Código</th>
+                        <th>Nome</th>
+                        <th>Marca</th>
+                        <th>Preço</th>
+                        <th>Status</th>
+                        <th class="text-end">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @* 
+                    Laço foreach no C# (Razor) para iterar sobre a coleção de produtos passados para a View.
+                    Cada iteração gera uma nova linha (<tr>) na tabela HTML.
+                *@
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <!-- Injetando as propriedades do objeto 'item' diretamente nas células <td> -->
+                        <td>@item.Codigo</td>
+                        <td class="fw-semibold">@item.Nome</td>
+                        <td>@item.NomeMarca</td>
+                        <!-- 'PrecoFormatado' provê o valor numérico convertido para formato de moeda pelo ViewModel -->
+                        <td>@item.PrecoFormatado</td>
+                        <td>@item.Status</td>
+                        <td>
+                            <!-- Grupo de botões de ações para aquele registro específico -->
+                            <div class="d-flex flex-wrap justify-content-end gap-2">
+                                <!-- 
+                                    As TagHelpers asp-action geram links para as respectivas Actions (Detalhes, Editar, Excluir).
+                                    O atributo asp-route-id acopla o Código daquele produto na URL, exemplo: /Produtos/Detalhes/5
+                                -->
+                                <a class="btn btn-sm btn-outline-secondary" asp-action="Detalhes" asp-route-id="@item.Codigo">Detalhes</a>
+                                <a class="btn btn-sm btn-outline-danger" asp-action="Editar" asp-route-id="@item.Codigo">Editar</a>
+                                <a class="btn btn-sm btn-danger" asp-action="Excluir" asp-route-id="@item.Codigo">Excluir</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
 }
 else
 {
-	<div class="alert alert-light border border-danger-subtle mb-0">
-		Nenhum produto cadastrado.
-	</div>
+    <!-- Bloco alternativo renderizado se a lista for nula ou não contiver itens -->
+    <div class="alert alert-light border border-danger-subtle mb-0">
+        Nenhum produto cadastrado.
+    </div>
 }
