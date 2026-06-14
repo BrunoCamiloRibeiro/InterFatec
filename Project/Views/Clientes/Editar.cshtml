@@ -1,9 +1,11 @@
+@* O modelo ClienteEditarViewModel é usado para carregar os dados existentes e enviá-los de volta na edição *@
 @model ClienteEditarViewModel
 
 @{
     ViewData["Title"] = "Editar cliente";
 }
 
+<!-- Estrutura principal da página com classes Bootstrap para layout e aparência -->
 <div class="row justify-content-center">
     <div class="col-lg-8 col-xl-7">
         <div class="card border-danger-subtle shadow-sm">
@@ -11,11 +13,15 @@
                 <h1 class="h3 mb-0 text-danger-emphasis">Editar cliente</h1>
             </div>
             <div class="card-body p-4">
+                <!-- Formulário enviando os dados para a action "Editar" via método POST -->
                 <form asp-action="Editar" method="post" class="vstack gap-3">
+                    <!-- Campo oculto para manter o Id do cliente. Essencial para que o backend saiba qual registro atualizar -->
                     <input type="hidden" asp-for="Id" />
+                    <!-- Exibe mensagens de erro globais do ModelState -->
                     <div asp-validation-summary="All" class="alert alert-danger mb-0" role="alert"></div>
 
                     <div>
+                        <!-- Labels e inputs amarrados às propriedades do modelo através do TagHelper asp-for -->
                         <label asp-for="Nome" class="form-label"></label>
                         <input asp-for="Nome" class="form-control" />
                         <span asp-validation-for="Nome" class="text-danger small"></span>
@@ -34,7 +40,9 @@
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center pt-2">
+                        <!-- Botão que apenas redireciona para a Action "Index", cancelando a edição -->
                         <a class="btn btn-outline-secondary" asp-action="Index">Voltar</a>
+                        <!-- Botão de submissão do formulário -->
                         <button type="submit" class="btn btn-danger">Salvar alterações</button>
                     </div>
                 </form>
