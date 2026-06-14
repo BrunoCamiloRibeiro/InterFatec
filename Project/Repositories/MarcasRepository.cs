@@ -49,8 +49,9 @@ public class MarcasRepository : IMarcasRepository
 
     public async Task ExcluirMarca(Marcas marca)
     {
-        _db.Marcas.Remove(marca);
-        await _db.SaveChangesAsync();
+        marca.Status = MarcaStatus.Inativo;
+        await _db.Database.ExecuteSqlInterpolatedAsync(
+            $"EXEC sp_UpdateMarca {marca.Id}, {marca.Nome}, {(int)marca.Status}");
     }
     
 }
