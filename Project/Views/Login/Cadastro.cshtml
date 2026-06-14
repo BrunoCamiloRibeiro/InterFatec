@@ -1,24 +1,38 @@
+@* Declara o modelo de dados utilizado por esta View para realizar o cadastro *@
 @model LoginViewModel
 
 @{
+    @* Define o título da página exibido na aba do navegador *@
     ViewData["Title"] = "Cadastro";
 }
 
+<!-- Contêiner principal do Bootstrap, adicionando margem no topo -->
 <div class="container mt-5">
+    <!-- Linha com centralização do conteúdo -->
     <div class="row justify-content-center">
+        <!-- Coluna ajustada para tamanho médio (6 de 12 colunas) -->
         <div class="col-md-6">
+            <!-- Cartão com sombra suave ao redor do formulário -->
             <div class="card shadow">
                 <div class="card-header bg-danger-subtle text-danger-emphasis border-bottom border-danger-subtle">
                     <h4 class="mb-0 fw-semibold">Crie sua Conta</h4>
                 </div>
                 <div class="card-body">
+                    @* 
+                        Início do formulário. 
+                        A propriedade action aponta diretamente para o método "RegistrarUsuario" no Controller "Login".
+                        O método POST envia as informações de forma segura.
+                    *@
                     <form method="post" action="@Url.Action("RegistrarUsuario", "Login")">
+                        @* Html Helper para exibir os erros de validação globais do modelo *@
                         @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
 
                         <div class="mb-3">
                             <label class="form-label">Tipo de cadastro</label>
                             <div class="d-flex gap-3">
+                                <!-- Botões de rádio para escolha do tipo de usuário -->
                                 <div class="form-check">
+                                    @* Lógica condicional (operador ternário) para manter selecionado o rádio que já veio no Model *@
                                     <input class="form-check-input" type="radio" name="CadastroTipo" id="cadastroTipoCliente" value="Cliente" @(Model.CadastroTipo == FabysUnha.Enums.TipoUsuario.Cliente ? "checked" : "")>
                                     <label class="form-check-label" for="cadastroTipoCliente">Cliente</label>
                                 </div>
@@ -29,6 +43,7 @@
                             </div>
                         </div>
 
+                        <!-- Campos do formulário com validação HTML (required, minlength, type="tel", etc) -->
                         <div class="mb-3">
                             <label for="cadastroNome" class="form-label">Nome</label>
                             <input type="text"
@@ -75,13 +90,16 @@
                                    required>
                         </div>
 
+                        <!-- Botão de submissão do formulário -->
                         <button type="submit" class="btn btn-danger w-100">
                             Criar Conta
                         </button>
                     </form>
 
                     <hr>
+                    <!-- Link para redirecionamento caso o usuário já possua conta -->
                     <p class="text-center text-muted mb-0">
+                        @* Url.Action gera a URL baseada no Action e Controller *@
                         <small>Já possui uma conta? <a href="@Url.Action("Index", "Login")" class="text-danger text-decoration-none">Faça Login</a></small>
                     </p>
                 </div>
@@ -96,16 +114,21 @@
     </div>
 </div>
 
+@* Bloco section que injeta o script Javascript na seção definida do Layout principal *@
 @section Scripts {
     <script>
+        // Adiciona um listener para aguardar o carregamento completo do DOM
         document.addEventListener('DOMContentLoaded', function() {
-            // Máscara de telefone
+            // Lógica para adicionar uma máscara de formatação em tempo real no input de telefone
             const telInputs = document.querySelectorAll('input[type="tel"]');
             telInputs.forEach(input => {
                 input.addEventListener('input', function(e) {
+                    // Remove tudo que não for número (D é qualquer caractere não numérico)
                     let val = e.target.value.replace(/\D/g, '');
+                    // Limita a string a 11 caracteres numéricos
                     if (val.length > 11) val = val.slice(0, 11);
                     
+                    // Aplica as expressões regulares de acordo com o tamanho da string
                     if (val.length > 10) {
                         val = val.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
                     } else if (val.length > 6) {
