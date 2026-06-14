@@ -1,23 +1,35 @@
+@* Declaração do modelo fortemente tipado utilizado por esta view *@
 @model FuncionarioRegistroViewModel
 
 @{
+    @* Define o título da página no ViewData *@
     ViewData["Title"] = "Criar funcionário";
 }
 
+<!-- Estrutura principal utilizando grid do Bootstrap para centralizar o conteúdo -->
 <div class="row justify-content-center">
     <div class="col-xl-8">
+        <!-- Cartão que encapsula o formulário de criação -->
         <div class="card border-danger-subtle shadow-sm">
             <div class="card-header bg-danger-subtle border-danger-subtle">
                 <h1 class="h3 mb-0 text-danger-emphasis">Criar funcionário</h1>
             </div>
             <div class="card-body p-4">
+                @* 
+                    Formulário usando TagHelpers: 
+                    asp-action define a ação do controlador ("Criar") para onde os dados serão enviados via POST 
+                *@
                 <form asp-action="Criar" method="post" class="vstack gap-3">
+                    @* Sumário de validação para exibir erros de modelo de forma global *@
                     <div asp-validation-summary="All" class="alert alert-danger mb-0" role="alert"></div>
 
+                    <!-- Sistema de grid para os campos do formulário -->
                     <div class="row g-3">
                         <div class="col-md-6">
+                            @* TagHelpers asp-for conectam o campo diretamente com a propriedade do modelo *@
                             <label asp-for="Nome" class="form-label"></label>
                             <input asp-for="Nome" class="form-control" />
+                            @* Exibe mensagens de erro específicas para a propriedade Nome *@
                             <span asp-validation-for="Nome" class="text-danger small"></span>
                         </div>
 
@@ -29,6 +41,7 @@
 
                         <div class="col-md-4">
                             <label asp-for="Status" class="form-label"></label>
+                            @* asp-items popula o select a partir de um Enum *@
                             <select asp-for="Status" asp-items="Html.GetEnumSelectList<PessoaStatus>()"
                                     class="form-select"></select>
                             <span asp-validation-for="Status" class="text-danger small"></span>
@@ -42,6 +55,7 @@
 
                         <div class="col-md-4">
                             <label asp-for="EspecialidadeId" class="form-label"></label>
+                            @* asp-items popula o select com a lista de especialidades vinda do modelo *@
                             <select asp-for="EspecialidadeId" asp-items="Model.EspecialidadesList" class="form-select">
                                 <option value="">Selecione</option>
                             </select>
@@ -55,7 +69,9 @@
                         </div>
                     </div>
 
+                    <!-- Botões de ação do formulário -->
                     <div class="d-flex justify-content-between align-items-center pt-2">
+                        @* Link para voltar à listagem, utilizando TagHelper asp-action *@
                         <a class="btn btn-outline-secondary" asp-action="Index">Voltar</a>
                         <button type="submit" class="btn btn-danger">Salvar</button>
                     </div>
