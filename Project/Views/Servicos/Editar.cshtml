@@ -4,6 +4,7 @@
     ViewData["Title"] = "Editar serviço";
 }
 
+<!-- Grid para centralização do formulário na página -->
 <div class="row justify-content-center">
     <div class="col-xl-7">
         <div class="card border-danger-subtle shadow-sm">
@@ -11,13 +12,25 @@
                 <h1 class="h3 mb-0 text-danger-emphasis">Editar serviço</h1>
             </div>
             <div class="card-body p-4">
+                <!-- 
+                    Formulário para submeter os dados editados.
+                    'asp-action="Editar"' enviará um POST para a Action Editar no Controller correspondente.
+                -->
                 <form asp-action="Editar" method="post" class="vstack gap-3">
+                    <!-- 
+                        Campo oculto (hidden) para o ID. 
+                        Isso garante que o ID seja enviado com o formulário sem que o usuário possa modificá-lo visivelmente.
+                    -->
                     <input type="hidden" asp-for="Id" />
+                    <!-- Exibe o sumário de validação (erros do servidor) antes dos campos do formulário -->
                     <div asp-validation-summary="All" class="alert alert-danger mb-0" role="alert"></div>
 
+                    <!-- Grupo de entrada da Descrição -->
                     <div>
+                        <!-- 'asp-for' nos rótulos e campos faz o vínculo automático (binding) com a propriedade no ViewModel -->
                         <label asp-for="Descricao" class="form-label"></label>
                         <input asp-for="Descricao" class="form-control" />
+                        <!-- Mostra o erro de validação (se houver) embaixo do respectivo campo -->
                         <span asp-validation-for="Descricao" class="text-danger small"></span>
                     </div>
 
@@ -30,6 +43,7 @@
 
                         <div class="col-md-6">
                             <label asp-for="Tempo" class="form-label"></label>
+                            <!-- 'type="time"' especifica a formatação de horário no navegador HTML5 -->
                             <input asp-for="Tempo" type="time" class="form-control" />
                             <span asp-validation-for="Tempo" class="text-danger small"></span>
                         </div>
@@ -37,10 +51,12 @@
 
                     <div>
                         <label asp-for="Status" class="form-label"></label>
+                        <!-- Utiliza 'asp-items' para mapear um Enum e criar uma lista de opções (<option>) no <select> -->
                         <select asp-for="Status" asp-items="Html.GetEnumSelectList<ServicoStatus>()" class="form-select"></select>
                         <span asp-validation-for="Status" class="text-danger small"></span>
                     </div>
 
+                    <!-- Botões na base do formulário, separados usando flexbox (justify-content-between) -->
                     <div class="d-flex justify-content-between align-items-center pt-2">
                         <a class="btn btn-outline-secondary" asp-action="Index">Voltar</a>
                         <button type="submit" class="btn btn-danger">Salvar alterações</button>
