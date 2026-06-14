@@ -1,3 +1,4 @@
+@* O Model é uma lista de objetos EspecialidadeViewModel *@
 @model IEnumerable<EspecialidadeViewModel>
 
 @{
@@ -11,9 +12,11 @@
 		<p class="text-body-secondary mb-0">Organize as especialidades usadas para vincular os funcionários.</p>
 	</div>
 
+	<!-- Link para criar um novo registro -->
 	<a class="btn btn-danger btn-lg" asp-action="Criar">Nova especialidade</a>
 </div>
 
+@* Verifica se o Model (a lista) tem pelo menos um item usando LINQ (Any) *@
 @if (Model?.Any() == true)
 {
 	<div class="card border-danger-subtle shadow-sm">
@@ -28,14 +31,17 @@
 					</tr>
 				</thead>
 				<tbody>
+				@* Laço de repetição (foreach) para gerar dinamicamente as linhas (<tr>) da tabela baseadas no Model *@
 				@foreach (var item in Model)
 				{
 					<tr>
+						<!-- Exibe as propriedades de cada item da lista iterada -->
 						<td>@item.Id</td>
 						<td class="fw-semibold">@item.Descricao</td>
 						<td>@item.Status</td>
 						<td class="text-end">
 							<div class="btn-group btn-group-sm" role="group">
+								<!-- O asp-route-id envia o Id da especialidade como parâmetro na URL para as actions Editar/Excluir -->
 								<a asp-action="Editar" asp-route-id="@item.Id" class="btn btn-outline-primary" title="Editar">
 									Editar
 								</a>
@@ -51,8 +57,10 @@
 		</div>
 	</div>
 }
+}
 else
 {
+	@* Se a lista estiver vazia, exibe um bloco informando a ausência de dados *@
 	<div class="alert alert-light border border-danger-subtle mb-0">
 		Nenhuma especialidade cadastrada.
 	</div>
