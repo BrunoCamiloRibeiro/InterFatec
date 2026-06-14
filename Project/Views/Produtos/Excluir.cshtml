@@ -1,4 +1,8 @@
 @model ProdutoDetalhesViewModel
+@*
+    A view de Exclusão costuma reutilizar ViewModels de Detalhes, 
+    já que o objetivo principal é apenas mostrar ao usuário o que será apagado.
+*@
 
 @{
     ViewData["Title"] = "Excluir produto";
@@ -12,10 +16,12 @@
             </div>
 
             <div class="card-body p-4">
+                <!-- Caixa de alerta chamando atenção para o perigo da exclusão -->
                 <div class="alert alert-danger mb-4" role="alert">
                     Tem certeza que deseja excluir este produto? Esta ação não pode ser desfeita.
                 </div>
 
+                <!-- Lista de pares Chave/Valor mostrando os dados do Produto -->
                 <dl class="row mb-0">
                     <dt class="col-sm-4 text-body-secondary">Código</dt>
                     <dd class="col-sm-8">@Model.Codigo</dd>
@@ -30,13 +36,23 @@
                     <dd class="col-sm-8">@Model.PrecoFormatado</dd>
 
                     <dt class="col-sm-4 text-body-secondary">Imagem</dt>
+                    <!-- 
+                        Exemplo de operador ternário Razor embutido: 
+                        Se a string for vazia/nula, exibe "Sem imagem", senão exibe o caminho da imagem.
+                    -->
                     <dd class="col-sm-8">@(string.IsNullOrWhiteSpace(Model.PathImagem) ? "Sem imagem" : Model.PathImagem)</dd>
 
                     <dt class="col-sm-4 text-body-secondary">Status</dt>
                     <dd class="col-sm-8 mb-0">@Model.Status</dd>
                 </dl>
 
+                <!-- 
+                    Formulário de exclusão.
+                    Sempre é recomendado usar POST (ou DELETE via API) em operações destrutivas
+                    para evitar que o navegador ou webcrawlers acionem a exclusão acidentalmente (como fariam com GET).
+                -->
                 <form asp-action="Excluir" method="post" class="d-flex flex-wrap justify-content-end gap-2 mt-4">
+                    <!-- Campo oculto essencial para dizer ao controller QUAL código excluir -->
                     <input type="hidden" asp-for="Codigo" />
                     <a class="btn btn-outline-secondary" asp-action="Index">Cancelar</a>
                     <button type="submit" class="btn btn-danger">Confirmar exclusão</button>
