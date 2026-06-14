@@ -51,6 +51,12 @@ public class LoginController : Controller
             return View("Cadastro", model);
         }
 
+        if (model.CadastroSenha.Length < 6)
+        {
+            ModelState.AddModelError(string.Empty, "A senha deve ter no mínimo 6 dígitos.");
+            return View("Cadastro", model);
+        }
+
         if (model.CadastroSenha != model.CadastroConfirmacaoSenha)
         {
             ModelState.AddModelError(string.Empty, "A confirmação da senha não confere.");
@@ -59,10 +65,12 @@ public class LoginController : Controller
 
         if (model.CadastroTipo == TipoUsuario.Funcionario)
         {
+            var telefoneLimpo = new string(model.CadastroTelefone.Where(char.IsDigit).ToArray());
+
             var funcionario = new Funcionarios
             {
                 Nome = model.CadastroNome.Trim(),
-                Telefone = model.CadastroTelefone.Trim(),
+                Telefone = telefoneLimpo,
                 Senha = model.CadastroSenha,
                 Status = PessoaStatus.Ativo,
                 Salario = 1412.00M,
@@ -74,7 +82,9 @@ public class LoginController : Controller
             return RedirectToAction("Index");
         }
 
-        var clienteExistente = await _clientesService.ObterClientePorTelefone(model.CadastroTelefone.Trim());
+        var telefoneLimpoCliente = new string(model.CadastroTelefone.Where(char.IsDigit).ToArray());
+
+        var clienteExistente = await _clientesService.ObterClientePorTelefone(telefoneLimpoCliente);
         if (clienteExistente != null)
         {
             ModelState.AddModelError(string.Empty, "Este telefone já está cadastrado.");
@@ -84,7 +94,7 @@ public class LoginController : Controller
         var cliente = new Clientes
         {
             Nome = model.CadastroNome.Trim(),
-            Telefone = model.CadastroTelefone.Trim(),
+            Telefone = telefoneLimpoCliente,
             Senha = model.CadastroSenha,
             Status = PessoaStatus.Ativo
         };
@@ -107,8 +117,10 @@ public class LoginController : Controller
             return View("Index", new LoginViewModel());
         }
 
+        var telefoneLimpo = new string(telefone.Where(char.IsDigit).ToArray());
+
         var (valido, cliente, agendamentos) = await _loginAuthService
-            .AutenticarClientePorTelefoneESenha(telefone, senha);
+            .AutenticarClientePorTelefoneESenha(telefoneLimpo, senha);
 
         if (!valido)
         {
@@ -141,7 +153,9 @@ public class LoginController : Controller
             return View("Index", new LoginViewModel());
         }
 
-        var funcionario = await _loginAuthService.AutenticarFuncionario(telefone, senha);
+        var telefoneLimpo = new string(telefone.Where(char.IsDigit).ToArray());
+
+        var funcionario = await _loginAuthService.AutenticarFuncionario(telefoneLimpo, senha);
 
         if (funcionario == null)
         {
