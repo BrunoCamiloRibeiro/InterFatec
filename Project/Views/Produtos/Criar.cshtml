@@ -1,4 +1,7 @@
 @model ProdutoRegistroViewModel
+@*
+    O model define os dados necessários para registrar um novo produto, incluindo as listas suspensas (MarcasList).
+*@
 
 @{
     ViewData["Title"] = "Criar produto";
@@ -11,9 +14,19 @@
                 <h1 class="h3 mb-0 text-danger-emphasis">Criar produto</h1>
             </div>
             <div class="card-body p-4">
+                <!-- 
+                    A TagHelper enctype="multipart/form-data" é OBRIGATÓRIA quando o formulário envia arquivos (como imagens).
+                    Sem isso, o navegador enviará apenas o nome do arquivo, e não o conteúdo do arquivo em si.
+                -->
                 <form asp-action="Criar" method="post" class="vstack gap-3" enctype="multipart/form-data">
+                    
+                    <!-- 
+                        asp-validation-summary="All" exibe um bloco com todos os erros de validação da model de uma vez.
+                        Pode incluir mensagens de erro que não estão atreladas a um único campo (erros em nível de classe).
+                    -->
                     <div asp-validation-summary="All" class="alert alert-danger mb-0" role="alert"></div>
 
+                    <!-- Nome do Produto -->
                     <div>
                         <label asp-for="Nome" class="form-label"></label>
                         <input asp-for="Nome" class="form-control" />
@@ -21,32 +34,46 @@
                     </div>
 
                     <div class="row g-3">
+                        <!-- Campo Marca -->
                         <div class="col-md-6">
                             <label asp-for="MarcaId" class="form-label"></label>
+                            <!-- 
+                                asp-items="Model.MarcasList" preenche as opções do select (<option>)
+                                utilizando a lista contida na propriedade MarcasList do nosso ViewModel.
+                            -->
                             <select asp-for="MarcaId" asp-items="Model.MarcasList" class="form-select">
                                 <option value="">Selecione</option>
                             </select>
                             <span asp-validation-for="MarcaId" class="text-danger small"></span>
                         </div>
 
+                        <!-- Campo Status -->
                         <div class="col-md-6">
                             <label asp-for="Status" class="form-label"></label>
+                            <!-- Gera os itens do dropdown através do Enum 'ProdutoStatus' -->
                             <select asp-for="Status" asp-items="Html.GetEnumSelectList<ProdutoStatus>()" class="form-select"></select>
                             <span asp-validation-for="Status" class="text-danger small"></span>
                         </div>
 
+                        <!-- Campo Preço -->
                         <div class="col-md-6">
                             <label asp-for="Preco" class="form-label"></label>
                             <input asp-for="Preco" class="form-control" />
                             <span asp-validation-for="Preco" class="text-danger small"></span>
                         </div>
 
+                        <!-- Campo Upload de Imagem -->
                         <div class="col-md-6">
                             <label asp-for="ImagemUpload" class="form-label"></label>
+                            <!-- 
+                                O atributo type="file" especifica que este input fará upload de arquivo.
+                                O accept="image/*" restringe no lado do cliente a seleção para arquivos de imagem apenas.
+                            -->
                             <input asp-for="ImagemUpload" class="form-control" type="file" accept="image/*" />
                             <span asp-validation-for="ImagemUpload" class="text-danger small"></span>
                         </div>
 
+                        <!-- Campo Link/URL da Imagem -->
                         <div class="col-md-6">
                             <label asp-for="PathImagem" class="form-label"></label>
                             <input asp-for="PathImagem" class="form-control" placeholder="Ou insira o link da imagem..." />
@@ -54,6 +81,7 @@
                         </div>
                     </div>
 
+                    <!-- Botões de Ação -->
                     <div class="d-flex justify-content-between align-items-center pt-2">
                         <a class="btn btn-outline-secondary" asp-action="Index">Voltar</a>
                         <button type="submit" class="btn btn-danger">Salvar</button>
