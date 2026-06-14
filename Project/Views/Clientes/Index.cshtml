@@ -1,3 +1,4 @@
+@* A view recebe uma coleção (IEnumerable) de ClienteListagemViewModel, representando vários registros *@
 @model IEnumerable<ClienteListagemViewModel>
 
 @{
@@ -11,9 +12,11 @@
 		<p class="text-body-secondary mb-0">Acompanhe contatos, status e histórico dos atendimentos.</p>
 	</div>
 
+	<!-- Botão que direciona o usuário para a tela de criação (action "Criar") -->
 	<a class="btn btn-danger btn-lg" asp-action="Criar">Novo cliente</a>
 </div>
 
+@* Verifica se a lista de clientes não é nula e se contém algum elemento *@
 @if (Model?.Any() == true)
 {
 	<div class="card border-danger-subtle shadow-sm">
@@ -31,6 +34,7 @@
 					</tr>
 				</thead>
 				<tbody>
+				@* Itera sobre cada cliente presente no modelo, criando uma linha <tr> para cada um *@
 				@foreach (var item in Model)
 				{
 					<tr>
@@ -42,6 +46,7 @@
 						<td>@(item.DataUltimoAgendamento?.ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
 						<td>
 							<div class="d-flex flex-wrap justify-content-end gap-2">
+								<!-- Botões de ação. asp-route-id anexa o Id do cliente atual (item.Id) à URL da rota gerada -->
 								<a class="btn btn-sm btn-outline-secondary" asp-action="Detalhes" asp-route-id="@item.Id">Detalhes</a>
 								<a class="btn btn-sm btn-outline-danger" asp-action="Editar" asp-route-id="@item.Id">Editar</a>
 								<a class="btn btn-sm btn-danger" asp-action="Excluir" asp-route-id="@item.Id">Excluir</a>
@@ -54,8 +59,10 @@
 		</div>
 	</div>
 }
+}
 else
 {
+	@* Caso não haja registros cadastrados, exibe esta mensagem de alerta *@
 	<div class="alert alert-light border border-danger-subtle mb-0">
 		Nenhum cliente cadastrado.
 	</div>
