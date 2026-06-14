@@ -29,7 +29,7 @@ public class LoginAuthService : ILoginAuthService
         command.CommandText = @"SELECT p.id, p.Nome, p.Telefone, p.status, p.senha
                                 FROM Pessoas AS p
                                 INNER JOIN Clientes AS c ON p.id = c.pessoa_id
-                                WHERE p.Telefone = @telefone";
+                                WHERE p.Telefone = @telefone AND p.status = 0";
 
         var telefoneParam = command.CreateParameter();
         telefoneParam.ParameterName = "@telefone";
@@ -80,7 +80,7 @@ public class LoginAuthService : ILoginAuthService
         command.CommandText = @"SELECT p.id, p.Nome, p.Telefone, p.status, p.senha, f.salario, f.especialidade_id
                                 FROM Pessoas AS p
                                 INNER JOIN Funcionarios AS f ON p.id = f.pessoa_id
-                                WHERE p.Telefone = @telefone";
+                                WHERE p.Telefone = @telefone AND p.status = 0";
 
         var telefoneParam = command.CreateParameter();
         telefoneParam.ParameterName = "@telefone";
