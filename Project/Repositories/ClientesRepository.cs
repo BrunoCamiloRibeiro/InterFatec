@@ -37,7 +37,28 @@ public class ClientesRepository : IClientesRepository
             return null;
 
         var agendamentosPorCliente = await CarregarAgendamentosPorClienteAsync(id);
-        return CriarCliente(cliente, agendamentosPorCliente);
+        var clienteRetorno = CriarCliente(cliente, agendamentosPorCliente);
+
+        var connection = _db.Database.GetDbConnection();
+        using var command = connection.CreateCommand();
+        command.CommandText = "SELECT senha FROM Pessoas WHERE id = @id";
+        var param = command.CreateParameter();
+        param.ParameterName = "@id";
+        param.Value = id;
+        command.Parameters.Add(param);
+
+        await _db.Database.OpenConnectionAsync();
+        using var reader = await command.ExecuteReaderAsync();
+        if (await reader.ReadAsync())
+        {
+            if (!reader.IsDBNull(0))
+            {
+                clienteRetorno.Senha = reader.GetString(0);
+            }
+        }
+        await _db.Database.CloseConnectionAsync();
+
+        return clienteRetorno;
     }
 
     public async Task RegistrarCliente(Clientes cliente)
@@ -54,8 +75,9 @@ public class ClientesRepository : IClientesRepository
 
     public async Task ExcluirCliente(Clientes cliente)
     {
-        _db.Clientes.Remove(cliente);
-        await _db.SaveChangesAsync();
+        cliente.Status = PessoaStatus.Inativo;
+        await _db.Database.ExecuteSqlInterpolatedAsync(
+            $"EXEC sp_UpdateCliente {cliente.Id}, {cliente.Nome}, {cliente.Telefone}, {(int)cliente.Status}, {cliente.Senha}");
     }
 
     public async Task<Clientes?> ObterClientePorTelefone(string telefone)
