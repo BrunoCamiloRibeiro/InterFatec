@@ -1,6 +1,15 @@
+@* 
+   Importações globais do Razor.
+   Aqui definimos os namespaces que estarão disponíveis em todas as views (telas) desta pasta e subpastas.
+   Isso evita a necessidade de escrever o namespace completo (using ...) em cada arquivo .cshtml.
+*@
 @using FabysUnha.Enums
 @using FabysUnha.ViewModels
 @using FabysUnha.ViewModels.Servicos
 @using System.Linq
 @using Microsoft.AspNetCore.Mvc.Rendering
+@* 
+   A diretiva @addTagHelper habilita as Tag Helpers do ASP.NET Core MVC.
+   Elas permitem usar atributos como asp-for, asp-action, asp-controller nas tags HTML (ex: <a asp-action="...">).
+*@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
