@@ -1,15 +1,21 @@
+@* O modelo é o AgendamentoRegistroViewModel (usado tanto para criar quanto para editar) *@
 @model AgendamentoRegistroViewModel
 
 @{
+    @* Verifica se o ViewModel passado indica uma edição (usando a herança de ViewModels) *@
     var isEdit = Model is AgendamentoEditarViewModel;
+    
+    @* Resgata do ViewData as configurações da Wizard passadas pela View pai (Criar ou Editar) *@
     var formAction = ViewData["WizardAction"] as string ?? (isEdit ? "Editar" : "Criar");
     var submitText = ViewData["WizardSubmitText"] as string ?? (isEdit ? "Salvar alterações" : "Salvar agendamento");
     var pageTitle = ViewData["WizardTitle"] as string ?? (isEdit ? "Editar agendamento" : "Criar agendamento");
 
+    @* Define a coleção de serviços iniciais a serem renderizados (garantindo que exiba pelo menos 1 item) *@
     var serviceItems = Model.ServicosSelecionados.Count > 0
         ? Model.ServicosSelecionados
         : new List<ServicoAgendadoViewModel> { new ServicoAgendadoViewModel() };
 
+    @* Define a coleção de produtos iniciais (se houver) *@
     var productItems = Model.ProdutosSelecionados.Count > 0
         ? Model.ProdutosSelecionados
         : new List<ProdutoAgendadoViewModel> { new ProdutoAgendadoViewModel() };
@@ -18,6 +24,7 @@
 <div class="card border-danger-subtle shadow-sm">
     <div class="card-header bg-danger-subtle border-danger-subtle d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-2">
         <div>
+            <!-- Título dinâmico da página (Criar ou Editar) -->
             <h1 class="h3 mb-1 text-danger-emphasis">@pageTitle</h1>
             <p class="mb-0 text-body-secondary">Use as etapas para cadastrar cliente, serviços e produtos com mais clareza.</p>
         </div>
@@ -26,14 +33,22 @@
     </div>
 
     <div class="card-body p-4">
+        @* 
+           A Tag Helper asp-action usará dinamicamente o valor de formAction ("Criar" ou "Editar").
+           O ID do formulário será manipulado pelo JavaScript abaixo para funcionar como um wizard de etapas (SPA like).
+        *@
         <form asp-action="@formAction" method="post" id="agendamento-wizard-form" class="vstack gap-4">
+            
+            @* Se for uma edição, incluímos o campo oculto (hidden) de Nr para o ASP.NET Core realizar o binding correto no backend *@
             @if (Model is AgendamentoEditarViewModel editarModel)
             {
                 <input type="hidden" name="Nr" value="@editarModel.Nr" />
             }
 
+            @* Sumário onde as mensagens de erro de validação (Server-side) aparecerão em bloco *@
             <div asp-validation-summary="All" class="alert alert-danger mb-0" role="alert"></div>
 
+            <!-- Botões que funcionam como os "tabs" das etapas -->
             <div class="d-flex flex-wrap gap-2" id="wizard-step-buttons">
                 <button type="button" class="btn btn-danger" data-step-button="0">1. Dados</button>
                 <button type="button" class="btn btn-outline-danger" data-step-button="1">2. Serviços</button>
@@ -41,10 +56,12 @@
                 <button type="button" class="btn btn-outline-danger" data-step-button="3">4. Revisão</button>
             </div>
 
+            @* =========================== ETAPA 1 =========================== *@
             <section class="wizard-step" data-wizard-step="0">
                 <div class="row g-3">
                     <div class="col-lg-5">
                         <label asp-for="ClienteId" class="form-label"></label>
+                        @* asp-items popula o select element com a lista fornecida pelo Model (ClientesList) *@
                         <select asp-for="ClienteId" asp-items="Model.ClientesList" class="form-select">
                             <option value="">Selecione</option>
                         </select>
@@ -53,12 +70,14 @@
 
                     <div class="col-lg-4">
                         <label asp-for="DataHora" class="form-label"></label>
+                        @* Campo de data e hora em formato ISO local *@
                         <input asp-for="DataHora" type="datetime-local" value="@(Model.DataHora == default ? DateTime.Now.ToString("yyyy-MM-ddTHH:mm") : Model.DataHora.ToString("yyyy-MM-ddTHH:mm"))" class="form-control" />
                         <span asp-validation-for="DataHora" class="text-danger small"></span>
                     </div>
 
                     <div class="col-lg-3">
                         <label asp-for="Status" class="form-label"></label>
+                        @* Html.GetEnumSelectList gera opções baseadas em um enum (AgendamentoStatus) *@
                         <select asp-for="Status" asp-items="Html.GetEnumSelectList<AgendamentoStatus>()" class="form-select"></select>
                         <span asp-validation-for="Status" class="text-danger small"></span>
                     </div>
@@ -69,6 +88,7 @@
                 </div>
             </section>
 
+            @* =========================== ETAPA 2 =========================== *@
             <section class="wizard-step d-none" data-wizard-step="1">
                 <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-2 mb-3">
                     <div>
@@ -80,9 +100,12 @@
                 </div>
 
                 <div id="service-rows" class="vstack gap-3">
+                    @* Loop gerando as linhas já preenchidas (ou a primeira linha vazia) *@
                     @for (var i = 0; i < serviceItems.Count; i++)
                     {
                         var item = serviceItems[i];
+                        
+                        @* Geração manual das listas mantendo a seleção do usuário *@
                         var servicosOptions = (Model.ServicosList ?? Enumerable.Empty<SelectListItem>())
                             .Select(option => new SelectListItem { Text = option.Text, Value = option.Value, Selected = option.Value == item.ServicoId.ToString() })
                             .ToList();
@@ -91,6 +114,7 @@
                             .Select(option => new SelectListItem { Text = option.Text, Value = option.Value, Selected = option.Value == item.FuncionarioId.ToString() })
                             .ToList();
 
+                        // O prefixo indica como o binding vai associar esta posição à lista do servidor.
                         var servicePrefix = $"ServicosSelecionados[{i}]";
 
                         <div class="js-service-row card border-danger-subtle bg-body-tertiary">
@@ -129,6 +153,7 @@
                     }
                 </div>
 
+                @* Template escondido para adicionar novas linhas de serviço via JS *@
                 <template id="service-template">
                     <div class="js-service-row card border-danger-subtle bg-body-tertiary">
                         <div class="card-body">
@@ -171,6 +196,7 @@
                 </div>
             </section>
 
+            @* =========================== ETAPA 3 =========================== *@
             <section class="wizard-step d-none" data-wizard-step="2">
                 <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-2 mb-3">
                     <div>
@@ -182,9 +208,11 @@
                 </div>
 
                 <div id="product-rows" class="vstack gap-3">
+                    @* Loop gerando linhas de produtos caso o usuário já tenha informado algum antes *@
                     @for (var i = 0; i < productItems.Count; i++)
                     {
                         var item = productItems[i];
+                        
                         var produtosOptions = (Model.ProdutosList ?? Enumerable.Empty<SelectListItem>())
                             .Select(option => new SelectListItem { Text = option.Text, Value = option.Value, Selected = option.Value == item.ProdutoCodigo.ToString() })
                             .ToList();
@@ -221,6 +249,7 @@
                     }
                 </div>
 
+                @* Template escondido para adicionar novas linhas de produto via JS *@
                 <template id="product-template">
                     <div class="js-product-row card border-danger-subtle bg-body-tertiary">
                         <div class="card-body">
@@ -253,6 +282,7 @@
                 </div>
             </section>
 
+            @* =========================== ETAPA 4 =========================== *@
             <section class="wizard-step d-none" data-wizard-step="3">
                 <div class="row g-3">
                     <div class="col-lg-7">
@@ -305,6 +335,7 @@
 
                 <div class="d-flex justify-content-between mt-4">
                     <button type="button" class="btn btn-outline-danger" data-wizard-prev>Anterior</button>
+                    <!-- Botão final que efetua o envio (submit) do form para gravar ou editar no BD -->
                     <button type="submit" class="btn btn-danger btn-lg">@submitText</button>
                 </div>
             </section>
@@ -312,8 +343,13 @@
     </div>
 </div>
 
+@* 
+   Script client-side (Javascript puro) gerencia o preenchimento, enumeração e a troca visual de abas no form.
+*@
 <script>
     (function () {
+        // Renumera as linhas das coleções (Serviços e Produtos) para que o Model Binding do ASP.NET funcione corretamente.
+        // O MVC precisa que nomes sigam a estrutura: Lista[0].Campo, Lista[1].Campo, etc.
         function renumberRows(containerId, rowSelector, prefix) {
             const container = document.getElementById(containerId);
             if (!container) {
@@ -397,6 +433,7 @@
             }
         }
 
+        // Alterna entre as "etapas" do formulário exibindo ou ocultando partes (d-none)
         function setStep(step) {
             currentStep = Math.max(0, Math.min(step, steps.length - 1));
 
@@ -420,6 +457,7 @@
             updateSummary();
         }
 
+        // Caso haja falha de validação via backend e recarregue a tela, isto acha a etapa que possui o erro.
         function closestStepWithError() {
             const errorPane = steps.findIndex(function (pane) {
                 return pane.querySelector('.field-validation-error') !== null;
@@ -473,6 +511,7 @@
                 });
             }
 
+            // Exclusão de linhas com Event Delegation (vinculando evento ao container principal)
             if (serviceContainer) {
                 serviceContainer.addEventListener('click', function (event) {
                     const target = event.target;
@@ -482,7 +521,7 @@
 
                     const rows = serviceContainer.querySelectorAll('.js-service-row');
                     if (rows.length <= 1) {
-                        return;
+                        return; // Impede deletar a última linha de serviço
                     }
 
                     const row = target.closest('.js-service-row');
